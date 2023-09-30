@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Request\LoginRequest;
+use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
@@ -26,13 +27,13 @@ class AuthController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function login(LoginRequest $request)
+    public function login(Request $request)
     {
-        if (!\Auth::attempt([
-            'email' => $request->email,
+        if (!Auth::attempt([
+            'codigo' => $request->codigo,
             'password' => $request->password
         ])) {
-            throw new \Exception('Wrong email or password.');
+            throw new \Exception('Codigo o Nip incorrecto.');
         }
     }
 
@@ -44,7 +45,7 @@ class AuthController extends Controller
      */
     public function logout()
     {
-        \Auth::logout();
+        Auth::logout();
         return redirect('login');
     }
 }
