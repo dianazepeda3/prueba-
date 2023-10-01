@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 
 class PageController extends Controller
 {
@@ -13,7 +14,8 @@ class PageController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function dashboardOverview1() {
-        return view('pages/dashboard-overview-1', [
+        $user = Auth::user();     
+        return view('pages/dashboard-overview-1', compact('user'), [
             // Specify the base layout.
             // Eg: 'main-layout', 'login-layout'
             // The default value is 'main-layout'

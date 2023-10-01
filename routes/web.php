@@ -5,6 +5,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\DarkModeController;
 use App\Http\Controllers\ColorSchemeController;
+use App\Http\Controllers\AlumnoController;
 
 /*
 |--------------------------------------------------------------------------
@@ -27,10 +28,13 @@ Route::controller(AuthController::class)->middleware('loggedin')->group(function
     Route::post('register', 'register')->name('register.store');
 });
 
+//Login
+Route::post('login', [AlumnoController::class, 'logSiiau'])->name('log.siiau');
+
 Route::middleware('auth')->group(function() {
     Route::get('logout', [AuthController::class, 'logout'])->name('logout');
     Route::controller(PageController::class)->group(function() {
-        Route::get('/', 'dashboardOverview1')->name('dashboard-overview-1');
+        Route::get('inicio/', 'dashboardOverview1')->name('dashboard-overview-1');
         Route::get('dashboard-overview-2-page', 'dashboardOverview2')->name('dashboard-overview-2');
         Route::get('calendar-page', 'calendar')->name('calendar');
         Route::get('chat-page', 'chat')->name('chat');

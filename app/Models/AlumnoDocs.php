@@ -8,4 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 class AlumnoDocs extends Model
 {
     use HasFactory;
+    
+    public $timestamps = false;
+
+    public function alumno(){
+        return $this->belongsTo(Alumno::class);
+    }
 }

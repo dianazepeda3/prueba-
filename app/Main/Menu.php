@@ -13,7 +13,7 @@ class Menu
     public static function menu()
     {
         return [
-            'START MENU',
+            'MENU PRINCIPAL',
             'dashboard' => [
                 'icon' => 'home',
                 'title' => 'Dashboard',

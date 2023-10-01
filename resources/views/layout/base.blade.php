@@ -18,6 +18,9 @@ License: You must have a valid license purchased only from themeforest(the above
     <meta name="description" content="Rocketman admin is super flexible, powerful, clean & modern responsive tailwind admin template with unlimited possibilities.">
     <meta name="keywords" content="admin template, Rocketman Admin Template, dashboard template, flat admin template, responsive admin template, web app">
     <meta name="author" content="LEFT4CODE">   
+
+    <link href="{{asset('css/sb-admin-2.min.css')}}" rel="stylesheet">
+    
     @yield('head')
 
     <!-- BEGIN: CSS Assets-->

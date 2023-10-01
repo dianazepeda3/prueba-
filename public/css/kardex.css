@@ -1,0 +1,126 @@
+html{
+  font-size: 62.5%;
+}
+
+body{
+  font-size: 16px;
+}
+
+.heading {
+  font-size: 3rem;  
+  text-align: center;
+  color: #1D459B;
+}
+
+.articulos {
+  font-size: 15px;    
+}
+
+.content{
+  font-size: 15px;
+  margin-left: 20px;
+  margin-top: 30px;
+}
+
+.footer{
+  font-size: 15px;
+  margin-left: 20px;
+  margin-top: 30px;
+  text-align: center;
+}
+
+.firma{
+  border-top: 1px solid black;
+  padding-top: 5px;
+  margin-bottom: solid 5px;
+  margin-top: 10px;
+  margin-left: 100px;
+  margin-right: 100px;
+  text-align: center;
+}
+
+.linea{
+  margin-left: 40%;
+  margin-right: 40%;
+  margin-top: 30px;
+  border-bottom: solid 1px;
+}
+
+.acomodo{
+  line-height: 20%;
+
+}
+
+img {
+  width: 11rem;
+  height: 11rem;
+  object-fit: contain;
+  position: relative;
+  top: 0;
+  left: 30;
+}
+
+.formato{
+  text-align: right;
+  text-decoration: underline;
+
+}
+
+.datos{
+  font-size: 14px;
+}
+
+.tabla table{
+  border-collapse: collapse;
+}
+
+#datos {
+  width: 100%;
+}
+
+#tab-promedio {
+  text-align: right;
+}
+
+
+.tabla th {
+  font-family: Arial, Verdana, Helvetica, sans-Arial, sans-serif;
+  font-size: 11px;
+  padding: 4px 4px;
+  text-align: left;
+  border-bottom: 1px solid #CFCFC4;
+  border-right: 1px solid #CFCFC4;
+  border-left: 1px solid #CFCFC4;
+  border-top: 1px solid #ddd;
+  background-color: #E5E4E2;
+  color: #0F4D92;
+}
+
+.tabla td {
+  font-family: Arial, Verdana, Helvetica, sans-Arial, sans-serif;
+  font-size: 11px;
+  padding: 4px;
+  border-bottom: 1px solid #ddd;
+  border-right: 1px solid #ddd;
+  border-left: 1px solid #ddd;
+  border-top: 1px solid #ddd;
+  text-align: left;
+}
+
+.titulo-tabla th{
+  background-color: #0F4D92;
+  font-size: 15px;
+  color: white;
+  font-weight: bold;
+}
+
+.nrc {
+  color: blue;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+tr {
+  background-color: #ffffff;
+  color: #0F4D92;
+}
