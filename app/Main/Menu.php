@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Main;
+use Illuminate\Support\Facades\Auth;
 
 class Menu
 {
@@ -12,6 +13,11 @@ class Menu
      */
     public static function menu()
     {
+        $alumno = "";
+        $user = Auth::user();
+        if($user)
+            $alumno = $user->alumno;        
+
         return [
             'MENU PRINCIPAL',
             'dashboard' => [
@@ -35,6 +41,52 @@ class Menu
                         'title' => 'Overview 2'
                     ]
                 ]
+            ],
+            'tramites' => [
+                'icon' => 'award',
+                'route_name' => 'tramites',
+                'params' => [
+                    // Additional parameters
+                ],
+                'title' => 'Tramites'
+            ],
+            'usuarios' => [
+                'icon' => 'users',                
+                'title' => 'Usuarios',
+                'sub_menu' => [
+                    'lista-usuarios' => [
+                        'icon' => 'list',
+                        'route_name' => 'usuarios',
+                        'params' => [
+                            // Additional parameters
+                        ],
+                        'title' => 'Ver Usuarios'
+                    ],
+                    'usuarios-form' => [
+                        'icon' => 'user-plus',
+                        'route_name' => 'usuarios-form',
+                        'params' => [
+                            // Additional parameters
+                        ],
+                        'title' => 'Agregar Usuario'
+                    ]
+                ]
+            ],            
+            'maestros' => [
+                'icon' => 'user',
+                'route_name' => 'maestros',
+                'params' => [
+                    // Additional parameters
+                ],
+                'title' => 'Maestros'
+            ],
+            'alumno' => [
+                'icon' => 'user',
+                'route_name' => 'show-datos',
+                'params' => [
+                    $alumno,
+                ],
+                'title' => 'Mis Datos'
             ],
             'calendar' => [
                 'icon' => 'calendar',

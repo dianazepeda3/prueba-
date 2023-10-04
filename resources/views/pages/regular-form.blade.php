@@ -10,6 +10,7 @@
     </div>
     <div class="grid grid-cols-12 gap-6 mt-5">
         <div class="intro-y col-span-12 lg:col-span-6">
+        <div class="intro-y col-span-12 lg:col-span-6">
             <!-- BEGIN: Input -->
             <div class="intro-y box">
                 <div class="flex flex-col sm:flex-row items-center p-5 border-b border-slate-200/60 dark:border-darkmode-400">

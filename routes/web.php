@@ -6,6 +6,7 @@ use App\Http\Controllers\PageController;
 use App\Http\Controllers\DarkModeController;
 use App\Http\Controllers\ColorSchemeController;
 use App\Http\Controllers\AlumnoController;
+use App\Http\Controllers\AdminController;
 
 /*
 |--------------------------------------------------------------------------
@@ -33,8 +34,36 @@ Route::post('login', [AlumnoController::class, 'logSiiau'])->name('log.siiau');
 
 Route::middleware('auth')->group(function() {
     Route::get('logout', [AuthController::class, 'logout'])->name('logout');
+    Route::controller(AdminController::class)->group(function() {
+        Route::get('tramites', 'tramites')->name('tramites');
+        Route::get('tramites/{alumno}', 'verTramite')->name('showTramite');  
+        Route::get('tramites/{alumno}/editar-datos-personales', 'editDatosPersonales')->name('edit-datos-personales');
+        Route::get('tramites/{alumno}/editar-datos-escolares', 'editDatosEscolares')->name('edit-datos-escolares');   
+        Route::patch('tramites/{alumno}/editar-datos-escolares', 'updateDatosEscolares')->name('update-datos-escolares');           
+        Route::get('tramites/{alumno}/editar-datos-laborales', 'editDatosLaborales')->name('edit-datos-laborales');
+    });
+});
+
+Route::middleware('auth')->group(function() {
+    Route::get('logout', [AuthController::class, 'logout'])->name('logout');
+    Route::controller(AlumnoController::class)->group(function() {        
+        Route::get('alumno/{alumno}', 'show')->name('show-datos');    
+        Route::get('alumno/edit/{alumno}', 'edit')->name('edit-datos'); 
+        Route::put('alumno/edit/{alumno}', 'update')->name('update-datos'); 
+        
+        //Opciones de Titulacion
+        Route::get('/alumno/opciones_titulacion/{id}', 'getSubcategorias');
+    });
+});
+
+Route::middleware('auth')->group(function() {
+    Route::get('logout', [AuthController::class, 'logout'])->name('logout');
     Route::controller(PageController::class)->group(function() {
         Route::get('inicio/', 'dashboardOverview1')->name('dashboard-overview-1');
+        Route::get('usuarios', 'usuarios')->name('usuarios');
+        Route::get('usuarios/create', 'usuarios_form')->name('usuarios-form');       
+        Route::get('maestros', 'maestros')->name('maestros');
+
         Route::get('dashboard-overview-2-page', 'dashboardOverview2')->name('dashboard-overview-2');
         Route::get('calendar-page', 'calendar')->name('calendar');
         Route::get('chat-page', 'chat')->name('chat');

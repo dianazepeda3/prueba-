@@ -62,4 +62,12 @@ class User extends Authenticatable
             return url('media-example/no-image.png');
         }
     }
+
+    public function alumno(){
+        return $this->hasOne(Alumno::class);
+    }
+
+    public function coordinador(){
+        return $this->hasOne(Coordinador::class);
+    }
 }

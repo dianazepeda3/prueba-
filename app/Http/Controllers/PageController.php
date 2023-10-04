@@ -4,6 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use App\Models\User;
+use App\Models\Alumno;
+use App\Models\Maestro;
+use App\Models\Tramite;
 
 class PageController extends Controller
 {
@@ -30,8 +34,46 @@ class PageController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
+    public function usuarios() {
+        $user = Auth::user();
+        $usuarios = User::all();   
+        return view('admin/usuarios', compact('user','usuarios'));
+    }
+
+    public function usuarios_form() {
+        $user = Auth::user();
+        return view('admin/usuarios-form',compact('user'));
+    }
+
+    public function tramites() {
+        $user = Auth::user();
+        $tramites = Tramite::all();   
+        $alumnos = Alumno::all();
+        return view('admin/tramites', compact('user','tramites','alumnos'));
+    }
+
+    public function showTramite(Alumno $alumno) {
+        $user = Auth::user();
+        $tramites = Tramite::all();   
+        $alumnos = Alumno::all();
+        return view('admin/showTramite', compact('user','tramites','alumno'));
+    }
+
+    public function maestros() {
+        $user = Auth::user();
+        $maestros = Maestro::all();  
+        return view('admin/maestros', compact('user','maestros'));
+    }
+
+    /**
+     * Show specified view.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
     public function dashboardOverview2() {
-        return view('pages/dashboard-overview-2');
+        $user = Auth::user(); 
+        return view('pages/dashboard-overview-2', compact('user'));
     }
 
     /**
@@ -41,7 +83,8 @@ class PageController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function calendar() {
-        return view('pages/calendar');
+        $user = Auth::user(); 
+        return view('pages/calendar', compact('user'));
     }
 
     /**
@@ -51,7 +94,8 @@ class PageController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function chat() {
-        return view('pages/chat');
+        $user = Auth::user(); 
+        return view('pages/chat', compact('user'));
     }
 
     /**
@@ -61,7 +105,8 @@ class PageController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function inbox() {
-        return view('pages/inbox');
+        $user = Auth::user(); 
+        return view('pages/inbox', compact('user'));
     }
 
     /**
@@ -71,7 +116,8 @@ class PageController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function emailDetail() {
-        return view('pages/email-detail');
+        $user = Auth::user(); 
+        return view('pages/email-detail', compact('user'));
     }
 
     /**
@@ -81,7 +127,8 @@ class PageController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function compose() {
-        return view('pages/compose');
+        $user = Auth::user(); 
+        return view('pages/compose', compact('user'));
     }
 
     /**
@@ -91,7 +138,8 @@ class PageController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function products() {
-        return view('pages/products');
+        $user = Auth::user(); 
+        return view('pages/products', compact('user'));
     }
 
     /**
@@ -101,7 +149,8 @@ class PageController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function productDetail() {
-        return view('pages/product-detail');
+        $user = Auth::user(); 
+        return view('pages/product-detail', compact('user'));
     }
 
     /**
@@ -111,7 +160,8 @@ class PageController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function orders() {
-        return view('pages/orders');
+        $user = Auth::user(); 
+        return view('pages/orders', compact('user'));
     }
 
     /**
@@ -121,7 +171,8 @@ class PageController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function orderDetail() {
-        return view('pages/order-detail');
+        $user = Auth::user(); 
+        return view('pages/order-detail', compact('user'));
     }
 
     /**
@@ -131,7 +182,8 @@ class PageController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function fileManager() {
-        return view('pages/file-manager');
+        $user = Auth::user();
+        return view('pages/file-manager', compact('user'));
     }
 
     /**
@@ -141,7 +193,8 @@ class PageController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function profile() {
-        return view('pages/profile');
+        $user = Auth::user();
+        return view('pages/profile', compact('user'));
     }
 
     /**
@@ -151,7 +204,8 @@ class PageController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function pricing() {
-        return view('pages/pricing');
+        $user = Auth::user();
+        return view('pages/pricing', compact('user'));
     }
 
     /**
@@ -191,7 +245,8 @@ class PageController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function crudDataList() {
-        return view('pages/crud-data-list');
+        $user = Auth::user();
+        return view('pages/crud-data-list',compact('user'));
     }
 
     /**
@@ -201,7 +256,8 @@ class PageController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function crudForm() {
-        return view('pages/crud-form');
+        $user = Auth::user();
+        return view('pages/crud-form',compact('user'));
     }
 
     /**
@@ -275,7 +331,8 @@ class PageController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function regularTable() {
-        return view('pages/regular-table');
+        $user = Auth::user();
+        return view('pages/regular-table',compact('user'));
     }
 
     /**
@@ -405,7 +462,8 @@ class PageController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function icon() {
-        return view('pages/icon');
+        $user = Auth::user();
+        return view('pages/icon',compact('user'));
     }
 
     /**
@@ -425,7 +483,8 @@ class PageController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function regularForm() {
-        return view('pages/regular-form');
+        $user = Auth::user();
+        return view('pages/regular-form',compact('user'));
     }
 
     /**
