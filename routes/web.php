@@ -37,20 +37,41 @@ Route::middleware('auth')->group(function() {
     Route::controller(AdminController::class)->group(function() {
         Route::get('tramites', 'tramites')->name('tramites');
         Route::get('tramites/{alumno}', 'verTramite')->name('showTramite');  
-        Route::get('tramites/{alumno}/editar-datos-personales', 'editDatosPersonales')->name('edit-datos-personales');
-        Route::get('tramites/{alumno}/editar-datos-escolares', 'editDatosEscolares')->name('edit-datos-escolares');   
-        Route::patch('tramites/{alumno}/editar-datos-escolares', 'updateDatosEscolares')->name('update-datos-escolares');           
-        Route::get('tramites/{alumno}/editar-datos-laborales', 'editDatosLaborales')->name('edit-datos-laborales');
+        Route::get('tramites/editar-datos-personales/{alumno}', 'editDatosPersonales')->name('edit-datos-personales');
+        Route::patch('tramites/editar-datos-personales/{alumno}', 'updateDatosPersonales')->name('update-datos-personales');           
+        Route::get('tramites/editar-datos-escolares/{alumno}', 'editDatosEscolares')->name('edit-datos-escolares');   
+        Route::patch('tramites/editar-datos-escolares/{alumno}', 'updateDatosEscolares')->name('update-datos-escolares');           
+        Route::get('tramites/editar-datos-laborales/{alumno}', 'editDatosLaborales')->name('edit-datos-laborales');
+        Route::patch('tramites/editar-datos-laborales/{alumno}', 'updateDatosLaborales')->name('update-datos-laborales'); 
+
+        Route::post('tramites/generar-dictamen/{tramite}','generate_dictamen')->name('generar-dictamen');
+
+        Route::get('tramites/documentos/revisar/{tramite}','revisarDocumento')->name('revisar-documentos');
+        Route::get('tramites/documentos/validar/{tramite}','validarDocumento')->name('validar-documentos');        
+
+        Route::get('tramites/documento/aprobar/{documento}','aprobarDocumento')->name('aprobar-documento');
+        Route::patch('tramites/documento/desaprobar/{documento}','desaprobarDocumento')->name('desaprobar-documento');
+        Route::get('tramites/documentos/eliminar/{documento}','eliminarDocumento')->name('admin-eliminar-documento');
+
+        //FIRMA
+        Route::get('firma','firma')->name('firma');
+        Route::post('firma/guardar','uploadFirma')->name('guardar-firma');
+        Route::get('firma/ver-firma/{firma}','visualizarFirma')->name('ver-firma');
     });
 });
 
 Route::middleware('auth')->group(function() {
     Route::get('logout', [AuthController::class, 'logout'])->name('logout');
     Route::controller(AlumnoController::class)->group(function() {        
-        Route::get('alumno/{alumno}', 'show')->name('show-datos');    
-        Route::get('alumno/edit/{alumno}', 'edit')->name('edit-datos'); 
-        Route::put('alumno/edit/{alumno}', 'update')->name('update-datos'); 
-        
+        Route::get('datos', 'show')->name('show-datos');    
+        Route::get('datos/edit', 'edit')->name('edit-datos'); 
+        Route::patch('datos/edit', 'update')->name('update-datos'); 
+        Route::get('documentos', 'showDocumentos')->name('show-documentos');
+        Route::get('documentos/visualizar/{documento}', 'visualizarDocumento')->name('ver-documento');
+        Route::get('documentos/revisar','revisionDocumentos')->name('mandar-revision-documentos');
+        Route::get('documentos/descargar/{documento}', 'descargarDocumento')->name('descargar-documento');
+        Route::get('documentos/eliminar/{documento}','eliminarDocumento')->name('eliminar-documento');
+        Route::post('documento','uploadDocumento')->name('upload-documento');
         //Opciones de Titulacion
         Route::get('/alumno/opciones_titulacion/{id}', 'getSubcategorias');
     });

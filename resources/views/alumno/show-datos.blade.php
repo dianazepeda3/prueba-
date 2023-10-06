@@ -1,13 +1,13 @@
 @extends('../layout/' . $layout)
 
 @section('subhead')
-    <title>Trámite - Titulación CUCEI</title>
+    <title>Mis Datos - Titulación CUCEI</title>
 @endsection
 
-@section('subcontent')
+@section('subcontent')      
     <div class="intro-y flex flex-col sm:flex-row items-center mt-8">
         <h2 class="flex items-center text-lg font-medium mr-auto">
-            <a href="{{ route('tramites') }}">Trámites</a> <i class="w-4 h-4 mx-2 !stroke-2" data-lucide="arrow-right"></i> {{ $alumno->user->name }}
+            MIS DATOS
         </h2>
         <div class="w-full sm:w-auto flex mt-4 sm:mt-0">
             <button class="btn btn-primary shadow-md mr-2">
@@ -15,6 +15,35 @@
             </button>
         </div>
     </div>
+    {{-- ERRORES --}}
+    <div class="grid grid-cols-12 gap-12 mt-5"> 
+        <div class="intro-y col-span-12 lg:col-span-12">  
+             {{-- Mensaje Alerta --}}
+            @if (session('info'))
+                <div class="alert alert-danger-soft show flex items-center mb-2">
+                    <i data-lucide="alert-octagon" class="w-6 h-6 mr-2"></i>
+                    {{ session('info') }}
+                </div>
+            @endif
+            {{-- Mensaje Exito --}}                 
+            @if (session('success'))
+                <div class="alert alert-success-soft show flex items-center mb-2">
+                    {{ session('success') }}
+                </div>
+            @endif 
+            @if ($errors->any())
+                {{-- Mostrar error --}}
+                <div class="alert alert-danger-soft show flex items-center mb-2">
+                    <i data-lucide="alert-octagon" class="w-6 h-6 mr-2"></i>
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>   
+            @endif 
+        </div> 
+    </div>   
     <div class="grid grid-cols-12 gap-5 mt-5">
         <!-- BEGIN: Product Detail Side Menu -->
         <div class="col-span-12 xl:col-span-6">

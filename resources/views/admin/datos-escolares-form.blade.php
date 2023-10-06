@@ -9,21 +9,23 @@
     <div class="grid grid-cols-12 gap-12 mt-5"> 
         <div class="intro-y col-span-12 lg:col-span-2"></div>
         <div class="intro-y col-span-12 lg:col-span-8">  
-            {{-- Mensaje Alerta --}}
+             {{-- Mensaje Alerta --}}
             @if (session('info'))
-                <div class="alert alert-danger">
+                <div class="alert alert-danger-soft show flex items-center mb-2">
+                    <i data-lucide="alert-octagon" class="w-6 h-6 mr-2"></i>
                     {{ session('info') }}
                 </div>
             @endif
-            {{-- Mensaje Exito --}}
+            {{-- Mensaje Exito --}}                 
             @if (session('success'))
-                <div class="alert alert-success">
+                <div class="alert alert-success-soft show flex items-center mb-2">
                     {{ session('success') }}
                 </div>
             @endif 
             @if ($errors->any())
                 {{-- Mostrar error --}}
-                <div class="alert alert-danger">
+                <div class="alert alert-danger-soft show flex items-center mb-2">
+                    <i data-lucide="alert-octagon" class="w-6 h-6 mr-2"></i>
                     <ul>
                         @foreach ($errors->all() as $error)
                             <li>{{ $error }}</li>
@@ -54,7 +56,8 @@
                                     value="{{$alumno->user->name}}"
                                 @else
                                     value="{{old('nombre')}}"
-                                @endif>
+                                @endif
+                                @can('alumno') disabled @endcan>
                             </div>
                             <div class="form-inline mt-5">
                                 <label for="codigo" class="form-label sm:w-20">Código</label>
@@ -63,14 +66,16 @@
                                     value="{{$alumno->user->codigo}}"
                                 @else
                                     value="{{old('codigo')}}"
-                                @endif>  
+                                @endif
+                                @can('alumno') disabled @endcan>
                                 <label for="promedio" class="form-label sm:w-20">Promedio</label>
                                 <input id="promedio" name="promedio" type="text" class="form-control" placeholder="92.80"
                                 @if(isset($alumno))
                                     value="{{$alumno->promedio}}"
                                 @else
                                     value="{{old('promedio')}}"
-                                @endif>                             
+                                @endif
+                                @can('alumno') disabled @endcan>                           
                             </div> 
                             <div class="form-inline mt-5">
                                 <label for="situacion" class="form-label sm:w-20">Situación</label>
@@ -80,6 +85,15 @@
                                 @else
                                     value="{{old('carrera')}}"
                                 @endif disabled>
+                                @can('alumno')
+                                    <label for="carrera" class="form-label sm:w-20">Carrera</label>
+                                    <input id="carrera" name="carrera" type="text" class="form-control" placeholder="2019A..."
+                                    @if(isset($alumno))
+                                        value="{{ $alumno->carrera->clave }}"
+                                    @else
+                                        value="{{old('carrera')}}"
+                                    @endif disabled>
+                                @else
                                 <label for="carrera" class="form-label sm:w-20">Carrera</label>
                                 <select id="carrera" name="carrera" data-placeholder="Selecciona la carrera" class="tom-select form-control">                                        
                                     <option value="0" selected>Selecciona la carrera...</option>
@@ -91,6 +105,7 @@
                                         @endif
                                     @endforeach                                          
                                 </select>  
+                                @endcan
                             </div>                                               
                             <div class="form-inline mt-5">                           
                                 <label for="ciclo_ingreso" class="form-label sm:w-20">Ciclo Ingreso</label>
@@ -99,14 +114,16 @@
                                     value="{{$alumno->ciclo_ingreso}}"
                                 @else
                                     value="{{old('ciclo_ingreso')}}"
-                                @endif>
+                                @endif
+                                @can('alumno') disabled @endcan> 
                                 <label for="ciclo_egreso" class="form-label sm:w-20">Ciclo &nbsp;Egreso</label>
                                 <input id="ciclo_egreso" name="ciclo_egreso" type="text" class="form-control" placeholder="2022B..."
                                 @if(isset($alumno))
                                     value="{{$alumno->ciclo_egreso}}"
                                 @else
                                     value="{{old('ciclo_egreso')}}" 
-                                @endif>
+                                @endif
+                                @can('alumno') disabled @endcan> 
                             </div>  
                             <div class="form-inline mt-5">
                                 <label for="plan_estudios" class="form-label sm:w-20">Plan de Estudios</label>
@@ -122,7 +139,7 @@
                             </div>   
                             <div class="form-inline mt-5">
                                 <label for="articulo" class="form-label sm:w-20">Modalidad de Titulación</label>
-                                <select id="articulo" name="articulo" class="tom-select form-control">                                                                            
+                                <select id="articulo" name="articulo" class="tom-select2 form-control">                                                                            
                                     <option value="0" selected>Seleccione la modalidad de Titulación...</option>
                                     @foreach ($articulos as $articulo)
                                         @if ($alumno->id_articulo == $articulo->id)
@@ -145,12 +162,12 @@
                                     @endforeach                               
                                 </select>   
                             </div> 
-                            <div id="nombre_del_trabajo" @if(isset($alumno) && ($alumno->id_opcion_titulacion != 7 || $alumno->id_opcion_titulacion != 11 || $alumno->id_opcion_titulacion != 13 || $alumno->id_opcion_titulacion != 14 || $alumno->id_opcion_titulacion != 15 || $alumno->id_opcion_titulacion != 16 )) hidden @elseif(isset($alumno)!=true) hidden @endif >         
+                            <div id="nombre_del_trabajo" @if(isset($alumno) && ($alumno->id_opcion_titulacion != 7 && $alumno->id_opcion_titulacion != 11 && $alumno->id_opcion_titulacion != 13 && $alumno->id_opcion_titulacion != 14 && $alumno->id_opcion_titulacion != 15 && $alumno->id_opcion_titulacion != 16 )) hidden @elseif(isset($alumno)!=true) hidden @endif >         
                                 <div class="form-inline mt-5">
                                     <label for="nombre_del_trabajo" class="form-label sm:w-20">Título del Trabajo:</label>
                                     <input id="nombre_del_trabajo" name="nombre_del_trabajo" type="text" class="form-control" placeholder="Nombre del trabajo..."
                                     @if(isset($alumno))
-                                        value="{{$alumno->user->nombre_del_trabajo}}"
+                                        value="{{$alumno->titulo_del_trabajo}}"
                                     @else
                                         value="{{old('nombre_del_trabajo')}}"
                                     @endif> 

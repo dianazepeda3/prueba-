@@ -69,42 +69,45 @@
                                 <td>{{ $alumno->user->name }}</td>
                                 <td>{{ $alumno->user->codigo }}</td>
                                 <td>{{$alumno->carrera->clave}}</td>
-                                <td class="flex items-center text-danger">
+                                <td class="flex items-center ">
                                     @switch($alumno->tramite->estado)
                                         @case(0)
-                                            <span class="badge badge-danger">ERROR</span>
+                                            <div class="text-center w-40 px-3 py-1 alert-danger-soft border border-primary/10 rounded-full mr-2 mb-2">ERROR</div>                                                                                                                                                                                                                               
                                             @break
                                         @case(1)
-                                            <span class="badge badge-danger">Datos No Registrados</span>
+                                            <div class="text-center w-40 px-3 py-1 alert-pending-soft border border-primary/10 rounded-full mr-2 mb-2">Datos No Registrados</div>
                                             @break
                                         @case(2)
-                                            <span class="badge badge-secondary">Datos Registrados</span>
+                                            <div class="text-center w-40 px-3 py-1 alert-primary-soft border border-primary/10 rounded-full mr-2 mb-2">Datos Registrados</div>
                                             @break
                                         @case(3)
-                                            <span class="badge badge-primary">Documentos Entregados</span>
+                                            <div class="text-center w-40 px-3 py-1 alert-warning-soft border border-primary/10 rounded-full mr-2 mb-2">Documentos Entregados</div>
                                             @break
                                         @case(4)
-                                            <span class="badge badge-info">Documentos Validados</span>
+                                            <div class="text-center w-40 px-3 py-1 alert-success-soft border border-primary/10 rounded-full mr-2 mb-2">Documentos Validados</div>
                                             @break
                                         @case(5)
-                                            <span class="badge badge-success">Documentos No Aprobados</span>
+                                            <div class="text-center w-40 px-3 py-1 alert-danger-soft border border-primary/10 rounded-full mr-2 mb-2">Documentos No Aprobados</div> 
                                             @break
                                         @case(6)
-                                            <span class="badge badge-primary"> Etapa 2 </span>
+                                            <div class="text-center w-40 px-3 py-1 alert-primary-soft border border-primary/10 rounded-full mr-2 mb-2">Etapa 2</div>
                                             @break
                                         @case(7)
-                                            <span class="badge badge-info">Documentos Entregados - Etapa 2</span>
+                                            <div class="text-center w-40 px-3 py-1 alert-warning-soft border border-primary/10 rounded-full mr-2 mb-2">Documentos Entregados - Etapa 2</div>                                                                                                                                                                                                                                                                  
                                             @break 
                                         @case(8)
-                                            <span class="badge badge-info">Documentos Validados - Etapa 2</span>
+                                            <div class="text-center w-40 px-3 py-1 alert-success-soft border border-primary/10 rounded-full mr-2 mb-2">Documentos Validados - Etapa 2</div>                                                                                                                                                                                                                                                                    
                                             @break 
                                         @case(9)
+                                            <div class="text-center w-40 px-3 py-1 alert-danger-soft border border-primary/10 rounded-full mr-2 mb-2">ERROR</div>                                                                                                                                                                                                                                                                           
                                             <span class="badge badge-success">Documentos No Aprobados - Etapa 2</span>
                                             @break 
                                         @case(10)
+                                            <div class="text-center w-40 px-3 py-1 alert-primary-soft border border-primary/10 rounded-full mr-2 mb-2">ERROR</div>                                                                                                                                                                                                                                                                           
                                             <span class="badge badge-info">Datos de Titulacion generados</span>
                                             @break                                                        
                                         @case(11)
+                                            <div class="text-center w-40 px-3 py-1 alert-primary-soft border border-primary/10 rounded-full mr-2 mb-2">ERROR</div>                                                                                                                                                                                                                                                                           
                                             <span class="badge badge-success">Etapa 3</span>
                                             @break                                                                                                                           
                                         @default                                                            
@@ -116,12 +119,16 @@
                                     @endif
                                 </td>
                                 <td class="table-report__action w-56">
-                                    <div class="flex justify-center items-center">
-                                        <a class="flex items-center mr-3" href="{{ route('showTramite', $alumno) }}">
-                                            <i data-lucide="eye" class="w-4 h-4 mr-1"></i> Ver
+                                    <div class="flex justify-center items-center">                                       
+                                        <!--Boton de ver-->
+                                        <a class="flex items-center whitespace-nowrap justify-center mx-2" href="{{ route('showTramite', $alumno) }}">
+                                            <svg class="svg-inline--fa fa-venus-mars w-4 h-4 text-slate-500 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path fill="currentColor" d="M288 32c-80.8 0-145.5 36.8-192.6 80.6C48.6 156 17.3 208 2.5 243.7c-3.3 7.9-3.3 16.7 0 24.6C17.3 304 48.6 356 95.4 399.4C142.5 443.2 207.2 480 288 480s145.5-36.8 192.6-80.6c46.8-43.5 78.1-95.4 93-131.1c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C433.5 68.8 368.8 32 288 32zM144 256a144 144 0 1 1 288 0 144 144 0 1 1 -288 0zm144-64c0 35.3-28.7 64-64 64c-7.1 0-13.9-1.2-20.3-3.3c-5.5-1.8-11.9 1.6-11.7 7.4c.3 6.9 1.3 13.8 3.2 20.7c13.7 51.2 66.4 81.6 117.6 67.9s81.6-66.4 67.9-117.6c-11.1-41.5-47.8-69.4-88.6-71.1c-5.8-.2-9.2 6.1-7.4 11.7c2.1 6.4 3.3 13.2 3.3 20.3z"/></svg>                                                         
+                                            Ver
                                         </a>
-                                        <a class="flex items-center text-danger" href="javascript:;" data-tw-toggle="modal" data-tw-target="#delete-confirmation-modal">
-                                            <i data-lucide="trash-2" class="w-4 h-4 mr-1"></i> Eliminar
+                                         
+                                        <a class="flex items-center whitespace-nowrap justify-center text-danger" href="javascript:;" data-tw-toggle="modal" data-tw-target="#delete-modal-preview">
+                                            <svg class="svg-inline--fa fa-venus-mars w-4 h-4 text-slate-500 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path fill="rgb(var(--color-danger)" d="M135.2 17.7C140.6 6.8 151.7 0 163.8 0H284.2c12.1 0 23.2 6.8 28.6 17.7L320 32h96c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 96 0 81.7 0 64S14.3 32 32 32h96l7.2-14.3zM32 128H416V448c0 35.3-28.7 64-64 64H96c-35.3 0-64-28.7-64-64V128zm96 64c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16z"/></svg>                                                         
+                                            Eliminar
                                         </a>
                                     </div>
                                 </td>
@@ -181,24 +188,24 @@
             </select>
         </div>
         <!-- END: Pagination -->
-    </div>
-    <!-- BEGIN: Delete Confirmation Modal -->
-    <div id="delete-confirmation-modal" class="modal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-body p-0">
-                    <div class="p-5 text-center">
-                        <i data-lucide="x-circle" class="w-16 h-16 text-danger mx-auto mt-3"></i>
-                        <div class="text-3xl mt-5">Are you sure?</div>
-                        <div class="text-slate-500 mt-2">Do you really want to delete these records? <br>This process cannot be undone.</div>
-                    </div>
-                    <div class="px-5 pb-8 text-center">
-                        <button type="button" data-tw-dismiss="modal" class="btn btn-outline-secondary w-24 mr-1">Cancel</button>
-                        <button type="button" class="btn btn-danger w-24">Delete</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- END: Delete Confirmation Modal -->
+    </div>   
+    <!-- BEGIN: Modal Eliminar --> 
+    <div id="delete-modal-preview" class="modal" tabindex="-1" aria-hidden="true"> 
+        <div class="modal-dialog"> 
+            <div class="modal-content"> 
+                <div class="modal-body p-0"> 
+                    <div class="p-5 text-center"> 
+                        <i data-lucide="x-circle" class="w-16 h-16 text-danger mx-auto mt-3"></i> 
+                    <div class="text-3xl mt-5">¿Estas @if ($alumno->genero == "Mujer") segura? @else seguro? @endif
+                </div> 
+                <div class="text-slate-500 mt-2">
+                    @if ($alumno->genero == "Mujer") ¿Segura @else ¿Seguro @endif que deseas eliminar el documento? <br>
+                </div> 
+            </div> 
+            <div class="px-5 pb-8 text-center"> 
+                <button type="button" data-tw-dismiss="modal" class="btn btn-outline-secondary w-24 mr-1">Cancelar</button> 
+                <button type="button" class="btn btn-danger w-24">Eliminar</button> 
+            </div> 
+        </div> 
+    </div> <!-- END: Modal Eliminar -->  
 @endsection

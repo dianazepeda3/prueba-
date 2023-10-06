@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Storage;
 use App\Models\User;
 use App\Models\AlumnoDocs;
 use App\Models\Tramite;
+use App\Models\Maestro;
 use App\Models\Documento;
 use GuzzleHttp\Client;
 use Carbon\Carbon;
@@ -57,10 +58,37 @@ class AlumnoController extends Controller
      * @param  \App\Models\Alumno  $alumno
      * @return \Illuminate\Http\Response
      */
-    public function show(Alumno $alumno)
+    public function show()
     {        
         $user = Auth::user();
+        $alumno = $user->alumno;
         return view('alumno.show-datos', compact('user','alumno'));
+    }
+
+    public function showDocumentos()
+    {        
+        $user = Auth::user();
+        $alumno = $user->alumno;
+        $tramite = $alumno->tramite;
+        $documentos = Documento::where('tramite_id', $tramite->id)->get();
+        $alumnoDocs = $alumno->alumno_docs;
+        
+        $aprobados = true;               
+        foreach($documentos as $documento){
+            if ($documento->aprobado == 2 || $documento->aprobado == 3 || $documento->aprobado == 6 || $documento->aprobado == 7){                
+                $aprobados = false;
+            }            
+        }                              
+
+        $revisados = true;
+        foreach($documentos as $documento){
+            if ($documento->aprobado == 3 || $documento->aprobado == 7){                
+                $revisados = false;
+            }
+        }                        
+        $maestros = Maestro::all();
+        $id_opcion_titulacion = $alumno->opcion_titulacion->id;
+        return view('alumno.show-documentos', compact('user','id_opcion_titulacion','tramite', 'alumno', 'documentos', 'maestros', 'aprobados','alumnoDocs', 'revisados'));
     }
 
     /**
@@ -92,19 +120,16 @@ class AlumnoController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Alumno $alumno)
-    {       
-        echo "hola";
-        dd();
+    {            
          //Validacion de campos
-         $request->validate([                        
-            'fecha_nacimiento' => 'required|date|before:today|after:1900-01-01',
-
-            'estado_nacimiento' => 'required|string',
+         $request->validate([                                  
+            'fecha_nacimiento' => 'required|date|before:today|after:1900-01-01',       
+            'estado_nacimiento' => 'required|string',            
             'municipio_nacimiento' => 'required|string',
+            'estado_civil' => 'required|string',
+            'genero' => 'required|string',
             'telefono_celular' => 'required|numeric|digits:10',
-            'telefono_particular' => 'nullable|numeric|digits:10',
-            'estado_civil' => 'required',
-            'genero' => 'required',
+            'telefono_particular' => 'nullable|numeric|digits:10',            
 
             'domicilio_calle' => 'required|string',
             'domicilio_numero' => 'required|numeric',
@@ -114,15 +139,28 @@ class AlumnoController extends Controller
             'domicilio_municipio' => 'required|string',
             
             'correo_institucional' => 'required|regex:/(.+)@(alumnos)\.(udg)\.(mx)/i',
-            'correo_particular' => 'required|regex:/(.+)@(.+)\.(.+)/i',
-            'estado_civil' => 'required|string',
-
-            'articulo' => 'required|numeric|min:1',
-            'opciones_titulacion' => 'required|numeric|min:1',                  
-            'plan_estudios' => 'required|numeric|min:1',                        
-        ]);           
+            'correo_particular' => 'required|regex:/(.+)@(.+)\.(.+)/i',             
+                            
+        ]);     
         
-        if($request->trabaja){
+        if($request->id_opcion_titulacion == 7 || $request->id_opcion_titulacion == 11 || $request->id_opcion_titulacion == 13|| $request->id_opcion_titulacion == 14|| $request->id_opcion_titulacion == 15|| $request->id_opcion_titulacion == 16){
+            $request->validate([
+                'nombre_del_trabajo' => 'nullable|string',                              
+            ]);
+        }  
+        
+        if($request->plan_estudios == 0)
+            return redirect()->back()->with('info', 'Elige el Plan de Estudios');                
+        if($request->articulo == 0)
+            return redirect()->back()->with('info', 'Elige la Modalidad de Titulación');                
+        if($request->opciones_titulacion == 0)
+            return redirect()->back()->with('info', 'Elige la Opción de Titulación');        
+        if($request->estado_civil == 0)
+            return redirect()->back()->with('info', 'Selecciona el estado civil');                        
+        if($request->genero == 0)
+            return redirect()->back()->with('info', 'Selecciona el genero');                        
+        
+        /*if($request->trabaja){
             if($request->afin){
                 $request->validate([
                     'nombre_empresa' => 'required|string',
@@ -134,14 +172,14 @@ class AlumnoController extends Controller
                     'empresa_colonia' => 'nullable|string',
                     'empresa_CP' => 'nullable|numeric|digits:5',
                     'empresa_estado' => 'nullable|string',
-                    'empresa_municipio' => 'nullable|string',                               
+                    'empresa_municipio' => 'nullable|string',                                          
                 ]);
             }else{
                 $request->validate([
                     'descripcion' => 'nullable|string',
                 ]);
             }
-        }
+        }*/
 
         if($request->articulo == 5 || $request->opciones_titulacion == 13){
             $request->validate([
@@ -204,10 +242,15 @@ class AlumnoController extends Controller
         $alumno->dom_estado = $request->domicilio_estado;
 
         // Datos Laborales
-        //echo($request->trabaja);
-        //dd();
-        $alumno->trabaja = $request->trabaja;
-        $alumno->afin = $request->afin;
+        if($request->trabaja == "NO"){
+            $alumno->trabaja = 0;
+        }elseif($request->trabaja == "SI" && $request->afin == "SI"){
+            $alumno->trabaja = 1;
+            $alumno->afin = 1;            
+        }elseif($request->trabaja == "SI" && $request->afin == "NO"){
+            $alumno->trabaja = 1;
+            $alumno->afin = 0;            
+        }
         if($request->afin){
             $alumno->nombre_empresa = $request->nombre_empresa;
             $alumno->puesto = $request->puesto;
@@ -250,15 +293,7 @@ class AlumnoController extends Controller
         //Promedio
         if($request->opciones_titulacion == 2 && $alumno->promedio < 90){
             return redirect()->back()->with('info', 'Para elegir esta modalidad necesitas un promedio global mínimo de 90 (noventa)');
-        }
-
-        //$alumnoDocs = alumnoDocs::find($alumno->id);
-        //$alumnoDocs = AlumnoDocs::where('alumno_id', $alumno->id)->first();        
-        //user_id               
-
-        //$alumnoDocs->id_opcion_titulacion = $request->opciones_titulacion;        
-
-        //$alumnoDocs->save();
+        }     
         //Eliminar documentos
         $user_id = Auth::id();        
         
@@ -268,9 +303,6 @@ class AlumnoController extends Controller
 
             $nombre = (string)$alumno->user_id;
             $nombre_ruta =  $nombre . "_" . $alumno->user->name;
-
-            //$directory = 'alumnos/' . $nombre_ruta . '/';
-            //Storage::deleteDirectory($directory);
 
             if ($documentos) {
                 foreach ($documentos as $documento) {
@@ -301,10 +333,7 @@ class AlumnoController extends Controller
             
         }   
                
-        return redirect()->route('show-datos')->with('success', 'Información actualizada con éxito');
-        
-            
-        //return view('alumnos.documentacion', compact('alumno', 'id_opcion_titulacion','id_plan_estudios'));
+        return redirect()->route('edit-datos-laborales',$alumno)->with('success', 'Información escolar y laboral guardada con éxito');                    
     }
 
     /**
@@ -545,6 +574,317 @@ class AlumnoController extends Controller
         return redirect()->back()->withErrors([
             'codigo' => 'Tus datos no coinciden con nuestras credenciales',
         ]);  
+    }
+
+    public function uploadDocumento(Request $request)
+    {                                  
+        $max_size = (int) ini_get('upload_max_filesize') * 10240;        
+        //VALIDACION DE ARCHIVOS
+        $request->validate([
+            'nombre' => 'required|string',
+            'documento' => 'required|file|max:'.$max_size
+        ]);
+        //user
+        $user = Auth::user();                
+        $alumno = $user->alumno;
+        $tramite = $alumno->tramite;
+        
+        $nombre = (string)$user->id;
+        $nombre_ruta =  $nombre . "_" . $user->name;                         
+
+        //ASIGNA NOMBRE DEL ARCHIVO QUE CORRESPONDE              
+        $nombreArch = $request->nombre;
+
+        if($nombreArch == "0"){
+            return redirect()->route('show-documentos')->with('info', 'Selecciona el nombre del archivo');
+        }            
+        
+        //GUARDAR DOCUMENTO
+        if ($request->hasFile('documento') && $request->file('documento')->isValid()) {
+
+            $ruta = $request->documento->store('alumnos/' . $nombre_ruta . '/documentos');
+            $documento = new Documento();
+            $documento->ruta = $ruta;
+            $documento->nombre_original = $request->documento->getClientOriginalName();
+            $documento->mime = $request->documento->getClientMimeType();
+            $documento->user_id = $user->id;
+            $documento->id_alumno = $alumno->id;
+            $documento->tramite_id = $tramite->id;
+            $documento->nombre_documento = $nombreArch;
+
+            /*if($tramite->estado == 7){
+                $documento->aprobado = 2;
+            }
+            if($tramite->estado == 5){
+                $documento->aprobado = 6;
+            }*/
+
+            $documento->save();
+
+            $alumnoDocs = $alumno->alumno_docs;            
+
+            // GUARDA QUE DOCUMENTOS SE SUBIERON
+            switch($nombreArch){
+                case "0":
+                    return redirect()->route('show-documentos');
+                break;
+                case "Formato A":
+                    $alumnoDocs->formato_a = 1;
+                break; 
+                case "Kárdex de Estudiante":
+                    $alumnoDocs->kardex = 1;
+                break; 
+                case "Certificado de Inglés":
+                    $alumnoDocs->certificado = 1;
+                break; 
+                case "Solicitud de Prórroga":
+                    $alumnoDocs->prorroga = 1;
+                break; 
+                case "Testimonio de Desempeño":
+                    $alumnoDocs->testimonio_desempeno = 1;                    
+                break; 
+                case "Reporte Individual de Resultados":
+                    $alumnoDocs->reporte_individual_resultados = 1;  
+                break; 
+                case "Carta dirigida al Comité de Titulación":
+                    $alumnoDocs->carta = 1;
+                break;
+                case "Formato D":
+                    $alumnoDocs->formato_d = 1;                    
+                break; 
+                case "Protocolo":
+                    $alumnoDocs->protocolo = 1;                   
+                break;
+                case "Contenido de la asignatura":
+                    $alumnoDocs->contenido_asignatura = 1;
+                break;   
+                case "Formato C":
+                    $alumnoDocs->formato_c = 1;
+                break;      
+                case "Certificados / Constancias":
+                    $alumnoDocs->certificado_constancias = 1;
+                break; 
+                case "Constancia de Calificaciones":
+                    $alumnoDocs->constancia_calificaciones = 1;
+                break;
+                case "Folleto":
+                    $alumnoDocs->folleto = 1;
+                break;
+                case "Constancia Ganador PM":
+                    $alumnoDocs->constancia_ganador_pm = 1;
+                break;
+                case "Evidencia del ISSN o ISBN":
+                    $alumnoDocs->evidencia = 1;
+                break;
+                case "Evidencia":
+                    $alumnoDocs->evidencia = 1;
+                break;
+                case "Declaratoria":
+                    $alumnoDocs->declaratoria = 1;
+                break;
+                case "Publicación":
+                    $alumnoDocs->publicacion = 1;
+                break;
+                case "Autorización Impresión":
+                    $alumnoDocs->autorizacion_impresion = 1;
+                break;        
+                case "Documento Trabajo":
+                    $alumnoDocs->documento_trabajo = 1;
+                break;
+                case "Reporte Escrito":
+                    $alumnoDocs->reporte_escrito = 1;
+                break;
+                case "Reseña del Trabajo":
+                    $alumnoDocs->resena_trabajo = 1;
+                break;
+                case "Curriculum vitae Académico":
+                    $alumnoDocs->curriculum_academico = 1;
+                break;
+                case "Certificados CENEVAL":
+                    $alumnoDocs->certificados_ceneval = 1;
+                break;
+            }                                
+            $alumnoDocs->save(); 
+        }
+        return redirect()->route('show-documentos')->with('success','Documento subido correctamente');
+    }
+
+    public function visualizarDocumento(Documento $documento)
+    {
+        $user_id = Auth::user()->id;        
+        if ($documento->user_id == $user_id) {
+            //Visualize the file without downloading it
+            return response()->file(storage_path('app/' . $documento->ruta));
+        } else {
+            return redirect()->route('alumnos.dashboard')->with('error', 'No tienes permisos para ver este archivo');
+        }
+
+    }
+
+    public function revisionDocumentos(){        
+        $user = Auth::user();
+        //alumno
+        $alumno = $user->alumno;
+        $tramite = $alumno->tramite;
+        //alumno docs
+        $alumnodocs = $alumno->alumno_docs;
+
+        $documentos = Documento::where('id_alumno', $alumno->id)->get(); 
+        
+        // Comprobar que no haya documentos No Aprobados
+        $no_aprobados = false;
+        foreach ($documentos as $documento){
+            if($documento->aprobado == 2 || $documento->aprobado == 6){
+                $no_aprobados = true;
+            }
+        }
+        if($no_aprobados){
+            return redirect()->route('show-documentos')->with('info','Corrige los documentos no aprobados');
+        }        
+        if ($tramite->estado == 2 || $tramite->estado == 3 || $tramite->estado == 5) {
+            if($alumnodocs->formato_a && $alumnodocs->kardex && $alumnodocs->certificado){                                                
+                // EXCELENCIA Y PROMEDIO        // EXAMEN GLOBAL TEORICO PRACTICO / EXAMEN GLOBAL TEORICO
+                if($alumno->id_articulo == 1 || ($alumno->id_opcion_titulacion == 3 || $alumno->id_opcion_titulacion == 4 && $alumnodocs->carta)
+                    // CENEVAL
+                    || ($alumno->id_opcion_titulacion == 5 && $alumnodocs->reporte_individual_resultados && $alumnodocs->testimonio_desempeno)
+                    // Examen de Capacitacion
+                    || ($alumno->id_opcion_titulacion == 6 && $alumnodocs->formato_c && $alumnodocs->certificado_constancias)
+                    // Guías comentadas o ilustradas / Paquete didactico
+                    || ($alumno->id_opcion_titulacion == 7 || $alumno->id_opcion_titulacion == 8 && $alumnodocs->formato_d && $alumnodocs->protocolo && $alumnodocs->contenido_asignatura)
+                    // Cursos o créditos de maestría o doctorado
+                    || ($alumno->id_opcion_titulacion == 9 && $alumnodocs->constancia_calificaciones && $alumnodocs->folleto)
+                    // Seminario de Investigacion
+                    || ($alumno->id_opcion_titulacion == 11 && $alumnodocs->evidencia && $alumnodocs->declaratoria && $alumnodocs->publicacion && $alumnodocs->carta_autorizacion)
+                    // Seminario de Titulación
+                    || ($alumno->id_opcion_titulacion == 12 && $alumnodocs->evidencia && $alumnodocs->reporte_escrito && $alumnodocs->resena_trabajo && $alumnodocs->curriculum_academico)
+                    // Diseño o rediseño / Tesis / Informe de practicas
+                    || (($alumno->id_opcion_titulacion == 13 && (($alumno->ganador_proyecto_modular && $alumnodocs->constancia_ganador_pm) || !$alumno->ganador_proyecto_modular)) || $alumno->id_opcion_titulacion == 14 || $alumno->id_opcion_titulacion == 16 && $alumnodocs->protocolo)){                                                                     
+                        foreach ($documentos as $documentos){
+                            if($documentos->aprobado != 1 && $documentos->aprobado != 4){
+                                $documentos->aprobado = 3;
+                                $documentos->save();
+                            }
+                        }               
+                        $alumnodocs->validado = 1;                
+                        $alumnodocs->save();                            
+                        Tramite::where('alumno_id', $alumno->id)->update(['estado' => 3]);                                                             
+                }else{
+                    $alumnodocs->validado = 2;
+                    $alumnodocs->save();
+                }   
+            }else{
+                $alumnodocs->validado = 2;
+                $alumnodocs->save();
+            }   
+        }else if($tramite->estado == 6 || $tramite->estado == 9){
+            if((($tramite->alumno->id_opcion_titulacion == 7 || $tramite->alumno->id_opcion_titulacion == 8 || $tramite->alumno->id_opcion_titulacion == 13 || $tramite->alumno->id_opcion_titulacion == 14 || $tramite->alumno->id_opcion_titulacion == 16)
+                && $alumnodocs->autorizacion_impresion && $alumnodocs->documento_trabajo)
+                || ($tramite->alumno->id_opcion_titulacion == 12 && $alumnodocs->autorizacion_impresion)
+                || ($tramite->alumno->id_opcion_titulacion == 5 && $alumnodocs->certificados_ceneval)){  
+                foreach ($documentos as $documentos){
+                    if($documentos->aprobado != 1 && $documentos->aprobado != 5 && $documentos->aprobado != 4){
+                        $documentos->aprobado = 3;
+                        $documentos->save();
+                    }
+                }               
+                $alumnodocs->validado = 3;                
+                $alumnodocs->save();     
+                // Estado Documentos Entregados - 2da Etapa                       
+                Tramite::where('alumno_id', $alumno->id)->update(['estado' => 7]);                                                             
+            }else{
+                $alumnodocs->validado = 4;
+                $alumnodocs->save();
+            }                                 
+            
+        }    
+        
+        if($alumnodocs->validado == 2 || $alumnodocs->validado == 4)
+            return redirect()->route('show-documentos')->with('info','Tus documentos NO estan COMPLETOS');
+    
+        
+        return redirect()->route('show-documentos')->with('success','Documentos enviados a revisión.');
+    }
+
+    public function descargarDocumento(Documento $documento)
+    {
+        $user_id = Auth::user()->id;
+        if( $documento->user_id == $user_id ){
+            return Storage::download($documento->ruta, $documento->nombre_original);
+        }else{
+            return redirect()->route('alumnos.dashboard')->with('error', 'No tiene permisos para descargar este archivo');
+        }
+    }
+
+    public function eliminarDocumento(Documento $documento){        
+        try{
+            //$documento = Documento::find($documento->id);
+            Storage::delete($documento->ruta);
+            $nombre = $documento->nombre_documento;
+            $documento->delete();
+            $user_id = Auth::id();
+            $alumno = Alumno::where('user_id', $user_id)->first();
+            $alumnoDocs = AlumnoDocs::where('alumno_id', $alumno->id)->first();
+
+            if($nombre == "Formato A"){
+                $alumnoDocs->formato_a = 0;            
+            }else if($nombre == "Certificado de Inglés"){
+                $alumnoDocs->certificado = 0;
+            }else if($nombre == "Prórroga"){
+                $alumnoDocs->prorroga = 0;
+            }else if($nombre == "Testimonio de Desempeño"){
+                $alumnoDocs->testimonio_desempeno = 0;
+            }else if($nombre == "Reporte Individual de Resultados"){
+                $alumnoDocs->reporte_individual_resultados = 0;
+            }else if($nombre == "Formato D"){
+                $alumnoDocs->formato_d = 0;
+            }else if($nombre == "Protocolo"){
+                $alumnoDocs->protocolo = 0;
+            }else if($nombre == "Contenido de la asignatura"){
+                $alumnoDocs->contenido_asignatura = 0;
+            }else if($nombre == "Carta dirigida al Comité de Titulación"){
+                $alumnoDocs->carta = 0;
+            }else if($nombre == "Formato C"){
+                $alumnoDocs->formato_c = 0;                                                          
+            }else if($nombre == "Certificados / Constancias"){
+                $alumnoDocs->certificado_constancias = 0;
+            }else if($nombre == "Folleto"){
+                $alumnoDocs->folleto = 0;
+            }else if($nombre == "Constancia de Calificaciones"){
+                $alumnoDocs->constancia_calificaciones = 0;
+            }else if($nombre == "Constancia Ganador PM"){
+                $alumnoDocs->constancia_ganador_pm = 0;
+            }else if($nombre == "Evidencia del ISSN o ISBN"){
+                $alumnoDocs->evidencia = 0;
+            }else if($nombre == "Evidencia"){
+                $alumnoDocs->evidencia = 0;
+            }else if($nombre == "Declaratoria"){
+                $alumnoDocs->declaratoria = 0;
+            }else if($nombre == "Publicación"){
+                $alumnoDocs->publicacion = 0;
+            }else if($nombre == "Autorización Impresión"){
+                $alumnoDocs->autorizacion_impresion = 0;
+            }else if($nombre == "Autorizacion de Publicación Tesis"){
+                $alumnoDocs->autorizacion_publicacion = 0;
+            }else if($nombre == "Documento Trabajo"){
+                $alumnoDocs->documento_trabajo = 0;
+            }else if($nombre == "Reporte Escrito"){
+                $alumnoDocs->reporte_escrito = 0;
+            }else if($nombre == "Reseña del Trabajo"){
+                $alumnoDocs->resena_trabajo = 0;
+            }else if($nombre == "Curriculum vitae Académico"){
+                $alumnoDocs->curriculum_academico = 0;
+            }else if($nombre == "Certificados CENEVAL"){
+                $alumnoDocs->certificados_ceneval = 0;
+            }
+                
+            $alumnoDocs->save();           
+
+        }catch(\Exception $e){
+            return redirect()->route('admin.dashboard')->with('info', 'No se pudo eliminar el documento.');
+        }
+
+        //$tramite = Tramite::find($archivo->tramite_id);
+        return redirect()->route('show-documentos')->with('success','Documento "'.$nombre.'" eliminado');
     }
 
     public function getSubcategorias($id)

@@ -1,0 +1,521 @@
+body{
+  font-family: Arial, sans-serif;
+  font-size: 15.5px;
+  margin: 0px;  
+  background-size: cover;
+}
+
+.letra15{
+  font-size: 15.5px; 
+}
+
+.interlineado{
+  line-height: 1.6;
+}
+
+.letra14{
+  font-size: 14.2px; 
+}
+
+.letra13{
+  font-size: 12px; 
+}
+
+.letra12{
+  font-size: 11px;
+}
+
+.letra10{
+  font-size: 10px;
+  text-align: justify;
+}
+
+.biomedica{
+  background-image: url('../img/formato_biomedica.jpg');
+}
+
+.computacion{
+  background-image: url('../img/formato_computacion.jpg');
+}
+
+.cabecera-carta{
+  width: 600px;
+}
+
+.cabecera-biblioteca{
+  width: 950px;
+  position: absolute;
+  left: 6%;
+}
+
+.sello-biblioteca{
+  width: 110px;
+  position: absolute;
+  top: 54.5%;
+  left: 65%;
+}
+
+.abajo-carta{
+  position: absolute;
+  bottom: 1%;
+  left: 8%;
+  width: 550px;
+}
+
+.abajo-biblioteca{
+  position: absolute;
+  bottom: 1%;
+  left: 9%;
+  width: 850px;
+}
+
+.nombre-biblioteca{
+  text-align: right;
+  position: absolute;
+  top: 76%;
+  left: 48mm;
+  right: 48mm;
+}
+
+@page {
+  margin: 0;
+}
+
+.heading {
+  /*font-size: 18px;  */
+  text-align: center;
+  font-weight: bold;
+}
+
+.content{
+  margin-left: 20px;
+  margin-top: 30px;
+}
+
+.footer{
+  margin-left: 20px;
+  margin-top: 30px;
+  text-align: center;
+}
+
+.firma{
+  border-top: 1px solid black;
+  padding-top: 5px;
+  margin-bottom: solid 5px;
+  margin-top: 10px;
+  margin-left: 100px;
+  margin-right: 100px;
+  text-align: center;
+}
+
+.linea{
+  margin-left: 40%;
+  margin-right: 40%;
+  margin-top: 30px;
+  border-bottom: solid 1px;
+}
+
+.acomodo-titulo{
+  position: absolute;
+  top: 13%;
+  left: 30%;
+  /*font-size: 18px;  */
+  text-align: center;
+}
+
+.acomodo-titulo-carta{
+  position: absolute;
+  top: 11%;
+  left: 20%;
+  /*font-size: 18px;  */
+  text-align: center;
+}
+
+.titulo-comprobante{
+  position: absolute;
+  top: 18%;
+  left: 35%;
+  /*font-size: 18px;  */
+  text-align: center;
+  font-weight: bold;
+  text-decoration: underline;
+}
+
+.titulo-comprobante2{
+  position: absolute;
+  top: 11%;
+  left: 35%;
+  /*font-size: 18px;  */
+  text-align: center;
+  font-weight: bold;
+}
+
+.top20{
+  top: 22%;
+  text-align: justify;
+}
+
+.img-1 {
+  width: 35rem;
+  height: 10rem;
+  object-fit: contain;
+  position: relative;
+  top: 0;
+  left: 30;
+}
+
+.formato{
+  text-align: right;
+  text-decoration: underline;
+}
+
+.pos{
+  position: absolute;
+  left: 29mm;
+  right: 29mm;
+  /*font-size: 18px; */
+}
+
+.pos2{
+  position: absolute;
+  left: 37mm;
+  right: 29mm;
+}
+
+.pos-biblioteca{
+  position: absolute;
+  left: 48mm;
+  right: 48mm;
+}
+
+.modalidad{
+  position: absolute;
+  left: 56mm;
+  right: 29mm;
+  top: 31.9%;
+  text-align: justify;
+}
+
+.datos{
+  top: 25%;
+  text-align: justify;
+}
+
+.datos2{
+  top: 18%;
+  text-align: justify;
+}
+
+.datos-comprobante{
+  top: 15%;
+  text-align: justify;
+}
+
+.datos-biblioteca{
+  top: 27%;
+  text-align: justify;
+}
+
+.abajo{
+  top: 68%;
+  text-align: center;
+}
+
+.datos-material{
+  top: 61%;
+  line-height: 18.8px;
+}
+
+.abajo2{
+  top: 65%;
+  text-align: center;
+}
+
+.linea-firma{
+  top: 82%;
+}
+
+.linea-firma2{
+  top: 83%;
+}
+
+.atentamente{
+  top: 65%;
+  text-align: center;
+}
+
+.atentamente-biblioteca{
+  top: 58%;
+  text-align: center;
+}
+
+.atentamente-comprobante2{
+  top: 70.5%;
+  text-align: center;
+}
+
+.coordi{
+  top: 84.5%;
+  text-align: center;
+}
+
+.presidente{
+  top: 84%;
+  text-align: center;
+}
+
+.presidente2{
+  top: 83%;
+  text-align: center;
+}
+
+.aprobada{
+  text-align: center;
+  top: 49%;
+}
+
+.centrar-profes{
+  position: absolute;
+  left: 25mm;  
+}
+
+.centrar-profes2{
+  position: absolute;
+  left: 5mm;  
+}
+
+.folio{
+  text-align: right;
+  position: absolute;
+  top: 11%;
+  left: 29mm;
+  right: 29mm;
+}
+
+.folio-biblioteca{
+  text-align: right;
+  position: absolute;
+  top: 21%;
+  left: 48mm;
+  right: 48mm;
+}
+
+.right{
+  text-align: right;
+  position: absolute;
+  top: 20%;
+  left: 29mm;
+  right: 29mm;
+}
+
+.right2{
+  text-align: right;
+  position: absolute;
+  top: 12%;
+  left: 15mm;
+  right: 15mm;
+}
+
+.bold{
+  font-weight: bold;
+}
+
+.center{
+  text-align: center;
+}
+
+.cursiva{
+  font-style: italic;
+}
+
+.underline{
+  text-decoration: underline;
+}
+
+/* TABLA */
+table {
+  /*font-size: 12px; */
+  border-collapse: collapse;
+  width: 100%;
+}
+
+th, td {
+  text-align: left;
+  padding: 2px;
+  border: 2px solid;
+  border-width: thick;
+}
+
+th{
+  width: 200px;
+}
+
+.seleccion-mod{
+  width: 20px;
+  font-weight: bold;
+}
+
+table, th, td {
+  border-spacing: 5px;
+}
+
+.cbox{
+  transform: scale(1.5);
+  display: none; 
+}
+
+.cbox + label::before {
+  content: ""; /* código Unicode para la cruz */
+  display: inline-block;
+  width: 26px; /* ancho del icono */
+  height: 22px; /* altura del icono */
+  border: 1px solid black; /* borde del icono */
+  margin-right: 5px; /* separación entre el icono y el texto */
+  vertical-align: middle;
+}
+
+.cbox:checked + label::before  {  
+  width: 17px; /* ancho del icono */
+  height: 13px; /* altura del icono */
+  content: "X"; /* código Unicode para la cruz */
+  padding: 5px;
+}
+
+.cbox2{
+  transform: scale(1.5);
+  display: none; 
+}
+
+.cbox2 + label::before {
+  content: ""; /* código Unicode para la cruz */
+  display: inline-block;
+  width: 12px; /* ancho del icono */
+  height: 12px; /* altura del icono */
+  border: 1px solid black; /* borde del icono */
+  margin-right: 5px; /* separación entre el icono y el texto */
+  vertical-align: middle;
+  border-radius: 50%;
+}
+
+.cbox2:checked + label::before  {  
+  width: 10px; /* ancho del icono */
+  height: 10px; /* altura del icono */
+  content: "X"; /* código Unicode para la cruz */
+  padding: 1px;
+  font-weight: bold;
+}
+
+.cbox3{
+  transform: scale(1.5);
+  display: none; 
+}
+
+.cbox3 + label::before {
+  content: ""; /* código Unicode para la cruz */
+  display: inline-block;
+  width: 12px; /* ancho del icono */
+  height: 12px; /* altura del icono */
+  border: 1px solid black; /* borde del icono */
+  margin-right: 5px; /* separación entre el icono y el texto */
+  vertical-align: middle;
+}
+
+.cbox3:checked + label::before  {  
+  width: 10px; /* ancho del icono */
+  height: 10px; /* altura del icono */
+  content: "X"; /* código Unicode para la cruz */
+  padding: 1px;
+  font-weight: bold;
+}
+
+.firma-digital{
+  position: absolute;
+  top: 77.5%;
+  left: 40%;
+  width: 150px; 
+  height: 87px; 
+}
+
+.firma-digital2{
+  position: absolute;
+  top: 78.3%;
+  left: 40%;
+  width: 160px; 
+  height: 93px; 
+}
+
+.firma-digital-carta{
+  position: absolute;
+  top: 86.5%;
+  left: 20%;
+  width: 150px; 
+  height: 87px; 
+}
+
+.firma-digital-dictamen{
+  position: absolute;
+  top: 79%;
+  left: 40%;
+  width: 160px; /*150px; */
+  height: 93px; /*87px; */
+}
+
+.firma-digital-dictamen2{
+  position: absolute;
+  top: 77.5%;
+  left: 40%;
+  width: 160px; 
+  height: 93px; 
+}
+
+.linea-titulo-tesis{
+  top: 66.5%
+}
+
+.linea-titulo-tesis2{
+  top: 68.1%
+}
+
+.linea-tipo-otro{
+  top: 64%;
+}
+
+.linea-autores{
+  top: 70.1%
+}
+
+.linea-autores2{
+  top: 71.7%
+}
+
+.linea-fecha-titulacion{
+  top: 73.7%
+}
+
+.linea-titulo{
+  top: 75.5%
+}
+
+.linea-centro{
+  top: 77.3%
+}
+
+.linea-autor{
+  top: 82.1%
+}
+
+.linea-direccion{
+  top: 83.9%
+}
+
+.linea-telefono{
+  top: 85.7%
+}
+
+.linea-email{
+  top: 87.4%
+}
+
+.linea-firma-carta{
+  top: 89.8%
+}

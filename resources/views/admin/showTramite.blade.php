@@ -15,7 +15,275 @@
             </button>
         </div>
     </div>
-    <div class="grid grid-cols-12 gap-5 mt-5">
+    <div class="row">
+        @can('biblioteca')                 
+            <div class="col-md-12"> 
+                @if(!$alumnoDocs->constancia_no_adeudo_biblioteca)  
+                    <div class="btn-group mr-2">                        
+                        <a href="{{route('admin.formatoNoAdeudo',$tramite)}}"  class="btn btn-info btn-icon-split" id="citatorio" >
+                            <span class="icon"><i class="fas fa-file-alt"></i></span>
+                            <span class="text">Generar Formato de No Adeudo</span>
+                        </a>                        
+                    </div>
+                @endif                
+            </div>
+            <div class="col-md-12"> 
+                <!-- Boton de Carta de No Adeudo Autorizada -->                
+                @if($tramite->estado == 9 && $alumnoDocs->constancia_no_adeudo_biblioteca)
+                    <div class="btn-group mr-2">
+                        <a href="{{route('admin.tramites.carta.autorizada',$tramite)}}"  class="btn btn-primary btn-icon-split" id="aprobar" >
+                            <span class="icon"><i class="fas fa-file-alt"></i></span>
+                            <span class="text">Carta de No Adeudo Autorizada</span>
+                        </a>
+                    </div>
+                @endif 
+            </div>
+        @endcan
+        @can('control-escolar')                             
+            <div class="col-md-12"> 
+                @if(!$alumnoDocs->constancia_no_adeudo_universidad)  
+                    <div class="btn-group mr-2">                        
+                        <a href="{{route('admin.formatoNoAdeudoCE',$tramite)}}"  class="btn btn-info btn-icon-split" id="citatorio" >
+                            <span class="icon"><i class="fas fa-file-alt"></i></span>
+                            <span class="text">Generar Formato de No Adeudo</span>
+                        </a>                        
+                    </div>
+                @endif                
+            </div>
+        @endcan
+        <!--can('admin-coordinador')                  -->
+            <div id="horizontal-form" class="p-5">
+                <div class="form-inline">
+                    <!-- Boton de Finalizar Trámite -->                    
+                    @if($tramite->estado == 10)
+                        <div class="btn-group mr-2">
+                            <a href="#"  class="btn btn-success btn-icon-split" id="aprobarButton" data-toggle="modal" data-target="#aprobarTramiteModal">
+                                <span class="icon"><i class="fas fa-check"></i></span>
+                                <span class="text">Finalizar Tramite</span>
+                            </a>
+                        </div>
+                    @endif
+                    <!-- Boton de Consultar Kardex -->                
+                    @if($tramite->estado == 2)
+                        <div class="btn-group mr-2">
+                            <a href="{{route('admin.kardex',$tramite)}}"  class="btn btn-primary btn-icon-split" id="aprobar" >
+                                <span class="icon"><i class="fas fa-file-alt"></i></span>
+                                <span class="text">Consultar Kárdex</span>
+                            </a>
+                        </div>
+                    @endif
+                    <!-- Boton de Validar Documentos -->                
+                    @if(($aprobados && $tramite->estado == 3 || $aprobados && $tramite->estado == 7))
+                        <!--Estado - Documentos Entregados -->
+                        <div class="btn-group mr-2">
+                            <a href="{{route('validar-documentos',$tramite)}}"  class="btn btn-primary btn-icon-split" id="aprobar" >
+                                <span class="icon"><i class="fas fa-file-alt"></i></span>
+                                <span class="text">Validar Documentos</span>
+                            </a>
+                        </div>
+                    @elseif(($revisados && $tramite->estado == 3 || $revisados && $tramite->estado == 7))
+                        <!--Estado - Documentos Entregados -->
+                        <div class="btn-group mr-2">
+                            <a href="{{route('revisar-documentos',$tramite)}}"  class="btn btn-primary btn-icon-split" id="aprobar" >
+                                <span class="icon"><i class="fas fa-file-alt"></i></span>
+                                <span class="text">Documentos Revisados</span>
+                            </a>
+                        </div>
+                    @elseif($tramite->estado == 4)
+                        <!-- Boton de Generar Dictamen -->
+                        @if($alumnoDocs->dictamen == 0)
+                            <div class="btn-group mr-2">                        
+                                <a href="javascript:;" data-tw-toggle="modal" data-tw-target="#modal-dictamen" class="btn btn-primary" id="citatorio" >
+                                    <span class="icon"><i class="fas fa-file-alt"></i></span>
+                                    <span class="text">Generar Dictamen</span>
+                                </a>                        
+                            </div>
+                        @endif
+                        @if($alumnoDocs->comprobante_academica == 0 && $alumnoDocs->dictamen == 1)
+                            <div class="btn-group mr-2">                        
+                                <a href=""  class="btn btn-info btn-icon-split" id="citatorio" >
+                                    <span class="icon"><i class="fas fa-file-alt"></i></span>
+                                    <span class="text">Generar Comprobante Academico</span>
+                                </a>                        
+                            </div>
+                        @endif
+                        <!-- Boton de Pasar a 2da etapa -->                
+                        @if($alumnoDocs->dictamen == 1 && $alumnoDocs->comprobante_academica == 1)
+                            <div class="btn-group mr-2">
+                                <a href="{{route('admin.tramites.etapa2',$tramite)}}"  class="btn btn-primary btn-icon-split" id="aprobar" >
+                                    <span class="icon"><i class="fas fa-file-alt"></i></span>
+                                    <span class="text">Pasar a 2da Etapa</span>
+                                </a>
+                            </div>
+                        @endif  
+                    <!-- Estado - Documentos Validados 2da Etapa-->                            
+                    @elseif ($tramite->estado == 8)
+                        @can('admin')                                                    
+                            <!-- Boton de Generar Citatorio -->
+                            <div class="btn-group mr-2">
+                                <a href="{{route('admin.tramite.editar.datos.titulacion',$alumno)}}"  class="btn btn-info btn-icon-split" id="citatorio" >
+                                    <span class="icon"><i class="fas fa-file-alt"></i></span>
+                                    <span class="text">Generar Datos de Titulación</span>
+                                </a>
+                            </div>   
+                        @endcan           
+                    @elseif($tramite->estado == 7 || $tramite->estado == 8 && $alumno->tipo_de_ceremonia == 'INDIVIDUAL')
+                        <!-- Boton de descargar Citatorio -->
+                        
+                    @endif
+                    @if(isset($alumno) && $tramite->estado > 5)
+                        <!--PROTESTA-->
+                    @endif  
+                    @if($tramite->estado == 11)
+                        <div class="btn-group mr-2">
+                            <a href="{{route('admin.tramites.etapa3',$tramite)}}"  class="btn btn-primary btn-icon-split" id="aprobar" >
+                                <span class="icon"><i class="fas fa-file-alt"></i></span>
+                                <span class="text">Pasar a 3ra Etapa</span>
+                            </a>
+                        </div>
+                    @endif                                      
+                    <!-- Boton de Editar -->
+                    @can('coordinador')
+                        @if ($tramite->estado < 6)
+                            <div class="btn-group mr-2">
+                                <a  href="{{ route('admin.tramite.edit', $tramite) }}" class="btn btn-warning btn-icon-split" id="editarButton">
+                                    <span class="icon"><i class="fas fa-pen"></i></span>
+                                    <span class="text">Editar</span>
+                                </a>
+                            </div>
+                            <!-- Boton de Eliminar -->
+                            <div class="btn-group mr-2">
+                                <a  class="btn btn-danger btn-icon-split" id="eliminarButton" href="#" data-toggle="modal" data-target="#eliminarTramiteModal{{$tramite->id}}">
+                                    <span class="icon"><i class="fas fa-times"></i></span>
+                                    <span class="text">Eliminar</span>
+                                </a>
+                            </div>   
+                        @endif                        
+                    @endcan
+                    @can('admin')                        
+                        <div class="btn-group mr-2">
+                            <a  href="{{ route('admin.tramite.edit', $tramite) }}" class="btn btn-warning btn-icon-split" id="editarButton">
+                                <span class="icon"><i class="fas fa-pen"></i></span>
+                                <span class="text">Editar</span>
+                            </a>
+                        </div>
+                        <!-- Boton de Eliminar -->
+                        <div class="btn-group mr-2">
+                            <a  class="btn btn-danger btn-icon-split" id="eliminarButton" href="#" data-toggle="modal" data-target="#eliminarTramiteModal{{$tramite->id}}">
+                                <span class="icon"><i class="fas fa-times"></i></span>
+                                <span class="text">Eliminar</span>
+                            </a>
+                        </div>   
+                    @endcan
+                                 
+                    <!-- Boton de Notificar -->
+                    @if($tramite->estado == 0)
+                        <div class="btn-group mr-2" id="eliminararErrorButton">
+                            <a href="{{ route('admin.tramites.eliminarError' , $tramite) }}" class="btn btn-dark btn-icon-split">
+                                <span class="icon text-white-50">
+                                    <i class="fas fa-info-circle"></i>
+                                </span>
+                                <span class="text">Eliminar estado de Error</span>
+                            </a>
+                        </div>
+                    <!-- Boton de Notificar -->
+                    @else
+                        <div class="btn-group mr-2" id="notificarErrorButton" href="#" data-toggle="modal" data-target="#notificarErrorTramite">                    
+                            <a href="#" class="btn btn-dark btn-icon-split">
+                                <span class="icon text-white-50">
+                                    <i class="fas fa-info-circle"></i>
+                                </span>
+                                <span class="text">Notificar de Error</span>
+                            </a>
+                        </div>
+
+                    @endif
+
+                </div>
+            </div>               
+            <!-- Estado - Datos Titulación -->    
+            @if(isset($alumno) && ($tramite->estado >= 10))                  
+                <div class="col-md-12 mb-3">
+                    @if($tramite->estado == 7 || $tramite->estado == 8 && $alumno->tipo_de_ceremonia == 'INDIVIDUAL')
+                        <!-- Boton de descargar Citatorio -->
+                        <div class="btn-group mr-2">
+                            <a href="{{ route('admin.tramite.documentos.descargar.citatorio', $alumno) }}"  class="btn btn-info btn-icon-split" id="citatorio_descarga">
+                                <span class="icon"><i class="fas fa-file-alt"></i></span>
+                                <span class="text">Descargar Citatorio</span>
+                            </a>
+                        </div>
+                    @endif
+                    <!-- Boton de Descargar Acta -->
+                    <div class="btn-group mr-2">
+                        <a href="{{route('admin.tramite.documentos.descargar.acta',$alumno)}}"  class="btn btn-primary btn-icon-split" id="acta_titulacion">
+                            <span class="icon"><i class="fas fa-file-contract"></i></span>
+                            <span class="text">Descargar Acta de Titulación</span>
+                        </a>
+                    </div>
+                    <!-- Boton de Descargar Protesta -->
+                    <div class="btn-group mr-2">
+                        <a href="{{ route('admin.tramite.documentos.descargar.protesta', $alumno) }}"  class="btn btn-secondary btn-icon-split" id="protesta_descarga">
+                            <span class="icon"><i class="fas fa-file-word"></i></span>
+                            <span class="text">Descargar Protesta</span>
+                        </a>
+                    </div>                  
+                    <!-- Boton de Descargar Acta circunstanciada -->
+                    <div class="btn-group mr-2">
+                        <a href="{{route('admin.tramite.documentos.descargar.actacirunstanciada',$alumno)}}"  class="btn btn-secondary btn-icon-split" id="acta_titulacion">
+                            <span class="icon"><i class="fas fa-file-invoice"></i></span>
+                            <span class="text">Descargar Acta Circunstanciada</span>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <!-- Boton de Subir Acta firmada -->
+                    <div class="btn-group mr-2">
+                        <a href="#"  class="btn btn-info btn-icon-split" id="acta_titulacion" data-toggle="modal" data-target="#subirActaFirmadaModal">
+                            <span class="icon"><i class="fas fa-file-upload"></i></span>
+                            <span class="text">Subir Acta de Titulación Firmada</span>
+                        </a>
+                    </div>                        
+                    <!-- Boton de Descargar Acta  -->
+                    <div class="btn-group mr-2">
+                        <a href="{{route('admin.tramite.editar.datos.titulacion',$alumno)}}"  class="btn btn-warning btn-icon-split" id="acta_titulacion">
+                            <span class="icon"><i class="fas fa-graduation-cap"></i></span>
+                            <span class="text">Editar Datos de Titulacion</span>
+                        </a>
+                    </div>
+                </div>
+            @endif 
+        <!--endcan        -->
+    </div>
+    {{-- ERRORES --}}
+    <div class="grid grid-cols-12 gap-12"> 
+        <div class="intro-y col-span-12 lg:col-span-12">  
+            {{-- Mensaje Alerta --}}
+            @if (session('info'))
+                <div class="alert alert-danger-soft show flex items-center mb-2">
+                    <i data-lucide="alert-octagon" class="w-6 h-6 mr-2"></i>
+                    {{ session('info') }}
+                </div>
+            @endif
+            {{-- Mensaje Exito --}}                 
+            @if (session('success'))
+                <div class="alert alert-success-soft show flex items-center mb-2">
+                    {{ session('success') }}
+                </div>
+            @endif 
+            @if ($errors->any())
+                {{-- Mostrar error --}}
+                <div class="alert alert-danger-soft show flex items-center mb-2">
+                    <i data-lucide="alert-octagon" class="w-6 h-6 mr-2"></i>
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>   
+            @endif 
+        </div> 
+    </div> 
+    <div class="grid grid-cols-12 gap-5 ">
         <!-- BEGIN: Product Detail Side Menu -->
         <div class="col-span-12 xl:col-span-6">
             <div class="box intro-y p-5 mt-5">
@@ -138,10 +406,12 @@
                             <svg class="svg-inline--fa fa-venus-mars w-4 h-4 text-slate-500 mr-2" xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path fill="currentColor" d="M164.9 24.6c-7.7-18.6-28-28.5-47.4-23.2l-88 24C12.1 30.2 0 46 0 64C0 311.4 200.6 512 448 512c18 0 33.8-12.1 38.6-29.5l24-88c5.3-19.4-4.6-39.7-23.2-47.4l-96-40c-16.3-6.8-35.2-2.1-46.3 11.6L304.7 368C234.3 334.7 177.3 277.7 144 207.3L193.3 167c13.7-11.2 18.4-30 11.6-46.3l-40-96z"/></svg>
                             <b>Teléfono (empresa):&nbsp;</b>{{ $alumno->tel_empresa }}
                         </div>
-                        <div class="flex mt-3">
-                            <svg class="svg-inline--fa fa-venus-mars w-4 h-4 text-slate-500 mr-2" xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 576 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path fill="currentColor" d="M575.8 255.5c0 18-15 32.1-32 32.1h-32l.7 160.2c0 2.7-.2 5.4-.5 8.1V472c0 22.1-17.9 40-40 40H456c-1.1 0-2.2 0-3.3-.1c-1.4 .1-2.8 .1-4.2 .1H416 392c-22.1 0-40-17.9-40-40V448 384c0-17.7-14.3-32-32-32H256c-17.7 0-32 14.3-32 32v64 24c0 22.1-17.9 40-40 40H160 128.1c-1.5 0-3-.1-4.5-.2c-1.2 .1-2.4 .2-3.6 .2H104c-22.1 0-40-17.9-40-40V360c0-.9 0-1.9 .1-2.8V287.6H32c-18 0-32-14-32-32.1c0-9 3-17 10-24L266.4 8c7-7 15-8 22-8s15 2 21 7L564.8 231.5c8 7 12 15 11 24z"/></svg>
-                            <b>Domicilio:&nbsp;</b>{{ $alumno->empresa_calle." #".$alumno->empresa_numero.", ".$alumno->empresa_colonia.", ".$alumno->empresa_CP.", ".$alumno->empresa_municipio.", ".$alumno->empresa_estado }}
-                        </div>
+                        @if (isset($alumno->empresa_calle))                                                    
+                            <div class="flex mt-3">
+                                <svg class="svg-inline--fa fa-venus-mars w-4 h-4 text-slate-500 mr-2" xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 576 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path fill="currentColor" d="M575.8 255.5c0 18-15 32.1-32 32.1h-32l.7 160.2c0 2.7-.2 5.4-.5 8.1V472c0 22.1-17.9 40-40 40H456c-1.1 0-2.2 0-3.3-.1c-1.4 .1-2.8 .1-4.2 .1H416 392c-22.1 0-40-17.9-40-40V448 384c0-17.7-14.3-32-32-32H256c-17.7 0-32 14.3-32 32v64 24c0 22.1-17.9 40-40 40H160 128.1c-1.5 0-3-.1-4.5-.2c-1.2 .1-2.4 .2-3.6 .2H104c-22.1 0-40-17.9-40-40V360c0-.9 0-1.9 .1-2.8V287.6H32c-18 0-32-14-32-32.1c0-9 3-17 10-24L266.4 8c7-7 15-8 22-8s15 2 21 7L564.8 231.5c8 7 12 15 11 24z"/></svg>
+                                <b>Domicilio:&nbsp;</b>{{ $alumno->empresa_calle." #".$alumno->empresa_numero.", ".$alumno->empresa_colonia.", ".$alumno->empresa_CP.", ".$alumno->empresa_municipio.", ".$alumno->empresa_estado }}
+                            </div>
+                        @endif
                     @else
                         <div class="flex items-center mt-3">
                             <svg class="svg-inline--fa fa-venus-mars w-4 h-4 text-slate-500 mr-2" xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path fill="currentColor" d="M184 48H328c4.4 0 8 3.6 8 8V96H176V56c0-4.4 3.6-8 8-8zm-56 8V96H64C28.7 96 0 124.7 0 160v96H192 320 512V160c0-35.3-28.7-64-64-64H384V56c0-30.9-25.1-56-56-56H184c-30.9 0-56 25.1-56 56zM512 288H320v32c0 17.7-14.3 32-32 32H224c-17.7 0-32-14.3-32-32V288H0V416c0 35.3 28.7 64 64 64H448c35.3 0 64-28.7 64-64V288z"/></svg>
@@ -192,32 +462,16 @@
             </div>
             <div class="tab-content">
                 <div id="active-transactions" class="tab-pane active" role="tabpanel" aria-labelledby="active-transactions-tab">
-                    <div class="box p-5 intro-y mt-5">
-                        <!--<div class="flex flex-col xl:flex-row gap-y-3">
-                            <div class="form-inline flex-1 flex-col xl:flex-row items-start xl:items-center gap-y-2 xl:mr-6">
-                                <label for="crud-form-1" class="form-label">Invoice</label>
-                                <input id="crud-form-1" type="text" class="form-control w-full" placeholder="Invoice..">
-                            </div>
-                            <div class="form-inline flex-1 flex-col xl:flex-row items-start xl:items-center gap-y-2 xl:mr-6">
-                                <label for="crud-form-1" class="form-label">Status</label>
-                                <select class="form-select w-full" aria-label="Default select example">
-                                    <option>Active</option>
-                                    <option>Inactive</option>
-                                </select>
-                            </div>
-                            <button class="btn btn-primary shadow-md">
-                                <i class="w-4 h-4 mr-2" data-lucide="search"></i> Filter
-                            </button>
-                        </div>-->
+                    <div class="box p-5 intro-y mt-5">                       
                         <div class="overflow-auto lg:overflow-visible ">
                             <table id="docs-entregados" class="table table-striped mt-5">
                                 <thead>
                                     <tr>
                                         <th class="whitespace-nowrap !py-5">Nombre</th>
-                                        <th class="whitespace-nowrap">Nombre Original</th>
+                                        <th class="">Nombre Original</th>
                                         <th class="whitespace-nowrap">Fecha de Registro</th>
                                         <th class="whitespace-nowrap">Estado</th>
-                                        <th class="whitespace-nowrap text-center">Acciones</th>
+                                        <th class="whitespace-nowrap">Acciones</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -228,28 +482,93 @@
                                                     <div class="font-medium whitespace-nowrap">{{ $documento->nombre_documento }}</div>                                                   
                                                 </td>
                                                 <td>
-                                                    <div class="font-medium whitespace-nowrap">{{ $documento->nombre_original }}</div>                                                   
+                                                    <div class="">{{ $documento->nombre_original }}</div>                                                   
                                                 </td>
                                                 <td>
                                                     <div class="font-medium whitespace-nowrap">{{ $documento->created_at }}</div>                                                   
                                                 </td>
                                                 <td>
                                                     <div class="font-medium whitespace-nowrap">
-                                                    @if($documento->aprobado == 0)
-                                                        <span class="badge badge-light">Entregado</span>                                                                                                                      
-                                                    @elseif ($documento->aprobado == 1 || $documento->aprobado == 5)
-                                                        <span class="badge badge-success">Aprobado</span>
-                                                    @elseif ($documento->aprobado == 2 || $documento->aprobado == 6)
-                                                        <span class="badge badge-danger">No Aprobado</span>  
-                                                    @elseif ($documento->aprobado == 3)
-                                                        <span class="badge badge-dark">En revisión</span>
-                                                    @endif
+                                                        @if($documento->aprobado == 0)
+                                                            <div class="px-3 py-1 alert-primary-soft border border-primary/10 rounded-full mr-2 mb-2">Entregado</div>                                                                                                                                                                       
+                                                        @elseif ($documento->aprobado == 1 || $documento->aprobado == 5)                                                    
+                                                            <div class="px-3 py-1 alert-success-soft border border-primary/10 rounded-full mr-2 mb-2">Aprobado</div>                                                    
+                                                        @elseif ($documento->aprobado == 2 || $documento->aprobado == 6)
+                                                            <div class="px-3 py-1 alert-danger-soft border border-primary/10 rounded-full mr-2 mb-2">No Aprobado</div>
+                                                        @elseif ($documento->aprobado == 3)
+                                                            <div class="px-3 py-1 alert-pending-soft border border-primary/10 rounded-full mr-2 mb-2">En revisión</div>
+                                                        @endif
                                                     </div>
                                                 </td>                                                 
                                                 <td>
-                                                    <a class="flex items-center whitespace-nowrap justify-center" href="javascript:;">
-                                                        <i data-lucide="file-text" class="w-4 h-4 mr-1"></i> View Details
-                                                    </a>
+                                                    <div class="flex items-center">
+                                                        <!--Boton de ver-->
+                                                        <a class="flex items-center whitespace-nowrap justify-center tooltip" title="Ver" href="{{ route('ver-documento', $documento) }}">
+                                                            <svg class="svg-inline--fa fa-venus-mars w-6 h-4 text-slate-500 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path fill="currentColor" d="M288 32c-80.8 0-145.5 36.8-192.6 80.6C48.6 156 17.3 208 2.5 243.7c-3.3 7.9-3.3 16.7 0 24.6C17.3 304 48.6 356 95.4 399.4C142.5 443.2 207.2 480 288 480s145.5-36.8 192.6-80.6c46.8-43.5 78.1-95.4 93-131.1c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C433.5 68.8 368.8 32 288 32zM144 256a144 144 0 1 1 288 0 144 144 0 1 1 -288 0zm144-64c0 35.3-28.7 64-64 64c-7.1 0-13.9-1.2-20.3-3.3c-5.5-1.8-11.9 1.6-11.7 7.4c.3 6.9 1.3 13.8 3.2 20.7c13.7 51.2 66.4 81.6 117.6 67.9s81.6-66.4 67.9-117.6c-11.1-41.5-47.8-69.4-88.6-71.1c-5.8-.2-9.2 6.1-7.4 11.7c2.1 6.4 3.3 13.2 3.3 20.3z"/></svg>                                                         
+                                                        </a>
+                                                        <!--Boton de descargar-->
+                                                        <a class="flex items-center whitespace-nowrap justify-center tooltip" title="Descargar" href="{{ route('descargar-documento', $documento) }}">
+                                                            <svg class="svg-inline--fa fa-venus-mars w-6 h-4 text-slate-500 mr-2" xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path fill="currentColor" d="M288 32c0-17.7-14.3-32-32-32s-32 14.3-32 32V274.7l-73.4-73.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l128 128c12.5 12.5 32.8 12.5 45.3 0l128-128c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L288 274.7V32zM64 352c-35.3 0-64 28.7-64 64v32c0 35.3 28.7 64 64 64H448c35.3 0 64-28.7 64-64V416c0-35.3-28.7-64-64-64H346.5l-45.3 45.3c-25 25-65.5 25-90.5 0L165.5 352H64zm368 56a24 24 0 1 1 0 48 24 24 0 1 1 0-48z"/></svg>
+                                                        </a>
+                                                        @cannot('biblioteca') 
+                                                            @cannot('control-escolar')                                                        
+                                                                <!--Boton de eliminar-->
+                                                                <a class="flex items-center whitespace-nowrap justify-center tooltip" title="Eliminar" href="javascript:;" data-tw-toggle="modal" data-tw-target="#delete-modal-preview">
+                                                                    <svg class="svg-inline--fa fa-venus-mars w-6 h-4 text-slate-500 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path fill="rgb(var(--color-danger)" d="M135.2 17.7C140.6 6.8 151.7 0 163.8 0H284.2c12.1 0 23.2 6.8 28.6 17.7L320 32h96c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 96 0 81.7 0 64S14.3 32 32 32h96l7.2-14.3zM32 128H416V448c0 35.3-28.7 64-64 64H96c-35.3 0-64-28.7-64-64V128zm96 64c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16z"/></svg>                                                         
+                                                                </a>
+                                                            @endcan
+                                                        @endcan
+                                                        <!-- Documentos Entregados -->
+                                                        @if($tramite->estado == 3 || $tramite->estado == 7)
+                                                            @if($documento->aprobado != 1 && $documento->aprobado != 5)
+                                                                <!--Boton de aprobar-->
+                                                                <a class="flex items-center whitespace-nowrap justify-center tooltip" title="Aprobar" href="{{ route('aprobar-documento', $documento) }}">
+                                                                    <svg class="svg-inline--fa fa-venus-mars w-8 h-6 text-slate-500 mr-2" xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path fill="rgb(var(--color-success)" d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM369 209L241 337c-9.4 9.4-24.6 9.4-33.9 0l-64-64c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l47 47L335 175c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9z"/></svg>
+                                                                </a>
+                                                            @endif
+                                                            @if($documento->aprobado == 3 || ($tramite->estado == 3 && $documento->aprobado == 1) || ($tramite->estado == 7 && $documento->aprobado == 5))                                                            
+                                                                <!--Boton de desaprobar-->
+                                                                <a class="flex items-center whitespace-nowrap justify-center tooltip" title="No Aprobar" href="javascript:;" data-tw-toggle="modal" data-tw-target="#desaprobar-documento{{$documento->id}}">
+                                                                    <svg class="svg-inline--fa fa-venus-mars w-8 h-6 text-slate-500 mr-2" xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path fill="rgb(var(--color-danger)" d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM175 175c9.4-9.4 24.6-9.4 33.9 0l47 47 47-47c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9l-47 47 47 47c9.4 9.4 9.4 24.6 0 33.9s-24.6 9.4-33.9 0l-47-47-47 47c-9.4 9.4-24.6 9.4-33.9 0s-9.4-24.6 0-33.9l47-47-47-47c-9.4-9.4-9.4-24.6 0-33.9z"/></svg>
+                                                                </a>
+                                                            @endif
+                                                        @endif                                                       
+                                                        <!-- BEGIN: Modal Desaprobar --> 
+                                                        <div id="desaprobar-documento{{$documento->id}}" class="modal" tabindex="-1" aria-hidden="true"> 
+                                                            <div class="modal-dialog"> 
+                                                                <div class="modal-content"> 
+                                                                    <!-- BEGIN: Modal Header --> 
+                                                                    <div class="modal-header"> 
+                                                                        <h2 class="font-medium text-base mr-auto">Documento "{{ $documento->nombre_documento }}" que no se aprobará</h2>                                                                        
+                                                                        <div class="dropdown sm:hidden"> 
+                                                                            <a class="dropdown-toggle w-5 h-5 block" href="javascript:;" aria-expanded="false" data-tw-toggle="dropdown"> 
+                                                                                <i data-lucide="more-horizontal" class="w-5 h-5 text-slate-500"></i> 
+                                                                            </a> 
+                                                                        </div> 
+                                                                    </div> 
+                                                                    <!-- END: Modal Header -->                                                                     
+                                                                    <!-- BEGIN: Modal Body --> 
+                                                                    <form method="POST" action="{{ route('desaprobar-documento', $documento) }}">
+                                                                        @csrf
+                                                                        @method('PATCH')
+                                                                        <div class="modal-body grid grid-cols-12 gap-4 gap-y-3"> 
+                                                                            <div class="col-span-12 sm:col-span-12"> 
+                                                                                <label for="modal-form-1" class="form-label">Agregue un comentario / observación del documento no aprobado.</label> 
+                                                                                <textarea id="comentario" name="comentario" class="form-control" name="comment" placeholder="Comentarios..."></textarea>                                                    
+                                                                            </div>                     
+                                                                        </div> 
+                                                                        <!-- END: Modal Body -->                                                                         
+                                                                        <!-- BEGIN: Modal Footer --> 
+                                                                        <div class="modal-footer"> 
+                                                                            <button type="button" data-tw-dismiss="modal" class="btn btn-outline-secondary w-20 mr-1">Cancelar</button> 
+                                                                            <button type="submit"  class="btn btn-primary w-20" >Confirmar</button> 
+                                                                        </div> <!-- END: Modal Footer -->
+                                                                    </form>
+                                                                </div> 
+                                                            </div>
+                                                         <!-- END: Modal Content --> 
+                                                        </div>
+                                                    </div>
                                                 </td>
                                             </tr>
                                         @endif
@@ -279,9 +598,43 @@
                                                     <div class="font-medium whitespace-nowrap">{{ $documento->created_at }}</div>                                                   
                                                 </td>                                                                                                 
                                                 <td>
-                                                    <a class="flex items-center whitespace-nowrap justify-center" href="javascript:;">
-                                                        <i data-lucide="file-text" class="w-4 h-4 mr-1"></i> View Details
-                                                    </a>
+                                                    <div class="flex items-center">
+                                                        <!--Boton de ver-->
+                                                        <a class="flex items-center whitespace-nowrap justify-center tooltip" title="Ver" href="{{ route('ver-documento', $documento) }}">
+                                                            <svg class="svg-inline--fa fa-venus-mars w-6 h-4 text-slate-500 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path fill="currentColor" d="M288 32c-80.8 0-145.5 36.8-192.6 80.6C48.6 156 17.3 208 2.5 243.7c-3.3 7.9-3.3 16.7 0 24.6C17.3 304 48.6 356 95.4 399.4C142.5 443.2 207.2 480 288 480s145.5-36.8 192.6-80.6c46.8-43.5 78.1-95.4 93-131.1c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C433.5 68.8 368.8 32 288 32zM144 256a144 144 0 1 1 288 0 144 144 0 1 1 -288 0zm144-64c0 35.3-28.7 64-64 64c-7.1 0-13.9-1.2-20.3-3.3c-5.5-1.8-11.9 1.6-11.7 7.4c.3 6.9 1.3 13.8 3.2 20.7c13.7 51.2 66.4 81.6 117.6 67.9s81.6-66.4 67.9-117.6c-11.1-41.5-47.8-69.4-88.6-71.1c-5.8-.2-9.2 6.1-7.4 11.7c2.1 6.4 3.3 13.2 3.3 20.3z"/></svg>                                                         
+                                                        </a>
+                                                        <!--Boton de descargar-->
+                                                        <a class="flex items-center whitespace-nowrap justify-center tooltip" title="Descargar" href="{{ route('descargar-documento', $documento) }}">
+                                                            <svg class="svg-inline--fa fa-venus-mars w-6 h-4 text-slate-500 mr-2" xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path fill="currentColor" d="M288 32c0-17.7-14.3-32-32-32s-32 14.3-32 32V274.7l-73.4-73.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l128 128c12.5 12.5 32.8 12.5 45.3 0l128-128c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L288 274.7V32zM64 352c-35.3 0-64 28.7-64 64v32c0 35.3 28.7 64 64 64H448c35.3 0 64-28.7 64-64V416c0-35.3-28.7-64-64-64H346.5l-45.3 45.3c-25 25-65.5 25-90.5 0L165.5 352H64zm368 56a24 24 0 1 1 0 48 24 24 0 1 1 0-48z"/></svg>
+                                                        </a>
+                                                        @cannot('biblioteca') 
+                                                            @cannot('control-escolar')                                                        
+                                                                <!--Boton de eliminar-->
+                                                                <a class="flex items-center whitespace-nowrap justify-center tooltip" title="Eliminar" href="javascript:;" data-tw-toggle="modal" data-tw-target="#delete-modal-preview{{$documento->id}}">
+                                                                    <svg class="svg-inline--fa fa-venus-mars w-6 h-4 text-slate-500 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path fill="rgb(var(--color-danger)" d="M135.2 17.7C140.6 6.8 151.7 0 163.8 0H284.2c12.1 0 23.2 6.8 28.6 17.7L320 32h96c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 96 0 81.7 0 64S14.3 32 32 32h96l7.2-14.3zM32 128H416V448c0 35.3-28.7 64-64 64H96c-35.3 0-64-28.7-64-64V128zm96 64c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16z"/></svg>                                                         
+                                                                </a>
+                                                            @endcan
+                                                        @endcan
+                                                    </div>
+                                                    <!-- BEGIN: Modal Eliminar --> 
+                                                    <div id="delete-modal-preview{{$documento->id}}" class="modal" tabindex="-1" aria-hidden="true"> 
+                                                        <div class="modal-dialog"> 
+                                                            <div class="modal-content"> 
+                                                                <div class="modal-body p-0"> 
+                                                                    <div class="p-5 text-center"> 
+                                                                        <i data-lucide="x-circle" class="w-16 h-16 text-danger mx-auto mt-3"></i> 
+                                                                    <div class="text-3xl mt-5">¿Estas @if ($alumno->genero == "Mujer") segura? @else seguro? @endif
+                                                                </div> 
+                                                                <div class="text-slate-500 mt-2">
+                                                                    @if ($alumno->genero == "Mujer") ¿Segura @else ¿Seguro @endif que deseas eliminar el documento? <br>
+                                                                </div> 
+                                                            </div> 
+                                                            <div class="px-5 pb-8 text-center"> 
+                                                                <button type="button" data-tw-dismiss="modal" class="btn btn-outline-secondary w-24 mr-1">Cancelar</button> 
+                                                                <a href="{{ route('admin-eliminar-documento', $documento) }}" class="btn btn-danger w-24">Eliminar</a> 
+                                                            </div> 
+                                                        </div> 
+                                                    </div> <!-- END: Modal Eliminar -->
                                                 </td>
                                             </tr>
                                         @endif
@@ -342,7 +695,82 @@
                 </div>
             </div>
         </div>
-        <!-- END: Product Detail Content -->
+        <!-- END: Product Detail Content -->  
+        <!-- BEGIN: Modal Content --> 
+        <div id="modal-dictamen" class="modal" tabindex="-1" aria-hidden="true"> 
+            <div class="modal-dialog"> 
+                <div class="modal-content"> 
+                    <!-- BEGIN: Modal Header --> 
+                    <div class="modal-header"> 
+                        <h2 class="font-medium text-base mr-auto">Datos para Dictamen</h2>                        
+                    </div> <!-- END: Modal Header --> 
+                    <form method="POST" action="{{route('generar-dictamen',$tramite)}}">
+                        @csrf
+                        <!-- BEGIN: Modal Body --> 
+                        <div class="modal-body grid grid-cols-12 gap-4 gap-y-3"> 
+                            <div class="col-span-12 sm:col-span-12"> 
+                                <label for="nombre" class="form-label">Nombre Completo:</label> 
+                                <input id="nombre" type="text" class="form-control" value="{{$alumno->user->name}}" disabled> 
+                            </div> 
+                            <div class="col-span-12 sm:col-span-4"> 
+                                <label for="codigo" class="form-label">Código:</label> 
+                                <input id="codigo" type="text" class="form-control" value="{{$alumno->user->codigo}}" disabled> 
+                            </div> 
+                            <div class="col-span-12 sm:col-span-4"> 
+                                <label for="numero_de_consecutivo" class="form-label">N° de Consecutivo:</label> 
+                                <input id="numero_de_consecutivo" name="numero_de_consecutivo" type="text" class="form-control" 
+                                @if(isset($alumno))
+                                    value="{{$alumno->numero_de_consecutivo}}"
+                                @else
+                                    value="{{old('numero_de_consecutivo')}}"
+                                @endif> 
+                            </div> 
+                            <div class="col-span-12 sm:col-span-4"> 
+                                <label for="anio_graduacion" class="form-label">Año de Graduación:</label> 
+                                <input id="anio_graduacion" name="anio_graduacion" type="text" class="form-control" 
+                                @if(isset($alumno))
+                                    value="{{$alumno->anio_graduacion}}"
+                                @else
+                                    value="{{old('anio_graduacion')}}"
+                                @endif> 
+                            </div> 
+                            <div class="col-span-12 sm:col-span-12"> 
+                                <label for="presidente">Presidente:</label>
+                                <select id="presidente" name="presidente" data-placeholder="Selecciona el presidente" class="tom-select w-full">
+                                    <option value="0">Seleccione una opción</option>
+                                    @foreach($maestros as $presidente)
+                                        <option value="{{$presidente->id}}" @if(isset($alumno) && $alumno->id_maestro_presidente == $presidente->id) selected @endif>{{$presidente->nombre}}</option>
+                                    @endforeach
+                                </select> 
+                            </div> 
+                            <div class="col-span-12 sm:col-span-12"> 
+                                <label for="secretario">Secretario:</label>
+                                <select id="secretario" name="secretario" data-placeholder="Selecciona el secretario" class="tom-select w-full">
+                                    <option value="0">Seleccione una opción</option>
+                                    @foreach($maestros as $secretario)
+                                        <option value="{{$secretario->id}}" @if(isset($alumno) && $alumno->id_maestro_secretario == $secretario->id) selected @endif>{{$secretario->nombre}}</option>
+                                    @endforeach
+                                </select> 
+                            </div> 
+                            <div class="col-span-12 sm:col-span-12"> 
+                                <label for="vocal">Vocal:</label>
+                                <select id="vocal" name="vocal" data-placeholder="Selecciona el vocal" class="tom-select w-full">
+                                    <option value="0">Seleccione una opción</option>
+                                    @foreach($maestros as $vocal)
+                                        <option value="{{$vocal->id}}" @if(isset($alumno) && $alumno->id_maestro_vocal == $vocal->id) selected @endif>{{$vocal->nombre}}</option>
+                                    @endforeach
+                                </select> 
+                            </div> 
+                        </div> <!-- END: Modal Body --> 
+                        <!-- BEGIN: Modal Footer --> 
+                        <div class="modal-footer"> 
+                            <button type="button" data-tw-dismiss="modal" class="btn btn-outline-secondary w-20 mr-1">Cancelar</button> 
+                            <button type="submit" class="btn btn-primary w-20">Generar</button> 
+                        </div> <!-- END: Modal Footer --> 
+                    </form>
+                </div> 
+            </div> 
+        </div> <!-- END: Modal Content --> 
     </div>
     <script>
         document.getElementById("btnDocsEntregados").addEventListener("click", function () {

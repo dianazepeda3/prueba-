@@ -80,13 +80,29 @@ class Menu
                 ],
                 'title' => 'Maestros'
             ],
+            'firma' => [
+                'icon' => 'edit',
+                'route_name' => 'firma',
+                'params' => [
+                    // Additional
+                ],
+                'title' => 'Firma Digital'
+            ],
             'alumno' => [
                 'icon' => 'user',
                 'route_name' => 'show-datos',
                 'params' => [
-                    $alumno,
+                    // Additional parameters
                 ],
                 'title' => 'Mis Datos'
+            ],
+            'documentos' => [
+                'icon' => 'file-text',
+                'route_name' => 'show-documentos',
+                'params' => [
+                    // Additional parameters
+                ],
+                'title' => 'Mis Documentos'
             ],
             'calendar' => [
                 'icon' => 'calendar',
