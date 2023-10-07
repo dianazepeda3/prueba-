@@ -6,6 +6,7 @@ use App\Models\Alumno;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Storage;
 
 use App\Models\User;
@@ -87,7 +88,7 @@ class AlumnoController extends Controller
             }
         }                        
         $maestros = Maestro::all();
-        $id_opcion_titulacion = $alumno->opcion_titulacion->id;
+        $id_opcion_titulacion = $alumno->id_opcion_titulacion;
         return view('alumno.show-documentos', compact('user','id_opcion_titulacion','tramite', 'alumno', 'documentos', 'maestros', 'aprobados','alumnoDocs', 'revisados'));
     }
 
@@ -97,9 +98,10 @@ class AlumnoController extends Controller
      * @param  \App\Models\Alumno  $alumno
      * @return \Illuminate\Http\Response
      */
-    public function edit(Alumno $alumno)
-    {
-        $user = $alumno->user;
+    public function edit()
+    {        
+        $user = Auth::user();
+        $alumno = $user->alumno;
         
         $carreras = DB::table('carreras')->get();
         $plan_estudios = DB::table('plan_estudios')->get();        
@@ -119,8 +121,10 @@ class AlumnoController extends Controller
      * @param  \App\Models\Alumno  $alumno
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Alumno $alumno)
+    public function update(Request $request)
     {            
+        $user = Auth::user();  
+        $alumno = $user->alumno;
          //Validacion de campos
          $request->validate([                                  
             'fecha_nacimiento' => 'required|date|before:today|after:1900-01-01',       
@@ -141,8 +145,7 @@ class AlumnoController extends Controller
             'correo_institucional' => 'required|regex:/(.+)@(alumnos)\.(udg)\.(mx)/i',
             'correo_particular' => 'required|regex:/(.+)@(.+)\.(.+)/i',             
                             
-        ]);     
-        
+        ]);          
         if($request->id_opcion_titulacion == 7 || $request->id_opcion_titulacion == 11 || $request->id_opcion_titulacion == 13|| $request->id_opcion_titulacion == 14|| $request->id_opcion_titulacion == 15|| $request->id_opcion_titulacion == 16){
             $request->validate([
                 'nombre_del_trabajo' => 'nullable|string',                              
@@ -158,28 +161,7 @@ class AlumnoController extends Controller
         if($request->estado_civil == 0)
             return redirect()->back()->with('info', 'Selecciona el estado civil');                        
         if($request->genero == 0)
-            return redirect()->back()->with('info', 'Selecciona el genero');                        
-        
-        /*if($request->trabaja){
-            if($request->afin){
-                $request->validate([
-                    'nombre_empresa' => 'required|string',
-                    'puesto' => 'required|string',
-                    'sueldo' => 'required|numeric',
-                    'telefono_empresa' => 'required|numeric|digits:10',   
-                    'empresa_calle' => 'nullable|string',
-                    'empresa_numero' => 'nullable|numeric',
-                    'empresa_colonia' => 'nullable|string',
-                    'empresa_CP' => 'nullable|numeric|digits:5',
-                    'empresa_estado' => 'nullable|string',
-                    'empresa_municipio' => 'nullable|string',                                          
-                ]);
-            }else{
-                $request->validate([
-                    'descripcion' => 'nullable|string',
-                ]);
-            }
-        }*/
+            return redirect()->back()->with('info', 'Selecciona el genero');                                       
 
         if($request->articulo == 5 || $request->opciones_titulacion == 13){
             $request->validate([
@@ -198,6 +180,7 @@ class AlumnoController extends Controller
         }else{
             $eliminar = true;           
         }        
+        
         // COMPROBACION EGRESADO
         if(($request->articulo == 1 || $request->articulo == 2) && $alumno->situacion != "EGRESADO"){
             if(($request->articulo == 2) || ($request->opciones_titulacion == 1 && $alumno->promedio >= 95) || ($request->opciones_titulacion == 2 && $alumno->promedio >= 90)){
@@ -223,7 +206,7 @@ class AlumnoController extends Controller
         }else{
             $alumno->ganador_proyecto_modular = false;
         }
-
+        
         // Datos Personales
         $alumno->fecha_nacimiento = $request->fecha_nacimiento;
         $alumno->genero = $request->genero;
@@ -239,44 +222,7 @@ class AlumnoController extends Controller
         $alumno->dom_colonia = $request->domicilio_colonia;
         $alumno->dom_CP = $request->domicilio_cp;
         $alumno->dom_municipio = $request->domicilio_municipio;
-        $alumno->dom_estado = $request->domicilio_estado;
-
-        // Datos Laborales
-        if($request->trabaja == "NO"){
-            $alumno->trabaja = 0;
-        }elseif($request->trabaja == "SI" && $request->afin == "SI"){
-            $alumno->trabaja = 1;
-            $alumno->afin = 1;            
-        }elseif($request->trabaja == "SI" && $request->afin == "NO"){
-            $alumno->trabaja = 1;
-            $alumno->afin = 0;            
-        }
-        if($request->afin){
-            $alumno->nombre_empresa = $request->nombre_empresa;
-            $alumno->puesto = $request->puesto;
-            $alumno->sueldo_mensual = $request->sueldo;
-            $alumno->empresa_calle = $request->empresa_calle;
-            $alumno->empresa_numero = $request->empresa_numero;
-            $alumno->empresa_colonia = $request->empresa_colonia;
-            $alumno->empresa_CP = $request->empresa_CP;
-            $alumno->empresa_municipio = $request->empresa_municipio;
-            $alumno->empresa_estado = $request->empresa_estado;
-            $alumno->tel_empresa = $request->telefono_empresa;
-            $alumno->descripcion = null;
-        }else{
-            $alumno->descripcion = $request->descripcion;
-            $alumno->nombre_empresa = null;
-            $alumno->puesto = null;
-            $alumno->sueldo_mensual = null;
-            $alumno->empresa_calle = null;
-            $alumno->empresa_numero = null;
-            $alumno->empresa_colonia = null;
-            $alumno->empresa_CP = null;
-            $alumno->empresa_municipio = null;
-            $alumno->empresa_estado = null;
-            $alumno->tel_empresa = null;
-
-        }
+        $alumno->dom_estado = $request->domicilio_estado;        
 
         $alumno->save(); 
 
@@ -284,24 +230,22 @@ class AlumnoController extends Controller
         if(($request->articulo == 1 || $request->articulo == 2) && $alumno->situacion == "EGRESADO"){
             return redirect()->back()->with('info', 'Para elegir esta modalidad necesitas tener tu situación como EGRESADO');
         }
-
         // COMPROBACIONES MODALIDAD DESEMPEÑO ACADEMICO
         //Excelencia
         if($request->opciones_titulacion == 1 && $alumno->promedio < 95){
             return redirect()->back()->with('info', 'Para elegir esta modalidad necesitas un promedio global mínimo de 95 (noventa y cinco)');
-        }
+        }       
         //Promedio
         if($request->opciones_titulacion == 2 && $alumno->promedio < 90){
             return redirect()->back()->with('info', 'Para elegir esta modalidad necesitas un promedio global mínimo de 90 (noventa)');
         }     
-        //Eliminar documentos
-        $user_id = Auth::id();        
+        //Eliminar documentos              
         
         if($eliminar){
             //Eliminar los documentos
-            $documentos = Documento::where('user_id', $alumno->user_id)->get();
+            $documentos = Documento::where('user_id', $alumno->user->id)->get();
 
-            $nombre = (string)$alumno->user_id;
+            $nombre = (string)$alumno->user->id;
             $nombre_ruta =  $nombre . "_" . $alumno->user->name;
 
             if ($documentos) {
@@ -313,7 +257,7 @@ class AlumnoController extends Controller
                 }
             }
 
-            $alumno = Alumno::where('user_id', $user_id)->first();
+            $alumno = Alumno::where('user_id', $user->id)->first();
             $alumnoDocs = $alumno->alumno_docs;
             $alumnoDocs->formato_a = 0;             
             //$alumnoDocs->kardex = 0; 
@@ -365,7 +309,7 @@ class AlumnoController extends Controller
                         'codigo' => $codigo,
                         'nip' => $nip, 
                     ]
-                ]);             
+                ]);  
                  
                 if($res->getBody() != "0"){
                     $cons = DB::table('users')->where('codigo','=',$codigo)->get();                
@@ -379,8 +323,7 @@ class AlumnoController extends Controller
                         $client = new Client();                
                         
                         $res = $client->request('POST', 'https://cuceimobile.space/Titulacion/ws_token.php?codigo='. $codigo); 
-                        $datos = $res->getBody();
-                                                
+                        $datos = $res->getBody();                                                
                         
                         // Separa informacion
                         $aux = explode('}', $datos);
@@ -408,7 +351,7 @@ class AlumnoController extends Controller
                                 return redirect()->back()->withErrors([
                                     'codigo' => 'Debes tener tu situación como EGRESADO',
                                 ]);  
-                            }
+                            }                                                       
 
                             //CREAR USUARIO
                             $usuario = new User();
@@ -416,7 +359,7 @@ class AlumnoController extends Controller
                             $usuario->password = bcrypt($nip);
                             $usuario->name = $name;   
                             
-                            $usuario->save();
+                            $usuario->save();                            
                             
                             $alumno = new Alumno();                                             
                             $alumno->user_id = $usuario->id;
@@ -525,7 +468,7 @@ class AlumnoController extends Controller
                             $pdf->setPaper('A4', 'portrait');
                             //return $pdf->stream();
 
-                            $nombre = (string)$alumno->user_id;
+                            $nombre = (string)$alumno->user->id;
                             $nombre_ruta =  $nombre . "_" . $alumno->user->name;
                             $ruta = 'alumnos/' . $nombre_ruta . '/documentos/kardex.pdf';                           
 
@@ -534,7 +477,7 @@ class AlumnoController extends Controller
                             $documento->ruta = $ruta;
                             $documento->nombre_original = "kardex.pdf";
                             $documento->mime = "application/pdf";
-                            $documento->user_id = $alumno->user_id;
+                            $documento->user_id = $alumno->user->id;
                             $documento->id_alumno = $id_alumno;
                             $documento->tramite_id = $id_tramite;
                             $documento->nombre_documento = "Kárdex";
@@ -549,8 +492,7 @@ class AlumnoController extends Controller
                             //GUARDAR KARDEX EN CARPETA DE SERVIDOR
                             $content = $pdf->download()->getOriginalContent();
                             Storage::put($ruta,$content);
-                        }
-                        
+                        }                                              
                     }             
                 }  
             } 
@@ -558,17 +500,24 @@ class AlumnoController extends Controller
             echo $e;
             dd();
             return redirect()->back()->withErrors([
-                'codigo' => $e . ' No se pudieron comprobar los datos, intenta de nuevo',
+                'codigo' => ' No se pudieron comprobar los datos, intenta de nuevo',
             ]);  
             return redirect()->back()->with('info', 'No se pudieron comprobar los datos, intenta de nuevo');
         }    
         $credentials = $request->only('codigo', 'password');
-        //$credentials['codigo'] = Crypt::encrypt($credentials['codigo']);
-                
         if (Auth::attempt($credentials)) {
             // La autenticación ha sido exitosa
-            return redirect()->intended('inicio');
-        }
+            $user = Auth::user();            
+            if(Gate::allows('alumno')){     
+                if($user->alumno->tramite->estado == 1)
+                    return redirect()->route('edit-datos');
+                else        
+                    return redirect()->intended('inicio');
+                
+            }else   if(Gate::allows('admin')){
+                return redirect()->intended('tramites');
+            }
+        }                         
 
         // Si la autenticación falla, redirige de vuelta al formulario de inicio de sesión
         return redirect()->back()->withErrors([
@@ -880,11 +829,18 @@ class AlumnoController extends Controller
             $alumnoDocs->save();           
 
         }catch(\Exception $e){
-            return redirect()->route('admin.dashboard')->with('info', 'No se pudo eliminar el documento.');
+            if(Gate::allows('alumno')){
+                return redirect()->route('show-documentos')->with('info', 'No se pudo eliminar el documento.');
+            }else{
+                return redirect()->route('showTramite')->with('info', 'No se pudo eliminar el documento.');            
+            }
         }
 
-        //$tramite = Tramite::find($archivo->tramite_id);
-        return redirect()->route('show-documentos')->with('success','Documento "'.$nombre.'" eliminado');
+        if(Gate::allows('alumno')){
+            return redirect()->route('show-documentos')->with('success','Documento "'.$nombre.'" eliminado');
+        }else{
+            return redirect()->route('showTramite')->with('success','Documento "'.$nombre.'" eliminado');
+        }        
     }
 
     public function getSubcategorias($id)

@@ -87,17 +87,16 @@
             <!-- END: Horizontal Form -->                       
         </div>
     </div>
-
-    <div class="grid grid-cols-12 gap-6 ">             
-        <div class="intro-y col-span-12 lg:col-span-3"></div>
-        <div class="intro-y col-span-12 lg:col-span-6">                         
-            <!-- BEGIN: Horizontal Form -->
-            <div class="intro-y box mt-5">
-                <div class="flex flex-col sm:flex-row items-center p-5 border-b border-slate-200/60 dark:border-darkmode-400">
-                    <h2 class="font-medium text-base mr-auto">FIRMA GUARDADA</h2>                    
-                </div>
-                <div id="horizontal-form" class="p-5">                   
-                    @if (isset($firma))                          
+    @if (isset($firma)) 
+        <div class="grid grid-cols-12 gap-6 ">             
+            <div class="intro-y col-span-12 lg:col-span-3"></div>
+            <div class="intro-y col-span-12 lg:col-span-6">                         
+                <!-- BEGIN: Horizontal Form -->
+                <div class="intro-y box mt-5">
+                    <div class="flex flex-col sm:flex-row items-center p-5 border-b border-slate-200/60 dark:border-darkmode-400">
+                        <h2 class="font-medium text-base mr-auto">FIRMA GUARDADA</h2>                    
+                    </div>
+                    <div id="horizontal-form" class="p-5">                       
                         <div class="card shadow mb-4">
                             <div class="card-body">
                                 <div class="row">
@@ -121,12 +120,12 @@
                                 </div>
                             </div>
                         </div>
-                    @endif
+                    </div>
                 </div>
+                <!-- END: Horizontal Form -->                       
             </div>
-            <!-- END: Horizontal Form -->                       
         </div>
-    </div>
+    @endif
 
     <script type="text/javascript">
         var sig = $('#sig').signature({syncField: '#signature64', syncFormat: 'PNG', background: 'transparent'});

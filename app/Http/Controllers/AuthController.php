@@ -244,16 +244,22 @@ class AuthController extends Controller
             //throw new \Exception('No se pudieron comprobar los datos, intenta de nuevo.');
             return redirect()->back()->with('info', 'No se pudieron comprobar los datos, intenta de nuevo');
         }          
-        if (!Auth::attempt([
+        /*if (!Auth::attempt([
             'codigo' => $request->codigo,
             'password' => $request->password
         ])) {
             //throw new \Exception('Codigo o Nip incorrecto.');
             return redirect()->route('login')->with('info', 'Codigo o Nip incorrecto.');
-        } 
-        return redirect()->back()->withErrors([
-            'codigo' => 'Tus datos no coinciden con nuestras credenciales',
-        ]);      
+        }   */     
+        if (Auth::attempt($credentials)) {
+            // La autenticación ha sido exitosa
+            if(Gate::allows('alumno')){
+                return redirect()->intended('documentos');
+            }else   if(Gate::allows('admin')){
+                return redirect()->intended('inicio');
+            }
+        }     
+        return redirect()->route('login')->with('info', 'Codigo o Nip incorrecto.');
                 
     }
 

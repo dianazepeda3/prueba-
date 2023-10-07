@@ -22,6 +22,7 @@ use App\Models\OpcionTitulacion;
 use App\Models\AlumnoDocs;
 use App\Models\Firma;
 use Carbon\Carbon;
+use NumberFormatter;
 
 class AdminController extends Controller
 {
@@ -280,8 +281,8 @@ class AdminController extends Controller
         }else{
             Documento::where('id', $documento->id)->update(['aprobado' => 1]);
         }
-        
-        return redirect()->route('showTramite', $tramite)->with('success', 'Documento "'. $documento->nombre_documento . '" Aprobado');
+        $alumno = $tramite->alumno;
+        return redirect()->route('showTramite', $alumno)->with('success', 'Documento "'. $documento->nombre_documento . '" Aprobado');
     }
 
     public function desaprobarDocumento(Request $request, Documento $documento)
@@ -298,7 +299,8 @@ class AdminController extends Controller
             Documento::where('id', $documento->id)->update(['aprobado' => 2]);
             Documento::where('id', $documento->id)->update(['comentario' => $request->comentario]);
         }
-        return redirect()->route('showTramite', $tramite)->with('success', 'Documento "'. $documento->nombre_documento . '" No Aprobado');
+        $alumno = $tramite->alumno;
+        return redirect()->route('showTramite', $alumno)->with('success', 'Documento "'. $documento->nombre_documento . '" No Aprobado');
     }
 
     public function revisarDocumento(Tramite $tramite){
@@ -361,16 +363,15 @@ class AdminController extends Controller
         return redirect()->route('showTramite', $alumno)->with('success', 'Documentos validados correctamente.');
     }
 
-    public function generate_dictamen(Request $request, Tramite $tramite){            
+    public function generate_dictamen(Request $request, Tramite $tramite){                   
         //alumno       
         $alumno =  $tramite->alumno;        
         $modalidad = $alumno->id_opcion_titulacion;
         $time = Carbon::now();          
         //$name = auth()->user()->id .'_'. auth()->user()->name;
         $firma = Firma::where('user_id', auth()->user()->id)->first();       
-        if(!isset($firma)) {
-            return redirect()->route('tramites')->with('info', 'No tiene firma guardada');
-        } 
+        if(!isset($firma))           
+            return redirect()->route('showTramite',$alumno)->with('info', 'No tiene firma guardada');        
         
         $dia = $time->format('d');
         $meses = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");        
@@ -440,14 +441,7 @@ class AdminController extends Controller
         
         $alumno->nombre_secretario_division = $secretario_division->nombre;        
 
-        $alumno->save();        
-
-        // Divide el valor en un arreglo usando el carácter "-"
-        /*$partes = explode('-', $request->fecha_limite);
-
-        // La primera parte es el año (index 0) y la segunda es el mes (index 1)
-        $anio_limite = $partes[0];
-        $mes_limite = $partes[1];*/        
+        $alumno->save();                  
 
         //buscas la carrera y el plan de estudio del alumno
         $carrera = $alumno->id_carrera;
@@ -505,6 +499,123 @@ class AdminController extends Controller
         //return $pdf->stream();        
         return redirect()->route('showTramite', $alumno)->with('success', 'Dictamen generado.');
                      
+    }
+
+    public function generate_comprobante_academico(Tramite $tramite){         
+        $name = auth()->user()->name .'_'. auth()->user()->id;  
+        $firma = Firma::where('user_id', auth()->user()->id)->first();       
+        if(!isset($firma)) {
+            return redirect()->route('admin.tramite.show', $tramite)->with('info', 'No tiene firma guardada');
+        }    
+        //alumno
+        $alumno = $tramite->alumno;        
+        $modalidad = $alumno->id_opcion_titulacion;
+        $time = Carbon::now();      
+        
+        $dia = $time->format('d');
+        $meses = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");        
+        $mes = $meses[($time->format('n')) - 1];
+        $anio= $time->format('Y');       
+        
+        $folio = $alumno->consecutivo;
+                
+        $carrera =  Carrera::where('id', $alumno->id_carrera)->first();
+        $carrera = $carrera->carrera;
+                
+        $plan = PlanEstudios::where('id', $alumno->id_plan_estudios)->first();
+        $plan = mb_strtolower($plan->nombre, 'UTF-8');
+
+        $promedio = $alumno->promedio;
+        $promedio = number_format($promedio, 2);
+        $formatterES = new NumberFormatter("es", NumberFormatter::SPELLOUT);
+
+        //checar si después del punto hay un cero
+        if( substr($promedio, strpos($promedio, '.')+1, 1) == "0"){
+            $promedio = $formatterES->format($promedio);
+            $promedio = str_replace('coma', 'punto', $promedio);
+        }else{
+            //Dividir el promedio antes y después del punto
+            $promedio_antes = substr($promedio, 0, strpos($promedio, '.'));
+            $promedio_despues = substr($promedio, strpos($promedio, '.')+1, strlen($promedio));
+
+            $promedio_antes = $formatterES->format($promedio_antes);
+            $promedio_despues = $formatterES->format($promedio_despues);
+
+            $promedio = $promedio_antes . " punto " . $promedio_despues;
+        }
+
+        $promedio = mb_strtoupper($promedio);
+        $prom = number_format($alumno->promedio, 2);
+        $promedio_numero = (string)$prom;
+        $promedio =  $promedio_numero . " (". $promedio .")";   
+        
+        if($alumno->id_opcion_titulacion >= 13){
+            //Presidente
+            $presidente = $this->retornarMaestroGrado($alumno->id_maestro_presidente);
+            //Secretario
+            $secretario = $this->retornarMaestroGrado($alumno->id_maestro_secretario);
+            //Vocal
+            $vocal = $this->retornarMaestroGrado($alumno->id_maestro_vocal);
+        }else{
+            $presidente = "";
+            $secretario = "";
+            $vocal = "";
+        }
+        
+        $pdf = PDF::loadView('layout.admin.comprobanteAcademico2', compact('plan','firma','name','alumno','dia','mes','anio','modalidad','folio'
+        ,'carrera','promedio','presidente','secretario','vocal'));     
+        $pdf->setPaper('letter');
+        
+        //return $pdf->stream();
+        
+        $tramite = Tramite::where('alumno_id', '=', $alumno->id)->first();
+        $nombre = (string)$alumno->user_id;
+        $nombre_ruta =  $nombre . "_" . $alumno->user->name;
+        $ruta = 'alumnos/' . $nombre_ruta . '/documentos/comprobanteAcademico.pdf';                           
+
+        //GUARDA DATOS DEL DOCUMENTO EN LA BD
+        $documento = new Documento();
+        $documento->ruta = $ruta;
+        $documento->nombre_original = "comprobanteAcademico.pdf";
+        $documento->mime = "application/pdf";
+        $documento->user_id = $alumno->user_id;
+        $documento->id_alumno = $alumno->id;
+        $documento->tramite_id = $tramite->id;
+        $documento->nombre_documento = "Comprobante Academico";
+        $documento->aprobado = 4;                                   
+
+        $documento->save();     
+
+        //GUARDAR EN CARPETA DE SERVIDOR
+        $content = $pdf->download()->getOriginalContent();
+        $content = $pdf->download()->getOriginalContent();
+        Storage::put($ruta,$content);
+
+        AlumnoDocs::where('alumno_id', $alumno->id)->update(['comprobante_academica' => 1]);
+
+        //return $pdf->stream();        
+        return redirect()->route('showTramite', $alumno)->with('success', 'Comprobante academico generado.');
+    }
+
+    public function pasarEtapa2(Tramite $tramite){
+        Tramite::where('id', $tramite->id)->update(['estado' => 6]);
+        $alumno = $tramite->alumno;
+        
+        //Enviar correo de notificacion
+        $details = [
+            'title' => 'Modalidad Aprobada',
+            'alumno' => $alumno->user->name,
+            'body' => "Le informamos que su modalidad de titulación ha sido aceptada, su Dictamen de Aprobación y su Comprobante Académico ya se encuentran disponibles en la plataforma. 
+            Ahora puede proceder con el siguiente paso en el proceso de titulación.",
+        ];
+
+        try{
+            Mail::to($alumno->correo_institucional)->send(new NotificacionTramiteMail($details));
+        } catch (\Exception $e) {
+            return redirect()->route('showTramite', $alumno)->with('info', 'Documentos validados correctamente. No se pudo enviar el correo.');
+        }
+
+        return redirect()->route('showTramite', $alumno)->with('success', 'Alumno en 2da etapa');
     }
 
     public function firma(){

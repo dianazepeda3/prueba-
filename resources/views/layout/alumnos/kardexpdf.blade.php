@@ -19,7 +19,7 @@
     <!-- Imagen de la cabecera -->
 
     <p>
-        <img align="left" src="{{ public_path("img/logo.jpg") }}" > <br>                              
+        <img align="left" src="{{ public_path("img/logo.jpg") }}" > <br> <br>                             
         <h1 class="heading">Kardex del estudiante</h1> 
     </p>
     

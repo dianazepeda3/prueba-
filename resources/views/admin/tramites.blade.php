@@ -5,7 +5,7 @@
 @endsection
 
 @section('subcontent')
-    <h2 class="intro-y text-lg font-medium mt-10">TRÁMITES</h2>
+    <h2 class="intro-y text-lg font-medium mt-10">TRÁMITES</h2>    
     <div class="grid grid-cols-12 gap-6 mt-5">
         <div class="intro-y col-span-12 flex flex-wrap sm:flex-nowrap items-center mt-2">
             <button class="btn btn-primary shadow-md mr-2">Crear Trámite</button>
@@ -15,7 +15,7 @@
                         <i class="w-4 h-4" data-lucide="plus"></i>
                     </span>
                 </button>
-                <div class="dropdown-menu w-40">
+                <!--<div class="dropdown-menu w-40">
                     <ul class="dropdown-content">
                         <li>
                             <a href="" class="dropdown-item">
@@ -33,7 +33,7 @@
                             </a>
                         </li>
                     </ul>
-                </div>
+                </div>-->
             </div>
             <div class="hidden md:block mx-auto text-slate-500">Showing 1 to 10 of 150 entries</div>
             <div class="w-full sm:w-auto mt-3 sm:mt-0 sm:ml-auto md:ml-0">
@@ -41,10 +41,39 @@
                     <input type="text" class="form-control w-56 box pr-10" placeholder="Search...">
                     <i class="w-4 h-4 absolute my-auto inset-y-0 mr-3 right-0" data-lucide="search"></i>
                 </div>
-            </div>
-        </div>
+            </div>            
+        </div>        
         <!-- BEGIN: Data List -->
         <div class="intro-y col-span-12 overflow-auto lg:overflow-visible">
+            {{-- ERRORES --}}
+        <div class="grid grid-cols-12 gap-12"> 
+            <div class="intro-y col-span-12 lg:col-span-12">  
+                {{-- Mensaje Alerta --}}
+                @if (session('info'))
+                    <div class="alert alert-danger-soft show flex items-center mb-2">
+                        <i data-lucide="alert-octagon" class="w-6 h-6 mr-2"></i>
+                        {{ session('info') }}
+                    </div>
+                @endif
+                {{-- Mensaje Exito --}}                 
+                @if (session('success'))
+                    <div class="alert alert-success-soft show flex items-center mb-2">
+                        {{ session('success') }}
+                    </div>
+                @endif 
+                @if ($errors->any())
+                    {{-- Mostrar error --}}
+                    <div class="alert alert-danger-soft show flex items-center mb-2">
+                        <i data-lucide="alert-octagon" class="w-6 h-6 mr-2"></i>
+                        <ul>
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>   
+                @endif 
+            </div> 
+        </div>
             <table class="table table-report -mt-2">
                 <thead>
                     <tr>
@@ -99,8 +128,7 @@
                                             <div class="text-center w-40 px-3 py-1 alert-success-soft border border-primary/10 rounded-full mr-2 mb-2">Documentos Validados - Etapa 2</div>                                                                                                                                                                                                                                                                    
                                             @break 
                                         @case(9)
-                                            <div class="text-center w-40 px-3 py-1 alert-danger-soft border border-primary/10 rounded-full mr-2 mb-2">ERROR</div>                                                                                                                                                                                                                                                                           
-                                            <span class="badge badge-success">Documentos No Aprobados - Etapa 2</span>
+                                            <div class="text-center w-40 px-3 py-1 alert-danger-soft border border-primary/10 rounded-full mr-2 mb-2">Documentos No Aprobados - Etapa 2</div>                                                                                                                                                                                                                                                                            
                                             @break 
                                         @case(10)
                                             <div class="text-center w-40 px-3 py-1 alert-primary-soft border border-primary/10 rounded-full mr-2 mb-2">ERROR</div>                                                                                                                                                                                                                                                                           

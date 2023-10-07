@@ -61,6 +61,8 @@ class CreateAlumnosdocsTable extends Migration
             
             $table->boolean('autorizacion_publicacion')->default(0);
             $table->boolean('autorizacion_impresion')->default(0);
+
+            $table->boolean('pago_arancel')->default(0);
             
             //Datos FK
             $table->foreign('alumno_id')->references('id')->on('alumnos')->onDelete('cascade')->onUpdate('cascade');

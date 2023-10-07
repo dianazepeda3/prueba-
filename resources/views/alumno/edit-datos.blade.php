@@ -55,7 +55,7 @@
                                     <div class="form-inline">
                                         <label for="nombre" class="form-label sm:w-20">Nombre Completo</label>
                                         <input id="nombre" name="nombre" type="text" class="form-control" placeholder="Nombre..."
-                                        @if(isset($alumno))
+                                        @if(isset($alumno->user->name))
                                             value="{{$alumno->user->name}}"
                                         @else
                                             value="{{old('nombre')}}"
@@ -64,7 +64,7 @@
                                     <div class="form-inline mt-5">
                                         <label for="codigo" class="form-label sm:w-20">Código</label>
                                         <input id="codigo" name="codigo" type="text" class="form-control" placeholder="123456789..."
-                                        @if(isset($alumno))
+                                        @if(isset($alumno->user->codigo))
                                             value="{{$alumno->user->codigo}}"
                                         @else
                                             value="{{old('codigo')}}"
@@ -83,11 +83,11 @@
                                         @if(isset($alumno))
                                             value="{{$alumno->situacion}}"
                                         @else
-                                            value="{{old('carrera')}}"
+                                            value="{{old('situacion')}}"
                                         @endif disabled>
                                         <label for="carrera" class="form-label sm:w-20">Carrera</label>
                                         <input id="carrera" name="carrera" type="text" class="form-control" placeholder="2019A..."
-                                        @if(isset($alumno))
+                                        @if(isset($alumno->carrera))
                                             value="{{ $alumno->carrera->clave }}"
                                         @else
                                             value="{{old('carrera')}}"
@@ -162,7 +162,7 @@
                                         <select id="opciones_titulacion" name="opciones_titulacion"  class="tom-select2 form-control">                                        
                                             @if ($alumno->tramite->estado != 1)
                                                 @foreach ($opciones_titulacion as $opcion)
-                                                    @if ($$id_opcion_titulacion == $opcion->id)
+                                                    @if ($alumno->id_opcion_titulacion == $opcion->id)
                                                         <option value="{{$opcion->id}}" selected>{{$opcion->nombre}}</option>
                                                     @elseif ($alumno->articulo->id == $opcion->articulo_id)
                                                         <option value="{{$opcion->id}}">{{$opcion->nombre}}</option>
@@ -172,20 +172,20 @@
                                                 @if (old('opciones_titulacion') == null)
                                                     <option value="0" selected>Seleccione la opcion de Titulación...</option>
                                                 @endif                                        
-                                            @endif                                
+                                            @endif                     
                                         </select>   
                                     </div> 
-                                    <div id="nombre_del_trabajo" @if(isset($alumno) && ($$id_opcion_titulacion != 7 || $alumno->id_opcion_titulacion != 11 || $$id_opcion_titulacion != 13 || $$id_opcion_titulacion != 14 || $$id_opcion_titulacion != 15 || $$id_opcion_titulacion != 16 )) hidden @elseif(isset($alumno)!=true) hidden @endif >         
+                                    <div id="nombre_del_trabajo" @if(isset($alumno) && ($alumno->id_opcion_titulacion != 7 || $alumno->id_opcion_titulacion != 11 || $$id_opcion_titulacion != 13 || $$id_opcion_titulacion != 14 || $$id_opcion_titulacion != 15 || $$id_opcion_titulacion != 16 )) hidden @elseif(isset($alumno)!=true) hidden @endif >         
                                         <div class="form-inline mt-5">
                                             <label for="nombre_del_trabajo" class="form-label sm:w-20">Título del Trabajo:</label>
                                             <input id="nombre_del_trabajo" name="nombre_del_trabajo" type="text" class="form-control" placeholder="Nombre del trabajo..."
-                                            @if(isset($alumno))
+                                            @if(isset($alumno->user->nombre_del_trabajo))
                                                 value="{{$alumno->user->nombre_del_trabajo}}"
                                             @else
                                                 value="{{old('nombre_del_trabajo')}}"
                                             @endif> 
                                         </div>     
-                                        <div id="ganador_de_proyecto" @if(isset($alumno) && $$id_opcion_titulacion != 13) hidden @elseif(isset($alumno)!=true) hidden @endif>                                             
+                                        <div id="ganador_de_proyecto" @if(isset($alumno) && $alumno->id_opcion_titulacion != 13) hidden @elseif(isset($alumno)!=true) hidden @endif>                                             
                                             <div class="form-inline mt-5">
                                             <label class="form-label sm:w-20">¿Ganador de proyecto?</label>
                                             <div class="form-check mr-2 mt-2 sm:mt-0"> 
@@ -359,9 +359,9 @@
                     </div>   
                 </div>
             </div>            
-            <div class=" sm:pl-5 mt-5">
+            <div class="sm:pl-5 mt-5">
                 <button class="btn btn-primary" type="submit">Guardar</button>                                               
-                <a class="btn btn-secondary" href="{{ route('showTramite',$alumno) }}">Cancelar</a>
+                <!--<a class="btn btn-secondary" href=" ">Cancelar</a>-->
             </div>
         </form>
 

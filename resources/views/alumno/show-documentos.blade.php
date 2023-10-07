@@ -9,11 +9,11 @@
         <h2 class="flex items-center text-lg font-medium mr-auto">
             DOCUMENTACIÓN
         </h2>
-        <div class="w-full sm:w-auto flex mt-4 sm:mt-0">
+        <!--<div class="w-full sm:w-auto flex mt-4 sm:mt-0">
             <button class="btn btn-primary shadow-md mr-2">
                 <i class="w-4 h-4 mr-2" data-lucide="file-text"></i> View Full Report
             </button>
-        </div>
+        </div>-->
     </div>
     {{-- ERRORES --}}
     <div class="grid grid-cols-12 gap-12 mt-5"> 
@@ -43,10 +43,10 @@
                 </div>   
             @endif 
         </div> 
-    </div>  
-    <div class="grid grid-cols-12 gap-5">
-        <!-- Estado < 2da Etapa -->
-        @if($tramite->estado < 6)
+    </div>      
+    <div class="grid grid-cols-12 gap-5">    
+        <!-- Estado < 2da Etapa -->    
+        @if($tramite->estado < 6 && $tramite->estado != 1)
             <!-- BEGIN: Lista Documentos -->
             <div class="col-span-12 xl:col-span-12">
                 <div class="box intro-y p-5 mt-5">
@@ -241,8 +241,98 @@
             </div>
             <!-- END: Lista Documentos --> 
         @endif 
+        <!-- Estado - 2da Etapa -->
+        @if($tramite->estado >= 6 && $tramite->estado < 8 or $tramite->estado == 9)  
+            @if($id_opcion_titulacion == 5 or $id_opcion_titulacion == 7 or $id_opcion_titulacion == 11 or  $id_opcion_titulacion == 12 or  $id_opcion_titulacion == 13 or $id_opcion_titulacion == 14 or $id_opcion_titulacion == 16)        
+                <!-- BEGIN: Lista Documentos -->
+                <div class="col-span-12 xl:col-span-12">
+                    <div class="box intro-y p-5 mt-5">
+                        <div class="flex items-center border-b border-slate-200/60 dark:border-darkmode-400 pb-5 mb-5">
+                            <div class="font-medium text-base truncate">Documentos para continuar el trámite de titulación</div>
+                        </div>
+                        <h5><b>MODALIDAD:&nbsp; </b>
+                            {{ $alumno->opcion_titulacion->opcion }}             
+                        </h5><br>  
+                        @if ($id_opcion_titulacion != 5)
+                            <!-- Autorizacion de Impresion -->             
+                            <div class="form-inline">                                         
+                                <input id="checkbox-switch-1" class="form-check-input" type="checkbox" 
+                                @if ($alumnoDocs->autorizacion_impresion) checked  @endif > 
+                                <label class="form-label sm:w-40">(Obligatorio)</label><label class="form-label sm:w-20"></label>
+                                <label class="form-label sm:w-60">Autorización de Impresión</label>                                                                    
+                            </div>  
+                            @if ($id_opcion_titulacion != 12) 
+                                <!-- Autorizacion de Impresion -->             
+                                <div class="form-inline mt-5">                                         
+                                    <input id="checkbox-switch-1" class="form-check-input" type="checkbox" 
+                                    @if ($alumnoDocs->documento_trabajo) checked  @endif > 
+                                    <label class="form-label sm:w-40">(Obligatorio)</label><label class="form-label sm:w-20"></label>
+                                    <label class="form-label sm:w-60">Documento Final del Trabajo</label>                                                                    
+                                </div>  
+                            @endif
+                        @else
+                            <!-- Certificados Ceneval -->     
+                            <div class="form-inline mt-5">                                         
+                                <input id="checkbox-switch-1" class="form-check-input" type="checkbox" 
+                                @if ($alumnoDocs->certificados_ceneval) checked @endif > 
+                                <label class="form-label sm:w-40">(Obligatorio)</label><label class="form-label sm:w-20"></label>
+                                <label class="form-label sm:w-60">Certificados CENEVAL</label>                                                                 
+                            </div>   
+                        @endif                   
+                    </div>
+                </div><!-- END: Lista Documentos --> 
+            @endif
+        @endif
+        <!-- Estado - 3ra Etapa -->
+        @if($tramite->estado == 8)  
+            <!-- BEGIN: Lista Documentos -->
+            <div class="col-span-12 xl:col-span-12">
+                <div class="box intro-y p-5 mt-5">
+                    <div class="flex items-center border-b border-slate-200/60 dark:border-darkmode-400 pb-5 mb-5">
+                        <div class="font-medium text-base truncate">Documentos obligatorios que deberá presentar en el área de pasantes</div>
+                    </div>
+                    <h5><b>MODALIDAD:&nbsp; </b>
+                        {{ $alumno->opcion_titulacion->opcion }}             
+                    </h5><br>  
+                    <!-- Comprobante de Pago de Arancel de la Ceremonia de Titulación -->             
+                    <div class="form-inline">                                         
+                        <input id="checkbox-switch-1" class="form-check-input" type="checkbox" 
+                        @if ($alumnoDocs->pago_arancel) checked  @endif > 
+                        <label class="form-label sm:w-40">(Obligatorio)</label><label class="form-label sm:w-20"></label>
+                        <label class="form-label sm:w-60 text-justify">Comprobante de Pago de Arancel de la Ceremonia de Titulación</label>                                                                    
+                    </div>                                         
+                    <!-- Constancia de No Adeudo a la Universidad -->     
+                    <div class="form-inline mt-5">                                         
+                        <input id="checkbox-switch-1" class="form-check-input" type="checkbox" 
+                        @if ($alumnoDocs->constancia_no_adeudo_universidad) checked  @endif > 
+                        <label class="form-label sm:w-40">(Obligatorio)</label><label class="form-label sm:w-20"></label>
+                        <label class="form-label sm:w-60">Constancia de No Adeudo a la Universidad</label>                                           
+                        <a class="btn btn-secondary" href="">Solicitar</a>                                                                    
+                    </div>    
+                    <!-- Constancia de No Adeudo a la Biblioteca -->     
+                    <div class="form-inline mt-5">                                         
+                        <input id="checkbox-switch-1" class="form-check-input" type="checkbox" 
+                        @if ($alumnoDocs->constancia_no_adeudo_biblioteca) checked  @endif > 
+                        <label class="form-label sm:w-40">(Obligatorio)</label><label class="form-label sm:w-20"></label>
+                        <label class="form-label sm:w-60">Constancia de No Adeudo a la Biblioteca</label>                                           
+                        <a class="btn btn-secondary" href="">Solicitar</a>                                                                    
+                    </div>       
+                    @if($id_opcion_titulacion == 7 or $id_opcion_titulacion == 11 or  $id_opcion_titulacion == 12 or  $id_opcion_titulacion == 13 or $id_opcion_titulacion == 14 or $id_opcion_titulacion == 16)                    
+                        <!-- Autorización para Publicación -->     
+                        <div class="form-inline mt-5">                                         
+                            <input id="checkbox-switch-1" class="form-check-input" type="checkbox" 
+                            @if ($alumnoDocs->autorizacion_publicacion) checked  @endif > 
+                            <label class="form-label sm:w-40">(Obligatorio)</label><label class="form-label sm:w-20"></label>
+                            <label class="form-label sm:w-60">Autorización para Publicación</label>                                           
+                            <a class="btn btn-secondary" href="">Generar Autorización</a>                                                                    
+                        </div>    
+                    @endif                          
+                </div>
+            </div><!-- END: Lista Documentos --> 
+            
+        @endif
         <!-- BEGIN: Subir Documentos --> <!-- Estado < Datos Titulacion -->
-        @if($tramite->estado != 3 && $tramite->estado != 7 && $tramite->estado != 8) 
+        @if($tramite->estado != 3 && $tramite->estado != 4 && $tramite->estado != 7) 
             <div class="col-span-12 xl:col-span-12">
                 <div class="box intro-y p-5 mt-5">
                     <form class="form" method="POST" action="{{ route('upload-documento') }}" enctype="multipart/form-data">
@@ -251,7 +341,7 @@
                             <div class="mx-2 w-96">
                                 <label>Nombre del archivo requerido:</label>  
                                 <!-- Estado - 2da Etapa -->
-                                @if($tramite->estado >= 6 && $tramite->estado < 10)
+                                @if($tramite->estado >= 6 && $tramite->estado < 10 && $tramite->estado != 8)
                                     <select class="form-control" name="nombre">                                                                                                                                            
                                         <option value="0" selected>Seleccione el nombre del archivo...</option>                                                                                                                                                                                                                                                                                                                 
                                         @if ($alumnoDocs->alumno->id_opcion_titulacion == 3 || $alumnoDocs->alumno->id_opcion_titulacion == 4)
@@ -317,7 +407,14 @@
                                                 <option value="Autorización Impresión">Autorización Impresión</option> 
                                             @endif                                                                                                                                                                                                                  
                                         @endif  
-                                    </select>                                
+                                    </select>  
+                                @elseif ($tramite->estado == 8)
+                                    <select class="form-control" name="nombre">                                                                                                                                            
+                                        <option value="0" selected>Seleccione el nombre del archivo...</option>  
+                                        @if (!$alumnoDocs->pago_arancel) 
+                                            <option value="Pago de Arancel">Pago de Arancel</option> 
+                                        @endif 
+                                    </select>
                                 @else
                                     <select class="form-control" name="nombre">                                                                                                                                            
                                         <option value="0" selected>Seleccione el nombre del archivo...</option>
@@ -518,7 +615,7 @@
                                                             </a>
                                                         @endif
                                                         <!--Boton de eliminar-->
-                                                        @if($documento->aprobado != 1 && $documento->aprobado != 3 && $documento->aprobado != 5)                                                        
+                                                        @if($tramite->estado != 3 && $documento->aprobado != 1 && $documento->aprobado != 3 && $documento->aprobado != 5)                                                        
                                                             <a class="flex items-center whitespace-nowrap justify-center tooltip" title="Eliminar" href="javascript:;" data-tw-toggle="modal" data-tw-target="#delete-modal-preview{{$documento->id}}">
                                                                 <svg class="svg-inline--fa fa-venus-mars w-6 h-4 text-slate-500 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path fill="rgb(var(--color-danger)" d="M135.2 17.7C140.6 6.8 151.7 0 163.8 0H284.2c12.1 0 23.2 6.8 28.6 17.7L320 32h96c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 96 0 81.7 0 64S14.3 32 32 32h96l7.2-14.3zM32 128H416V448c0 35.3-28.7 64-64 64H96c-35.3 0-64-28.7-64-64V128zm96 64c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16z"/></svg>                                                         
                                                             </a>
@@ -666,7 +763,7 @@
             </div>
         </div>
         <!-- END: Product Detail Content -->      
-    </div>        
+    </div>          
     <!-- BEGIN: Modal Mandar a Revisión --> 
      <div id="revisionTramiteModal" class="modal" tabindex="-1" aria-hidden="true"> 
         <div class="modal-dialog"> 
@@ -694,7 +791,8 @@
                 </div> <!-- END: Modal Footer --> 
             </div> 
         </div> 
-    </div> <!-- END: Modal Mandar a Revisión -->         
+    </div> <!-- END: Modal Mandar a Revisión -->  
+
     <script>
         document.getElementById("btnDocsEntregados").addEventListener("click", function () {
             document.getElementById("docs-entregados").style.display = "table";
@@ -705,6 +803,5 @@
             document.getElementById("docs-entregados").style.display = "none";
             document.getElementById("docs-generados").style.display = "table";
         });
-    </script>
-    
+    </script>    
 @endsection

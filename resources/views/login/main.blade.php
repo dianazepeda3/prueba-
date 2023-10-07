@@ -5,6 +5,36 @@
 @endsection
 
 @section('content')
+    <style>
+        @-webkit-keyframes spinner-border {
+        to {
+            transform: rotate(360deg);
+        }
+        }
+
+        @keyframes spinner-border {
+        to {
+            transform: rotate(360deg);
+        }
+        }
+        .spinner-border {
+        display: inline-block;
+        width: 2rem;
+        height: 2rem;
+        vertical-align: text-bottom;
+        border: 0.25em solid currentColor;
+        border-right-color: transparent;
+        border-radius: 50%;
+        -webkit-animation: .75s linear infinite spinner-border;
+        animation: .75s linear infinite spinner-border;
+        }
+
+        .spinner-border-sm {
+        width: 1rem;
+        height: 1rem;
+        border-width: 0.2em;
+        }
+    </style>
     <div class="container">
         <div class="w-full min-h-screen p-5 md:p-20 flex items-center justify-center">
             <div class="w-96 intro-y">
@@ -30,8 +60,7 @@
                         @endif
 
                         <div class="mt-5 xl:mt-8 text-center xl:text-left">
-                            <button id="btn-login" class="btn btn-primary w-full xl:mr-3" type="submit" onclick="submitForm()">
-                                <span id="spinner" class="spinner-border spinner-border-sm mr-2" style="display: none;"></span>
+                            <button id="btn-login" class="btn btn-primary w-full xl:mr-3" type="submit" onclick="submitForm()">                                 
                                 Iniciar Sesión
                             </button>                        
                         </div>

@@ -44,13 +44,15 @@ Route::middleware('auth')->group(function() {
         Route::get('tramites/editar-datos-laborales/{alumno}', 'editDatosLaborales')->name('edit-datos-laborales');
         Route::patch('tramites/editar-datos-laborales/{alumno}', 'updateDatosLaborales')->name('update-datos-laborales'); 
 
-        Route::post('tramites/generar-dictamen/{tramite}','generate_dictamen')->name('generar-dictamen');
-
+        Route::post('tramites/documentos/generar-dictamen/{tramite}','generate_dictamen')->name('generar-dictamen');
+        Route::get('tramites/documentos/generar-comprobante-academico/{tramite}','generate_comprobante_academico')->name('generar_comprobante_academico');        
+        Route::get('tramites/documentos/etapa2/{tramite}','pasarEtapa2')->name('pasar_etapa2');
+        
         Route::get('tramites/documentos/revisar/{tramite}','revisarDocumento')->name('revisar-documentos');
         Route::get('tramites/documentos/validar/{tramite}','validarDocumento')->name('validar-documentos');        
 
-        Route::get('tramites/documento/aprobar/{documento}','aprobarDocumento')->name('aprobar-documento');
-        Route::patch('tramites/documento/desaprobar/{documento}','desaprobarDocumento')->name('desaprobar-documento');
+        Route::get('tramites/documentos/aprobar/{documento}','aprobarDocumento')->name('aprobar-documento');
+        Route::patch('tramites/documentos/desaprobar/{documento}','desaprobarDocumento')->name('desaprobar-documento');
         Route::get('tramites/documentos/eliminar/{documento}','eliminarDocumento')->name('admin-eliminar-documento');
 
         //FIRMA
