@@ -680,7 +680,7 @@ class AlumnoController extends Controller
         // Comprobar que no haya documentos No Aprobados
         $no_aprobados = false;
         foreach ($documentos as $documento){
-            if($documento->aprobado == 2 || $documento->aprobado == 6){
+            if($documento->aprobado == 2 || $documento->aprobado == 6 || $documento->aprobado == 9){
                 $no_aprobados = true;
             }
         }
@@ -742,13 +742,13 @@ class AlumnoController extends Controller
                 $alumnodocs->save();
             }                                 
             
-        }else if($tramite->estado == 8 || $tramite->estado == 11){
+        }else if($tramite->estado == 8 || $tramite->estado == 12){
             if((($tramite->alumno->id_opcion_titulacion == 7 || $tramite->alumno->id_opcion_titulacion == 8 || $tramite->alumno->id_opcion_titulacion == 13 || $tramite->alumno->id_opcion_titulacion == 14 || $tramite->alumno->id_opcion_titulacion == 16)
                 && $alumnodocs->autorizacion_publicacion)
                 || $tramite->alumno->id_opcion_titulacion != 7 && $tramite->alumno->id_opcion_titulacion != 8 && $tramite->alumno->id_opcion_titulacion != 13 && $tramite->alumno->id_opcion_titulacion != 14 && $tramite->alumno->id_opcion_titulacion != 16
                 && ($alumnodocs->pago_arancel && $alumnodocs->constancia_no_adeudo_universidad && $alumnodocs->constancia_no_adeudo_biblioteca)){  
                 foreach ($documentos as $documentos){
-                    if($documentos->aprobado != 1 && $documentos->aprobado != 5 && $documentos->aprobado != 4){
+                    if($documentos->aprobado != 1 && $documentos->aprobado != 5 && $documentos->aprobado != 4 && $documentos->aprobado != 9){
                         $documentos->aprobado = 3;
                         $documentos->save();
                     }

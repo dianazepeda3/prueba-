@@ -342,8 +342,7 @@ class AdminController extends Controller
         }else{
             //Estado - Documentos No Aprobados
             Tramite::where('id', $tramite->id)->update(['estado' => 12]);
-            AlumnoDocs::where('alumno_id', $tramite->alumno->id)->update(['validado' => 6]);
-            return redirect()->route('showTramite', $alumno)->with('success', 'Documentos revisados.');
+            AlumnoDocs::where('alumno_id', $tramite->alumno->id)->update(['validado' => 6]);            
         }
         Tramite::where('id', $tramite->id)->update(['error' => null]);
         
@@ -379,14 +378,15 @@ class AdminController extends Controller
 
             try{
                 Mail::to($alumno->correo_institucional)->send(new NotificacionTramiteMail($details));
-            } catch (\Exception $e) {
-                echo $e;
-                dd();
+            } catch (\Exception $e) {             
                 return redirect()->route('showTramite', $alumno)->with('info', 'Documentos validados correctamente. No se pudo enviar el correo.');
             }
-        }else{
+        }else if($tramite->estado == 3){
             //Estado - Documentos Validados
             Tramite::where('id', $tramite->id)->update(['estado' => 4]);
+        }else{
+             //Estado - Documentos Validados
+             Tramite::where('id', $tramite->id)->update(['estado' => 11]);
         }
         Tramite::where('id', $tramite->id)->update(['error' => null]);        
 
@@ -652,6 +652,157 @@ class AdminController extends Controller
         return redirect()->route('showTramite', $alumno)->with('success', 'Alumno en 2da etapa');
     }
 
+    //Funcion para devolver la vista de editar Datos Titulacion
+    public function editDatosTitulacion(Alumno $alumno)
+    {
+        $user = $alumno->user;
+        $maestros = Maestro::all();
+        return view('admin.datos-titulacion', compact('user','alumno', 'maestros'));
+    }
+
+    //Funcion para devolver la vista de editar Datos Titulacion
+    public function updateDatosTitulacion(Request $request, Alumno $alumno)
+    {
+        //VALIDACION DE DATOS
+        $request->validate([            
+            'numero_de_consecutivo' => 'required|numeric', 
+            'anio_graduacion' => 'required|numeric', 
+            'consecutivo' => 'required|string', 
+            'fecha_egreso' => 'required|date',
+            'fecha_titulacion' => 'required|date',            
+            'tipo_de_ceremonia' => 'required',            
+            'presidente' => 'required',
+            'secretario' => 'required',
+            'vocal' => 'required',
+            'hora_inicio_citatorio' => 'required|string',
+            'hora_fin_citatorio' => 'required|string',
+            'fecha_citatorio' => 'required|date',
+            'tipo_de_ceremonia_presencial_virtual' => 'required',
+            'lugar_de_ceremonia' => 'required|string', 
+        ]);
+
+        //primero buscamos al alumno
+        $alumno = Alumno::find($alumno->id);
+
+        //Si hay comite_titulacion en el request
+        if($request->comite_titulacion != null){
+            try{
+                $presidente = Maestro::where('is_presidente_comite', $alumno->id_carrera)->first();
+                $secretario = Maestro::where('is_secretario_comite', $alumno->id_carrera)->first();
+                $vocal = Maestro::where('is_vocal_comite', $alumno->id_carrera)->first();
+
+                $alumno->id_maestro_presidente = $presidente->id;
+                $alumno->nombre_presidente = $presidente->nombre;
+
+                $alumno->id_maestro_secretario = $secretario->id;
+                $alumno->nombre_secretario = $secretario->nombre;
+
+                $alumno->id_maestro_vocal = $vocal->id;
+                $alumno->nombre_vocal = $vocal->nombre;
+            }catch(Exception $e){
+                return redirect()->route('showTramite',$alumno)->with('info', 'No se encontraron los maestros para el comite de titulacion');
+            }
+
+        }else{
+
+            if($request->presidente !=null){
+                //buscar presidente
+                $presidente = Maestro::where('id', $request->presidente)->first();
+                $alumno->id_maestro_presidente = $presidente->id;
+                $alumno->nombre_presidente = $presidente->nombre;
+            }
+            if($request->secretario !=null){
+                //buscar secretario
+                $secretario = Maestro::where('id', $request->secretario)->first();
+
+                $alumno->id_maestro_secretario = $secretario->id;
+                $alumno->nombre_secretario = $secretario->nombre;
+
+            }
+            if($request->vocal !=null){
+                //buscar vocal
+                $vocal = Maestro::where('id', $request->vocal)->first();
+
+                $alumno->id_maestro_vocal = $vocal->id;
+                $alumno->nombre_vocal = $vocal->nombre;
+            }
+        }
+        //buscar director de division
+        $director_division = Maestro::where('is_director_division', '1')->first();
+        $secretario_division = Maestro::where('is_secretario_division', '1')->first();
+
+        //actualizamos los datos
+        $alumno->numero_de_consecutivo = $request->numero_de_consecutivo;
+        $alumno->numero_de_consecutivo = $request->numero_de_consecutivo;
+        $alumno->anio_graduacion = (int)$request->anio_graduacion;
+        $alumno->consecutivo = $request->consecutivo;
+        $alumno->fecha_egreso = $request->fecha_egreso;
+        $alumno->fecha_titulacion = $request->fecha_titulacion;
+        $alumno->hora_inicio_citatorio = $request->hora_inicio_citatorio;
+        $alumno->hora_fin_citatorio = $request->hora_fin_citatorio;
+        $alumno->hora_fin_citatorio = $request->hora_fin_citatorio;
+        $alumno->fecha_citatorio = $request->fecha_citatorio;
+        $alumno->tipo_de_ceremonia = $request->tipo_de_ceremonia;
+        $alumno->tipo_de_ceremonia_presencial_virtual = $request->tipo_de_ceremonia_presencial_virtual;
+        $alumno->lugar_de_ceremonia = $request->lugar_de_ceremonia;
+
+        $alumno->id_director_division = $director_division->id;        
+        $alumno->nombre_director_division = $director_division->nombre;
+        
+        $alumno->id_secretario_division = $secretario_division->id;
+        
+        $alumno->nombre_secretario_division = $secretario_division->nombre;
+
+        if($alumno->id_opcion_titulacion == 6){
+            $alumno->calificacion_examen_capacitacion = $request->calificacion_examen_capacitacion;
+        }
+        //Si es global_teorico
+        else if($alumno->id_opcion_titulacion == 4){
+            $alumno->promedio_global_teorico = $request->promedio_global_teorico;
+        }
+        //Si es global_teorico
+        else if($alumno->id_opcion_titulacion == 7 || $alumno->id_opcion_titulacion == 11 || $alumno->id_opcion_titulacion == 13 || $alumno->id_opcion_titulacion == 14 || $alumno->id_opcion_titulacion == 16){
+            $alumno->calificacion_trabajo = $request->calificacion_trabajo;
+        }
+
+        $alumno->save();        
+
+        //buscas la carrera y el plan de estudio del alumno
+        $carrera = $alumno->id_carrera;
+        $plan = $alumno->id_plan_estudios;
+
+        if($request->anio_graduacion != null){
+            $anio = (int)$request->anio_graduacion;
+        }else{
+            $anio = date('Y');
+        }
+
+        if($request->numero_de_consecutivo != null){
+            $consecutivo = $request->numero_de_consecutivo;
+        }else{
+            //Mandar a llamar la funcion para el consecutivo
+            $consecutivo = $this->getConsecutivo($carrera, $plan);
+        }
+
+        if($request->consecutivo != null){
+            $tramite_consecutivo = $request->consecutivo;
+        }else{
+            //Generar el consecutivo del tramite
+            $tramite_consecutivo = $consecutivo . '/' . $anio;
+        }
+
+
+        Alumno::where('id', $alumno->id)->update(['numero_de_consecutivo' => $consecutivo, 'anio_graduacion' => $anio , 'consecutivo' => $tramite_consecutivo ]);
+
+        //buscar tramite
+        $tramite = Tramite::where('alumno_id', $alumno->id)->update(['estado' => '13']);
+
+        $tramite = Tramite::where('alumno_id', $alumno->id)->first();
+
+
+        return redirect()->route('showTramite', $alumno)->with('success', 'Datos de titulación actualizados correctamente');
+    }
+
     public function firma(){
         $user = Auth::user();
         $firma = Firma::where('user_id', auth()->user()->id)->first();     
@@ -705,11 +856,9 @@ class AdminController extends Controller
         }
     }
 
-    public function eliminarDocumento(Documento $archivo)
+    public function eliminarDocumento(Documento $documento)
     {
-        try{
-            $documento = Documento::find($archivo->id);
-            
+        try{                       
             if($documento->nombre_documento == "Dictamen"){
                 AlumnoDocs::where('alumno_id', $documento->id_alumno)->update(['dictamen' => 0]);
             }elseif($documento->nombre_documento == "Comprobante Academico"){
@@ -718,15 +867,19 @@ class AdminController extends Controller
                 AlumnoDocs::where('alumno_id', $documento->id_alumno)->update(['constancia_no_adeudo_biblioteca' => 0]);
             }elseif($documento->nombre_documento == "Constancia de No Adeudo Universidad"){
                 AlumnoDocs::where('alumno_id', $documento->id_alumno)->update(['constancia_no_adeudo_universidad' => 0]);
+            }elseif($documento->nombre_documento == "Acta de Titulacion Firmada"){
+                Alumno::where('id', '=', $documento->id_alumno)->update(['acta_firmada' => 0]);
             }
             Storage::delete($documento->ruta);
             $documento->delete();
-        }catch(\Exception $e){            
-            return redirect()->route('admin.dashboard')->with('info', 'No se pudo eliminar el documento.');
+        }catch(\Exception $e){       
+            echo $e;
+            dd();     
+            return redirect()->route('admin.tramite.show', $tramite)->with('info', 'No se pudo eliminar el documento.');
         }
 
-        $tramite = Tramite::find($archivo->tramite_id);
-        return redirect()->route('admin.tramite.show', $tramite)->with('success', 'Documento eliminado');
+        $tramite = Tramite::find($documento->tramite_id);
+        return redirect()->route('showTramite', $tramite->alumno)->with('success', 'Documento eliminado');
     }
 
     //Funcion para retornar al maestro de la forma DR. NOMBRE_MAESTRO
@@ -928,6 +1081,563 @@ class AdminController extends Controller
         } catch (\PhpOffice\PhpWord\Exception\Exception $e) {
             return redirect()->route('showTramite',$alumno)->with('info', 'Ha ocurrido un error al generar el documento');
         }
+
+    }
+
+    //Generar Acta de Titulacion
+    public function generarDocumentoActaTitulacion(Alumno $alumno)
+    {
+        //Descargar el documento con los datos
+        try{
+            //$time = Carbon::now(); 
+            $fecha_tit = $alumno->fecha_titulacion; //$time->format('d/m/Y');
+            $fecha_titulacion = date("d/m/Y", strtotime($fecha_tit));
+            $hora_actual = $alumno->hora_inicio_citatorio; //$time->format('H:i');
+            $num_acta = $this->retornarNumActa($alumno); //Numero de acta
+            $codigo = $alumno->user->codigo; //Codigo del alumno
+            $dia_titulacion = $this->setDiaFechaTitulacion($alumno); //Fecha de titulacion
+            $mes_titulacion = $this->setMesFechaTitulacion($alumno); //Fecha de titulacion
+            $anio_titulacion = $alumno->anio_graduacion; //Fecha de titulacion
+            $presidente = $this->retornarMaestroGrado($alumno->id_maestro_presidente);//Presidente
+            $secretario = $this->retornarMaestroGrado($alumno->id_maestro_secretario);//Secretario
+            $vocal = $this->retornarMaestroGrado($alumno->id_maestro_vocal);//Vocal
+            $lugar = $alumno->lugar_de_ceremonia;
+
+            $carrera_id = Carrera::where('id', $alumno->id_carrera)->first();
+            $carrera = mb_strtoupper($carrera_id->carrera) ; //Titulo de la carrera
+        }catch(\Exception $e){
+            echo $e;
+            dd();
+            return redirect()->route('showTramite',$alumno)->with('info', 'Ha ocurrido un error al generar el documento ' . $e->getMessage());
+        }        
+
+        $pasante = mb_strtoupper($alumno->user->name); //Pasante
+        $titulo = $this->setCarreraGenero($alumno); //Titulo de la carrera
+
+        //sacar de "Articulo 12. Modalidad de Investigación y Estudio de Posgrado" el numero de articulo
+        $articulo = Articulo::where('id', $alumno->id_articulo)->first();
+        $num_art = $articulo->numero_articulo;
+        $modalidad = mb_strtoupper($articulo->modalidad);
+
+        //sacar de la opcion de titulacion "I. Excelencia académica". el numero de la opcion
+        $opcion = OpcionTitulacion::where('id', $alumno->id_opcion_titulacion)->first();
+        $fraccion = substr($opcion->nombre, 0, strpos($opcion->nombre, '.'));
+        $opcion_tit = $opcion->opcion;
+        $opcion_tit = mb_strtoupper($opcion_tit);
+
+        $titulo_trabajo = mb_strtoupper($alumno->titulo_del_trabajo); //Titulo del trabajo
+
+        $sustentante = $pasante; //Sustentante
+        $secretario_division = $this->retornarMaestroGrado($alumno->id_secretario_division);//Vocal
+        $director_division = $this->retornarMaestroGrado($alumno->id_director_division);//Vocal
+
+        $formatterES = new NumberFormatter("es", NumberFormatter::SPELLOUT);
+
+        //si es examen de capacitacion
+        if($alumno->id_opcion_titulacion == 6){
+            //$calificacion_examen_capacitacion = $formatterES->format($alumno->calificacion_examen_capacitacion);
+            $calificacion_examen_capacitacion = $formatterES->format($alumno->calificacion_examen_capacitacion);
+            //remplazar coma por punto
+            $calificacion_examen_capacitacion = str_replace('coma', 'punto', $calificacion_examen_capacitacion);
+            $calificacion_examen_capacitacion = mb_strtoupper($calificacion_examen_capacitacion);
+            $calificacion_examen_capacitacion = $alumno->calificacion_examen_capacitacion . " (". $calificacion_examen_capacitacion .")";
+        }
+        //Ceneval
+        else if($alumno->id_opcion_titulacion == 5){
+            $puntos_globales = $alumno->puntos_globales_ceneval;
+
+            $promedio_ceneval = $formatterES->format($alumno->promedio_examenes_ceneval);
+            //remplazar coma por punto
+            $promedio_ceneval = str_replace('coma', 'punto', $promedio_ceneval);
+            $promedio_ceneval = mb_strtoupper($promedio_ceneval);
+            $promedio_ceneval = $alumno->promedio_examenes_ceneval . " (". $promedio_ceneval .")";
+        }
+        //Cursos o creditos
+        else if($alumno->id_opcion_titulacion == 9){
+
+            $calificacion_curso = $formatterES->format($alumno->calificacion_curso);
+            $calificacion_curso = str_replace('coma', 'punto', $calificacion_curso);
+            $calificacion_curso = mb_strtoupper($calificacion_curso);
+            $calificacion_curso = $alumno->calificacion_curso . " (". $calificacion_curso .")";
+
+            $nombre_del_curso = mb_strtoupper($alumno->nombre_del_curso);
+
+            $cant_materias = $alumno->cant_materias;
+        }
+        //Global Teorico
+        else if($alumno->id_opcion_titulacion == 4){
+
+            $materia_1_global_teorico = mb_strtoupper($alumno->materia_1_global_teorico);
+            $materia_2_global_teorico = mb_strtoupper($alumno->materia_2_global_teorico);
+            $materia_3_global_teorico = mb_strtoupper($alumno->materia_3_global_teorico);
+            $materia_4_global_teorico = mb_strtoupper($alumno->materia_4_global_teorico);
+
+            $calificacion = $alumno->promedio_global_teorico;
+            $calificacion = round($calificacion, 1);
+            $calificacion_letras = $this->retornarCalificacionLetra($calificacion);//Calificacion
+            $calificacion .= " ". $calificacion_letras;
+
+        }
+        //Excelencia Academica
+        else if($alumno->id_articulo == 1){
+
+            $promedio = $alumno->promedio;
+            $promedio = number_format($promedio, 2);
+
+            //checar si después del punto hay un cero
+            if( substr($promedio, strpos($promedio, '.')+1, 1) == "0"){
+                $promedio = $formatterES->format($promedio);
+                $promedio = str_replace('coma', 'punto', $promedio);
+            }else{
+                //Dividir el promedio antes y después del punto
+                $promedio_antes = substr($promedio, 0, strpos($promedio, '.'));
+                $promedio_despues = substr($promedio, strpos($promedio, '.')+1, strlen($promedio));
+
+                $promedio_antes = $formatterES->format($promedio_antes);
+                $promedio_despues = $formatterES->format($promedio_despues);
+
+                $promedio = $promedio_antes . " punto " . $promedio_despues;
+            }
+
+            $promedio = mb_strtoupper($promedio);
+            $prom = number_format($alumno->promedio, 2);
+            $promedio_numero = (string)$prom;
+            $promedio =  $promedio_numero . " (". $promedio .")";
+
+        }else{
+
+            //redondear el promedio
+            $calificacion = $alumno->calificacion_trabajo; //Calificacion
+            $calificacion = round($calificacion, 1);
+            $calificacion_letras = $this->retornarCalificacionLetra($calificacion);//Calificacion
+            $calificacion .= " ". $calificacion_letras;
+        }
+        
+        if(($alumno->id_opcion_titulacion >= 11 && $alumno->id_opcion_titulacion <= 16 ) || $alumno->id_opcion_titulacion == 7){
+            $acta_segun_opcion = 'Formato_Acta_Nueva_Jurado.docx';
+        }else{
+            $acta_segun_opcion = 'Formato_Acta_Nueva_Comite.docx';
+        }
+
+        try{
+            $template = new \PhpOffice\PhpWord\TemplateProcessor($acta_segun_opcion);
+            $template->setValue('num_acta', $num_acta);
+            $template->setValue('codigo', $codigo);
+            $template->setValue('fecha', $fecha_titulacion);
+            $template->setValue('hora', $hora_actual);
+            $template->setValue('lugar', $lugar);
+            $template->setValue('presidente', $presidente);
+            $template->setValue('secretario', $secretario);
+            $template->setValue('vocal', $vocal);
+            $template->setValue('carrera', $carrera);
+            $template->setValue('pasante', $pasante);
+            $template->setValue('titulo', $titulo);
+            $template->setValue('modalidad', $modalidad);
+            $template->setValue('opcion_tit', $opcion_tit);
+            $template->setValue('sustentante', $sustentante);
+            $template->setValue('secretario_division', $secretario_division);
+            $template->setValue('director_division', $director_division);
+
+            //Examen de capacitacion
+            if($alumno->id_opcion_titulacion == 6){
+                $template->setValue('promedio', $calificacion_examen_capacitacion);
+            //Ceneval
+            }else if ($alumno->id_opcion_titulacion == 5){
+                $template->setValue('promedio', $promedio_ceneval);
+            }
+            //Global Teorico
+            else if($alumno->id_opcion_titulacion == 4){                
+                $template->setValue('promedio', $calificacion);
+            }
+            else if ($alumno->id_opcion_titulacion == 9){
+                $template->setValue('promedio', $calificacion_curso);
+            }
+            else if ($alumno->id_articulo == 1){
+                $template->setValue('promedio', $promedio);
+            }
+            else{
+                $template->setValue('titulo_trabajo', $titulo_trabajo);
+                $template->setValue('calificacion', $calificacion);
+            }            
+
+
+            $tempFile = tempnam(sys_get_temp_dir(), 'PHPWord');
+            $template->saveAs($tempFile);
+
+            $headers = array(
+                'Content-Type' => 'octet-stream',
+            );
+
+            $nombre_doc = 'ACTA '. mb_strtoupper((string)$alumno->user->name).'.docx';
+
+            return response()->download($tempFile, $nombre_doc , $headers)->deleteFileAfterSend(true);
+
+        } catch (\PhpOffice\PhpWord\Exception\Exception $e) {
+            return redirect()->route('showTramite',$alumno)->with('info', 'Ha ocurrido un error al generar el documento');
+        }        
+
+    }
+
+    public function generarDocumentoProtesta(Alumno $alumno)
+    {        
+        //Descargar el documento con los datos
+        $fecha_titulacion = $this->setFecha($alumno->fecha_titulacion); //Fecha de titulacion
+        $titulo = $this->setCarreraGenero($alumno); //Titulo de la carrera
+        //Poner si es justa o justo
+        if($alumno->genero == 'M'){
+            $justa_justo = 'justa';
+        }else{
+            $justa_justo = 'justo';
+        }
+        $sustentante = mb_strtoupper($alumno->user->name); //Sustentante
+        $presidente = $this->retornarMaestroGrado($alumno->id_maestro_presidente);//Presidente
+        $secretario = $this->retornarMaestroGrado($alumno->id_maestro_secretario);//Secretario
+        $vocal = $this->retornarMaestroGrado($alumno->id_maestro_vocal);//Vocal
+        $secretario_division = $this->retornarMaestroGrado($alumno->id_secretario_division);//Vocal
+        $director_division = $this->retornarMaestroGrado($alumno->id_director_division);//Vocal
+
+        try{
+            $template = new \PhpOffice\PhpWord\TemplateProcessor('Formato_Protesta_Nueva.docx');
+            //$template = new \PhpOffice\PhpWord\TemplateProcessor('Formato_Protesta.docx');
+            $template->setValue('fecha_titulacion', $fecha_titulacion);
+            $template->setValue('titulo', $titulo);
+            $template->setValue('justa_justo', $justa_justo);
+            $template->setValue('sustentante', $sustentante);
+            $template->setValue('presidente', $presidente);
+            $template->setValue('secretario', $secretario);
+            $template->setValue('vocal', $vocal);
+            $template->setValue('director_division', $director_division);
+            $template->setValue('secretario_division', $secretario_division);
+
+            $tempFile = tempnam(sys_get_temp_dir(), 'PHPWord');
+            $template->saveAs($tempFile);
+
+            $headers = array(
+                'Content-Type' => 'octet-stream',
+            );
+
+            $nombre_doc = 'PROTESTA '. mb_strtoupper((string)$alumno->user->name).'.docx';
+
+            return response()->download($tempFile, $nombre_doc , $headers)->deleteFileAfterSend(true);
+
+        } catch (\PhpOffice\PhpWord\Exception\Exception $e) {
+            return redirect()->route('showTramite',$alumno)->with('info', 'Ha ocurrido un error al generar el documento');
+        }
+
+    }
+    //Retorna el dia de la titulacion en el formato 12 (DOCE)
+    public function setDiaFechaTitulacion(Alumno $alumno){
+        $dia_titulacion = $alumno->fecha_titulacion;
+        $dia_titulacion = date('d', strtotime($dia_titulacion));
+        $dia_a_letra = $this->setDiaALetras($dia_titulacion);
+
+        $dia_titulacion .= " (" . $dia_a_letra . ")";
+
+        return $dia_titulacion;
+    }
+
+    //Retorna el dia de la titulacion en el formato 12 (DOCE)
+    public function setDiaALetras($dia_titulacion){
+        //convertir el dia a letras Ejemplo: 12 (DOCE)
+        switch ($dia_titulacion) {
+            case '00':
+                $dia_titulacion = 'CERO';
+                break;
+            case '01':
+                $dia_titulacion = 'UNO';
+                break;
+            case '02':
+                $dia_titulacion = 'DOS';
+                break;
+            case '03':
+                $dia_titulacion = 'TRES';
+                break;
+            case '04':
+                $dia_titulacion = 'CUATRO';
+                break;
+            case '05':
+                $dia_titulacion = 'CINCO';
+                break;
+            case '06':
+                $dia_titulacion = 'SEIS';
+                break;
+            case '07':
+                $dia_titulacion = 'SIETE';
+                break;
+            case '08':
+                $dia_titulacion = 'OCHO';
+                break;
+            case '09':
+                $dia_titulacion = 'NUEVE';
+                break;
+            case '10':
+                $dia_titulacion = 'DIEZ';
+                break;
+            case '11':
+                $dia_titulacion = 'ONCE';
+                break;
+            case '12':
+                $dia_titulacion = 'DOCE';
+                break;
+            case '13':
+                $dia_titulacion = 'TRECE';
+                break;
+            case '14':
+                $dia_titulacion = 'CATORCE';
+                break;
+            case '15':
+                $dia_titulacion = 'QUINCE';
+                break;
+            case '16':
+                $dia_titulacion = 'DIECISEIS';
+                break;
+            case '17':
+                $dia_titulacion = 'DIECISIETE';
+                break;
+            case '18':
+                $dia_titulacion = 'DIECIOCHO';
+                break;
+            case '19':
+                $dia_titulacion = 'DIECINUEVE';
+                break;
+            case '20':
+                $dia_titulacion = 'VEINTE';
+                break;
+            case '21':
+                $dia_titulacion = 'VEINTIUNO';
+                break;
+            case '22':
+                $dia_titulacion = 'VEINTIDOS';
+                break;
+            case '23':
+                $dia_titulacion = 'VEINTITRES';
+                break;
+            case '24':
+                $dia_titulacion = 'VEINTICUATRO';
+                break;
+            case '25':
+                $dia_titulacion = 'VEINTICINCO';
+                break;
+            case '26':
+                $dia_titulacion = 'VEINTISEIS';
+                break;
+            case '27':
+                $dia_titulacion = 'VEINTISIETE';
+                break;
+            case '28':
+                $dia_titulacion = 'VEINTIOCHO';
+                break;
+            case '29':
+                $dia_titulacion = 'VEINTINUEVE';
+                break;
+            case '30':
+                $dia_titulacion = 'TREINTA';
+                break;
+            case '31':
+                $dia_titulacion = 'TREINTA Y UNO';
+                break;
+        }
+
+        return $dia_titulacion;
+    }
+
+    //Retorna el mes de la titulacion en el formato ENERO, FEBRERO, MARZO, etc
+    public function setMesFechaTitulacion(Alumno $alumno){
+        $mes_titulacion = $alumno->fecha_titulacion;
+        $mes_titulacion = date('m', strtotime($mes_titulacion));
+        $mes_titulacion = $this->setMesALetras($mes_titulacion);
+
+        return $mes_titulacion;
+    }
+
+    //Retorna el mes de la titulacion en el formato ENERO, FEBRERO, MARZO, etc
+    public function setMesALetras($mes_titulacion){
+        //convertir el dia a letras Ejemplo: 12 (DOCE)
+        switch ($mes_titulacion) {
+            case '01':
+                $mes_titulacion = 'ENERO';
+                break;
+            case '02':
+                $mes_titulacion = 'FEBRERO';
+                break;
+            case '03':
+                $mes_titulacion = 'MARZO';
+                break;
+            case '04':
+                $mes_titulacion = 'ABRIL';
+                break;
+            case '05':
+                $mes_titulacion = 'MAYO';
+                break;
+            case '06':
+                $mes_titulacion = 'JUNIO';
+                break;
+            case '07':
+                $mes_titulacion = 'JULIO';
+                break;
+            case '08':
+                $mes_titulacion = 'AGOSTO';
+                break;
+            case '09':
+                $mes_titulacion = 'SEPTIEMBRE';
+                break;
+            case '10':
+                $mes_titulacion = 'OCTUBRE';
+                break;
+            case '11':
+                $mes_titulacion = 'NOVIEMBRE';
+                break;
+            case '12':
+                $mes_titulacion = 'DICIEMBRE';
+                break;
+        }
+
+        return $mes_titulacion;
+    }
+
+    //Funcion para retornar al maestro de la forma DR. NOMBRE_MAESTRO
+    public function setCarreraGenero(Alumno $alumno)
+    {
+        //Buscar la carrera
+        $carrera_id = Carrera::where('id', $alumno->id_carrera)->first();
+
+        //Si es licenciatura
+        //Genero
+        if($carrera_id->id == 3){
+            //Poner Licenciada si es mujer o Licenciado si es hombre
+            if($alumno->genero == 'M'){
+                $genero = 'LICENCIADA EN INFORMÁTICA';
+            }else{
+                $genero = 'LICENCIADO EN INFORMÁTICA';
+            }
+
+        }else{
+            //Poner Ingeniera si es mujer o Ingeniero si es hombre
+            if($alumno->genero == 'M'){
+                $genero = 'INGENIERA';
+            }else{
+                $genero = 'INGENIERO';
+            }
+        }
+
+        $carrera = $genero;
+
+        if($carrera_id->id == 1){
+            if($alumno->genero == 'H'){
+                $carrera .= ' BIOMÉDICO';
+            }else{
+                $carrera .= ' BIOMÉDICA';
+            }
+        }
+
+        if($carrera_id->id == 2){
+            //Poner Si es informatico Si es femenino como quiera se queda así
+            if($alumno->genero == 'H'){
+                $carrera .= ' INFORMÁTICO';
+            }else{
+                $carrera .= ' INFORMÁTICA';
+            }
+        }
+
+        if($carrera_id->id == 4){
+            $carrera .= ' EN COMUNICACIONES Y ELECTRÓNICA';
+        }
+
+        if($carrera_id->id == 5){
+            $carrera .= ' EN COMPUTACIÓN';
+        }
+
+        if($carrera_id->id == 6){
+            $carrera .= ' EN FOTÓNICA';
+            //Sustituir Robotica por En Robotica
+            // $carrera = str_replace('Fotónica', $info, $carrera);
+        }
+
+        if($carrera_id->id == 7){
+            $carrera .= ' EN ROBÓTICA';
+            //Sustituir Robotica por En Robotica
+            // $carrera = str_replace('Robótica', $info, $carrera);
+        }
+
+        $carrera = mb_strtoupper($carrera);
+
+        return $carrera;
+    }
+
+     //Funcion para retornar al maestro de la forma DR. NOMBRE_MAESTRO
+     public function setFecha($fecha)
+     {
+         //Poner fecha en formato: miercoles, 12 de enero de 2020
+         $fecha_corregida = Carbon::parse($fecha)->formatLocalized('%A %d de %B de %Y');
+         //Traducir la fecha a español
+         $fecha_corregida = str_replace('Monday', 'lunes', $fecha_corregida);
+         $fecha_corregida = str_replace('Tuesday', 'martes', $fecha_corregida);
+         $fecha_corregida = str_replace('Wednesday', 'miércoles', $fecha_corregida);
+         $fecha_corregida = str_replace('Thursday', 'jueves', $fecha_corregida);
+         $fecha_corregida = str_replace('Friday', 'viernes', $fecha_corregida);
+         $fecha_corregida = str_replace('Saturday', 'sábado', $fecha_corregida);
+         $fecha_corregida = str_replace('Sunday', 'domingo', $fecha_corregida);
+ 
+         $fecha_corregida = str_replace('January', 'enero', $fecha_corregida);
+         $fecha_corregida = str_replace('February', 'febrero', $fecha_corregida);
+         $fecha_corregida = str_replace('March', 'marzo', $fecha_corregida);
+         $fecha_corregida = str_replace('April', 'abril', $fecha_corregida);
+         $fecha_corregida = str_replace('May', 'mayo', $fecha_corregida);
+         $fecha_corregida = str_replace('June', 'junio', $fecha_corregida);
+         $fecha_corregida = str_replace('July', 'julio', $fecha_corregida);
+         $fecha_corregida = str_replace('August', 'agosto', $fecha_corregida);
+         $fecha_corregida = str_replace('September', 'septiembre', $fecha_corregida);
+         $fecha_corregida = str_replace('October', 'octubre', $fecha_corregida);
+         $fecha_corregida = str_replace('November', 'noviembre', $fecha_corregida);
+         $fecha_corregida = str_replace('December', 'diciembre', $fecha_corregida);
+ 
+         return $fecha_corregida;
+     }
+
+     //Funcion para subir acta firmada
+    public function subirActaFirmada(Request $request, Alumno $alumno)
+    {
+
+        $max_size = (int) ini_get('upload_max_filesize') * 10240;
+        //user_id
+        //alumno
+        $id_alumno = $alumno->id;
+        $nombre = (string)$alumno->user_id;
+        $nombre_alumno = (string)$alumno->user->codigo;
+        $nombre_ruta =  $nombre . "_" . $nombre_alumno;
+
+        //VALIDACION DE ARCHIVOS
+        $request->validate([
+            'acta_firmada' => 'required|file|max:'.$max_size
+        ]);
+
+         //Actualizar el estado del alumno
+        Alumno::where('id', '=', $id_alumno)->update(['acta_firmada' => 1]);
+        $tramite = Tramite::where('alumno_id', '=', $id_alumno)->first();
+        $id_tramite = $tramite->id;
+
+        try {
+            //GUARDAR DOCUMENTO
+            if ($request->hasFile('acta_firmada') && $request->file('acta_firmada')->isValid()) {
+
+                $ruta = $request->acta_firmada->store('alumnos/' . $nombre_ruta . '/documentos');
+                $documento = new Documento();
+                $documento->ruta = $ruta;
+                $documento->nombre_original = $request->acta_firmada->getClientOriginalName();
+                $documento->mime = $request->acta_firmada->getClientMimeType();
+                $documento->user_id = $alumno->user_id;
+                $documento->id_alumno = $id_alumno;
+                $documento->tramite_id = $id_tramite;
+                $documento->nombre_documento = 'Acta de Titulacion Firmada';
+                $documento->aprobado = 4;
+
+                $documento->save();     
+            }
+        } catch (\Exception $e) {
+             return redirect()->back()->with('error', 'Error al subir el archivo');
+        }
+
+        return redirect()->route('showTramite', $alumno)->with('success','Documento de Acta de Titulación Firmada subido correctamente');
 
     }
 }

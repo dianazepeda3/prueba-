@@ -296,7 +296,7 @@
             @endif
         @endif
         <!-- Estado - 3ra Etapa -->
-        @if($tramite->estado == 8)  
+        @if($tramite->estado == 8 || $tramite->estado == 12)  
             <!-- BEGIN: Lista Documentos -->
             <div class="col-span-12 xl:col-span-12">
                 <div class="box intro-y p-5 mt-5">
@@ -352,7 +352,7 @@
             
         @endif
         <!-- BEGIN: Subir Documentos --> <!-- Estado < Datos Titulacion -->
-        @if($tramite->estado != 3 && $tramite->estado != 4 && $tramite->estado != 7) 
+        @if($tramite->estado != 3 && $tramite->estado != 4 && $tramite->estado != 7 && $tramite->estado != 10) 
             <div class="col-span-12 xl:col-span-12">
                 <div class="box intro-y p-5 mt-5">
                     <form class="form" method="POST" action="{{ route('upload-documento') }}" enctype="multipart/form-data">
@@ -428,14 +428,14 @@
                                             @endif                                                                                                                                                                                                                  
                                         @endif  
                                     </select>  
-                                @elseif ($tramite->estado == 8)
+                                @elseif ($tramite->estado == 8 || $tramite->estado == 12)
                                     <select class="form-control" name="nombre">                                                                                                                                            
                                         <option value="0" selected>Seleccione el nombre del archivo...</option>  
                                         @if (!$alumnoDocs->pago_arancel) 
                                             <option value="Pago de Arancel">Pago de Arancel</option> 
                                         @endif 
                                     </select>
-                                @else
+                                @else 
                                     <select class="form-control" name="nombre">                                                                                                                                            
                                         <option value="0" selected>Seleccione el nombre del archivo...</option>
                                         @if (!$alumnoDocs->formato_a)
@@ -613,9 +613,9 @@
                                                     <div class="font-medium whitespace-nowrap">
                                                         @if($documento->aprobado == 0)
                                                             <div class="text-center px-3 py-1 alert-primary-soft border border-primary/10 rounded-full mr-2 mb-2">Entregado</div>                                                                                                                                                                       
-                                                        @elseif ($documento->aprobado == 1 || $documento->aprobado == 5)                                                    
+                                                        @elseif ($documento->aprobado == 1 || $documento->aprobado == 5 || $documento->aprobado == 8)                                                    
                                                             <div class="text-center px-3 py-1 alert-success-soft border border-primary/10 rounded-full mr-2 mb-2">Aprobado</div>                                                    
-                                                        @elseif ($documento->aprobado == 2 || $documento->aprobado == 6)
+                                                        @elseif ($documento->aprobado == 2 || $documento->aprobado == 6 || $documento->aprobado == 9)
                                                             <div class="text-center px-3 py-1 alert-danger-soft border border-primary/10 rounded-full mr-2 mb-2">No Aprobado</div>
                                                         @elseif ($documento->aprobado == 3)
                                                             <div class="text-center px-3 py-1 alert-pending-soft border border-primary/10 rounded-full mr-2 mb-2">En revisión</div>
@@ -629,7 +629,7 @@
                                                             <svg class="svg-inline--fa fa-venus-mars w-6 h-4 text-slate-500 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path fill="currentColor" d="M288 32c-80.8 0-145.5 36.8-192.6 80.6C48.6 156 17.3 208 2.5 243.7c-3.3 7.9-3.3 16.7 0 24.6C17.3 304 48.6 356 95.4 399.4C142.5 443.2 207.2 480 288 480s145.5-36.8 192.6-80.6c46.8-43.5 78.1-95.4 93-131.1c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C433.5 68.8 368.8 32 288 32zM144 256a144 144 0 1 1 288 0 144 144 0 1 1 -288 0zm144-64c0 35.3-28.7 64-64 64c-7.1 0-13.9-1.2-20.3-3.3c-5.5-1.8-11.9 1.6-11.7 7.4c.3 6.9 1.3 13.8 3.2 20.7c13.7 51.2 66.4 81.6 117.6 67.9s81.6-66.4 67.9-117.6c-11.1-41.5-47.8-69.4-88.6-71.1c-5.8-.2-9.2 6.1-7.4 11.7c2.1 6.4 3.3 13.2 3.3 20.3z"/></svg>                                                         
                                                         </a>
                                                         <!-- Boton Ver Comentario -->
-                                                        @if($documento->comentario != "" && ($documento->aprobado == 2 || $documento->aprobado == 6))                                                        
+                                                        @if($documento->comentario != "" && ($documento->aprobado == 2 || $documento->aprobado == 6 || $documento->aprobado == 9))                                                        
                                                             <a class="flex items-center whitespace-nowrap justify-center tooltip" title="Ver Comentario" href="javascript:;" data-tw-toggle="modal" data-tw-target="#verComentarioModal{{$documento->id}}">
                                                                 <svg class="svg-inline--fa fa-venus-mars w-6 h-4 text-slate-500 mr-2" xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path fill="currentColor" d="M512 240c0 114.9-114.6 208-256 208c-37.1 0-72.3-6.4-104.1-17.9c-11.9 8.7-31.3 20.6-54.3 30.6C73.6 471.1 44.7 480 16 480c-6.5 0-12.3-3.9-14.8-9.9c-2.5-6-1.1-12.8 3.4-17.4l0 0 0 0 0 0 0 0 .3-.3c.3-.3 .7-.7 1.3-1.4c1.1-1.2 2.8-3.1 4.9-5.7c4.1-5 9.6-12.4 15.2-21.6c10-16.6 19.5-38.4 21.4-62.9C17.7 326.8 0 285.1 0 240C0 125.1 114.6 32 256 32s256 93.1 256 208z"/></svg>
                                                             </a>
@@ -722,7 +722,7 @@
                         </div>
                     </div>
                     <!-- Estado - Datos Registrados - Documentos Entregados - Documentos No Aprobados-->   
-                    @if ($tramite->estado == 2 || $tramite->estado == 5 || $tramite->estado == 6 || $tramite->estado == 9 || $tramite->estado == 8 || $tramite->estado == 11)
+                    @if ($tramite->estado == 2 || $tramite->estado == 5 || $tramite->estado == 6 || $tramite->estado == 9 || $tramite->estado == 8 || $tramite->estado == 12)
                         <div class="text-center mt-5">
                             <a class="btn btn-primary" href="javascript:;" data-tw-toggle="modal" data-tw-target="#revisionTramiteModal">                                    
                                 <svg class="svg-inline--fa fa-venus-mars w-6 h-4 text-slate-500 mr-2 blanco" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><style>.blanco{fill:#ffffff}</style><path  d="M64 0C28.7 0 0 28.7 0 64V448c0 35.3 28.7 64 64 64H320c35.3 0 64-28.7 64-64V160H256c-17.7 0-32-14.3-32-32V0H64zM256 0V128H384L256 0zM216 408c0 13.3-10.7 24-24 24s-24-10.7-24-24V305.9l-31 31c-9.4 9.4-24.6 9.4-33.9 0s-9.4-24.6 0-33.9l72-72c9.4-9.4 24.6-9.4 33.9 0l72 72c9.4 9.4 9.4 24.6 0 33.9s-24.6 9.4-33.9 0l-31-31V408z"/></svg>

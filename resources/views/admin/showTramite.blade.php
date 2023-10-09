@@ -116,16 +116,16 @@
                         </div>
                     @endif  
                 <!-- Estado - Documentos Validados 2da Etapa-->                            
-                @elseif ($tramite->estado == 8)
-                    @can('admin')                                                    
+                @elseif ($tramite->estado == 11)
+                    <!--can('admin')                                                    -->
                         <!-- Boton de Generar Citatorio -->
                         <div class="btn-group mr-2">
-                            <a href="{{route('admin.tramite.editar.datos.titulacion',$alumno)}}"  class="btn btn-info btn-icon-split" id="citatorio" >
-                                <span class="icon"><i class="fas fa-file-alt"></i></span>
+                            <a href="{{route('editar_datos_titulacion',$alumno)}}"  class="btn btn-warning btn-icon-split text-white" id="citatorio" >
+                                <svg class="blanco svg-inline--fa fa-venus-mars w-4 h-4 text-slate-500 mr-2" xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 640 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><style>.blanco{fill:#ffffff}</style><path d="M320 32c-8.1 0-16.1 1.4-23.7 4.1L15.8 137.4C6.3 140.9 0 149.9 0 160s6.3 19.1 15.8 22.6l57.9 20.9C57.3 229.3 48 259.8 48 291.9v28.1c0 28.4-10.8 57.7-22.3 80.8c-6.5 13-13.9 25.8-22.5 37.6C0 442.7-.9 448.3 .9 453.4s6 8.9 11.2 10.2l64 16c4.2 1.1 8.7 .3 12.4-2s6.3-6.1 7.1-10.4c8.6-42.8 4.3-81.2-2.1-108.7C90.3 344.3 86 329.8 80 316.5V291.9c0-30.2 10.2-58.7 27.9-81.5c12.9-15.5 29.6-28 49.2-35.7l157-61.7c8.2-3.2 17.5 .8 20.7 9s-.8 17.5-9 20.7l-157 61.7c-12.4 4.9-23.3 12.4-32.2 21.6l159.6 57.6c7.6 2.7 15.6 4.1 23.7 4.1s16.1-1.4 23.7-4.1L624.2 182.6c9.5-3.4 15.8-12.5 15.8-22.6s-6.3-19.1-15.8-22.6L343.7 36.1C336.1 33.4 328.1 32 320 32zM128 408c0 35.3 86 72 192 72s192-36.7 192-72L496.7 262.6 354.5 314c-11.1 4-22.8 6-34.5 6s-23.5-2-34.5-6L143.3 262.6 128 408z"/></svg>
                                 <span class="text">Generar Datos de Titulación</span>
                             </a>
                         </div>   
-                    @endcan           
+                    <!--endcan           -->
                 @elseif($tramite->estado == 7 || $tramite->estado == 8 && $alumno->tipo_de_ceremonia == 'INDIVIDUAL')
                     <!-- Boton de descargar Citatorio -->
                     
@@ -133,7 +133,7 @@
                 @if(isset($alumno) && $tramite->estado > 5)
                     <!--PROTESTA-->
                 @endif  
-                @if($tramite->estado == 11)
+                @if($tramite->estado == 18)
                     <div class="btn-group mr-2">
                         <a href="{{route('admin.tramites.etapa3',$tramite)}}"  class="btn btn-primary btn-icon-split" id="aprobar" >
                             <span class="icon"><i class="fas fa-file-alt"></i></span>
@@ -196,60 +196,62 @@
                         </a>
                     </div>
                 @endif
-            </div>          
+            </div> 
+        </div>       
             <!-- Estado - Datos Titulación -->    
-            @if(isset($alumno) && ($tramite->estado >= 13))                  
-                <div class="col-md-12 mb-3">
+            @if(isset($alumno) && ($tramite->estado >= 13))      
+                <div class="intro-y flex flex-col sm:flex-row items-center mt-3">
+                    <!-- Boton de Editar Datos de Titulación  -->
+                    <div class="mr-2">
+                        <a href="{{route('editar_datos_titulacion',$alumno)}}"  class="btn btn-warning btn-icon-split text-white" id="citatorio" >
+                            <svg class="blanco svg-inline--fa fa-venus-mars w-4 h-4 text-slate-500 mr-2" xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 640 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><style>.blanco{fill:#ffffff}</style><path d="M320 32c-8.1 0-16.1 1.4-23.7 4.1L15.8 137.4C6.3 140.9 0 149.9 0 160s6.3 19.1 15.8 22.6l57.9 20.9C57.3 229.3 48 259.8 48 291.9v28.1c0 28.4-10.8 57.7-22.3 80.8c-6.5 13-13.9 25.8-22.5 37.6C0 442.7-.9 448.3 .9 453.4s6 8.9 11.2 10.2l64 16c4.2 1.1 8.7 .3 12.4-2s6.3-6.1 7.1-10.4c8.6-42.8 4.3-81.2-2.1-108.7C90.3 344.3 86 329.8 80 316.5V291.9c0-30.2 10.2-58.7 27.9-81.5c12.9-15.5 29.6-28 49.2-35.7l157-61.7c8.2-3.2 17.5 .8 20.7 9s-.8 17.5-9 20.7l-157 61.7c-12.4 4.9-23.3 12.4-32.2 21.6l159.6 57.6c7.6 2.7 15.6 4.1 23.7 4.1s16.1-1.4 23.7-4.1L624.2 182.6c9.5-3.4 15.8-12.5 15.8-22.6s-6.3-19.1-15.8-22.6L343.7 36.1C336.1 33.4 328.1 32 320 32zM128 408c0 35.3 86 72 192 72s192-36.7 192-72L496.7 262.6 354.5 314c-11.1 4-22.8 6-34.5 6s-23.5-2-34.5-6L143.3 262.6 128 408z"/></svg>
+                            <span class="text">Editar Datos de Titulacion</span>
+                        </a>
+                    </div>
                     @if($tramite->estado == 7 || $tramite->estado == 8 && $alumno->tipo_de_ceremonia == 'INDIVIDUAL')
                         <!-- Boton de descargar Citatorio -->
-                        <div class="btn-group mr-2">
-                            <a href="{{ route('admin.tramite.documentos.descargar.citatorio', $alumno) }}"  class="btn btn-info btn-icon-split" id="citatorio_descarga">
+                        <div class="mr-2">
+                            <a href=""  class="btn btn-info btn-icon-split" id="citatorio_descarga">
                                 <span class="icon"><i class="fas fa-file-alt"></i></span>
                                 <span class="text">Descargar Citatorio</span>
                             </a>
                         </div>
                     @endif
                     <!-- Boton de Descargar Acta -->
-                    <div class="btn-group mr-2">
-                        <a href="{{route('admin.tramite.documentos.descargar.acta',$alumno)}}"  class="btn btn-primary btn-icon-split" id="acta_titulacion">
-                            <span class="icon"><i class="fas fa-file-contract"></i></span>
+                    <div class="mr-2">
+                        <a href="{{route('descargar_acta_titulacion',$alumno)}}" class="btn btn-primary btn-icon-split" id="acta_titulacion">
+                            <svg class="svg-inline--fa fa-venus-mars w-4 h-4 text-slate-500 mr-2 blanco" xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 384 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><style>.blanco{fill:#ffffff}</style><path d="M64 0C28.7 0 0 28.7 0 64V448c0 35.3 28.7 64 64 64H320c35.3 0 64-28.7 64-64V160H256c-17.7 0-32-14.3-32-32V0H64zM256 0V128H384L256 0zM216 232V334.1l31-31c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9l-72 72c-9.4 9.4-24.6 9.4-33.9 0l-72-72c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l31 31V232c0-13.3 10.7-24 24-24s24 10.7 24 24z"/></svg>
                             <span class="text">Descargar Acta de Titulación</span>
                         </a>
-                    </div>
+                    </div>                          
                     <!-- Boton de Descargar Protesta -->
-                    <div class="btn-group mr-2">
-                        <a href="{{ route('admin.tramite.documentos.descargar.protesta', $alumno) }}"  class="btn btn-secondary btn-icon-split" id="protesta_descarga">
-                            <span class="icon"><i class="fas fa-file-word"></i></span>
+                    <div class="mr-2">
+                        <a href="{{ route('descargar_protesta', $alumno) }}" class="btn btn-dark btn-icon-split" id="protesta_descarga">
+                            <svg class="svg-inline--fa fa-venus-mars w-4 h-4 text-slate-500 mr-2 blanco" xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 384 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><style>.blanco{fill:#ffffff}</style><path d="M64 0C28.7 0 0 28.7 0 64V448c0 35.3 28.7 64 64 64H320c35.3 0 64-28.7 64-64V160H256c-17.7 0-32-14.3-32-32V0H64zM256 0V128H384L256 0zM216 232V334.1l31-31c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9l-72 72c-9.4 9.4-24.6 9.4-33.9 0l-72-72c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l31 31V232c0-13.3 10.7-24 24-24s24 10.7 24 24z"/></svg>
                             <span class="text">Descargar Protesta</span>
                         </a>
-                    </div>                  
+                    </div>
+                    @if ($alumno->acta_firmada == 0)  
+                        <!-- Boton de Subir Acta firmada -->
+                        <div class="mr-2">
+                            <a href="javascript:;" data-tw-toggle="modal" data-tw-target="#subirActaFirmadaModal-dictamen" class="btn btn-primary btn-icon-split" id="acta_titulacion">
+                                <svg class="svg-inline--fa fa-venus-mars w-4 h-4 text-slate-500 mr-2 blanco" xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 384 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><style>.blanco{fill:#ffffff}</style><path d="M64 0C28.7 0 0 28.7 0 64V448c0 35.3 28.7 64 64 64H320c35.3 0 64-28.7 64-64V160H256c-17.7 0-32-14.3-32-32V0H64zM256 0V128H384L256 0zM216 408c0 13.3-10.7 24-24 24s-24-10.7-24-24V305.9l-31 31c-9.4 9.4-24.6 9.4-33.9 0s-9.4-24.6 0-33.9l72-72c9.4-9.4 24.6-9.4 33.9 0l72 72c9.4 9.4 9.4 24.6 0 33.9s-24.6 9.4-33.9 0l-31-31V408z"/></svg>
+                                <span class="text">Subir Acta de Titulación Firmada</span>
+                            </a>
+                        </div>
+                    @endif
+                </div>
+                <div class="intro-y flex flex-col sm:flex-row items-center mt-3">                   
                     <!-- Boton de Descargar Acta circunstanciada -->
-                    <div class="btn-group mr-2">
-                        <a href="{{route('admin.tramite.documentos.descargar.actacirunstanciada',$alumno)}}"  class="btn btn-secondary btn-icon-split" id="acta_titulacion">
+                    <div class="mr-2">
+                        <a href=""  class="btn btn-secondary btn-icon-split" id="acta_titulacion">
                             <span class="icon"><i class="fas fa-file-invoice"></i></span>
                             <span class="text">Descargar Acta Circunstanciada</span>
                         </a>
-                    </div>
-                </div>
-                <div class="col-md-12">
-                    <!-- Boton de Subir Acta firmada -->
-                    <div class="btn-group mr-2">
-                        <a href="#"  class="btn btn-info btn-icon-split" id="acta_titulacion" data-toggle="modal" data-target="#subirActaFirmadaModal">
-                            <span class="icon"><i class="fas fa-file-upload"></i></span>
-                            <span class="text">Subir Acta de Titulación Firmada</span>
-                        </a>
-                    </div>                        
-                    <!-- Boton de Descargar Acta  -->
-                    <div class="btn-group mr-2">
-                        <a href="{{route('admin.tramite.editar.datos.titulacion',$alumno)}}"  class="btn btn-warning btn-icon-split" id="acta_titulacion">
-                            <span class="icon"><i class="fas fa-graduation-cap"></i></span>
-                            <span class="text">Editar Datos de Titulacion</span>
-                        </a>
-                    </div>
+                    </div>                     
                 </div>
             @endif 
         <!--endcan        -->
-    </div>
     {{-- ERRORES --}}
     <div class="grid grid-cols-12 gap-12 mt-3"> 
         <div class="intro-y col-span-12 lg:col-span-12">  
@@ -786,6 +788,46 @@
                 </div> 
             </div> 
         </div> <!-- END: Modal Content --> 
+        <!--Modal para subir el Acta de titulación ya firmada-->
+        <div id="subirActaFirmadaModal-dictamen" class="modal" tabindex="-1" aria-hidden="true"> 
+            <div class="modal-dialog"> 
+                <div class="modal-content"> 
+                    <!-- BEGIN: Modal Header --> 
+                    <div class="modal-header"> 
+                        <h2 class="font-medium text-base mr-auto">Subir Acta de Titulación Firmada</h2>                        
+                    </div> <!-- END: Modal Header -->                                             
+                    <!-- BEGIN: Modal Body --> 
+                    <form class="form" method="POST" action="{{ route('subir_acta_firmada',$alumno) }}" enctype="multipart/form-data">
+                        @csrf  
+                        <div class="modal-body grid grid-cols-12 gap-4 gap-y-3"> 
+                            <div class="col-span-12 sm:col-span-12"> 
+                                <label for="nombre" class="form-label">Tenga en cuenta que al subir esta acta se le notificará a los sinodales asociados a este documento</label>                                 
+                            </div>                                                      
+                            <div class="">                                                   
+                                <div class="mx-2 w-96 font-bold">
+                                    <label>Acta Firmada:</label>                                
+                                </div>
+                                <div class="mx-2 w-96">
+                                    <label for="acta_firmada" class="form-label">
+                                        <span class="">
+                                            Seleccione un archivo a cargar
+                                        </span>
+                                    </label>
+                                    <div class="form-control">
+                                        <input type="file" name="acta_firmada" id="acta_firmada" >
+                                    </div>
+                                </div>                                  
+                            </div>                                                        
+                        </div> <!-- END: Modal Body --> 
+                        <!-- BEGIN: Modal Footer --> 
+                        <div class="modal-footer"> 
+                            <button type="button" data-tw-dismiss="modal" class="btn btn-outline-secondary w-20 mr-1">Cancelar</button> 
+                            <button type="submit" class="btn btn-primary w-20">Confirmar</button> 
+                        </div> <!-- END: Modal Footer --> 
+                    </form>                       
+                </div> 
+            </div> 
+        </div> <!-- END: Modal Content -->         
     </div>
     <script>
         document.getElementById("btnDocsEntregados").addEventListener("click", function () {

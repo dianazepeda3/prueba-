@@ -66,6 +66,14 @@ Route::middleware('auth')->group(function() {
         Route::get('tramites/documentos/constanciaNoAdeudo/{alumno}', 'generarformatoNoAdeudo')->name('generar_formatoNoAdeudo');
         Route::get('tramites/documentos/constanciaNoAdeudoCE/{alumno}', 'generarformatoNoAdeudoCE')->name('generar_formatoNoAdeudo_ce');
         
+        //Acta
+        Route::get('tramites/documentos/acta-titulacion/{alumno}', 'generarDocumentoActaTitulacion')->name('descargar_acta_titulacion');
+        Route::post('tramites/documentos/subir-acta-firmada/{alumno}','subirActaFirmada')->name('subir_acta_firmada');
+        Route::get('tramites/documentos/protesta/{alumno}','generarDocumentoProtesta')->name('descargar_protesta');
+        
+        //Datos Titulación
+        Route::get('tramites/datos-titulacion/{alumno}','editDatosTitulacion')->name('editar_datos_titulacion');
+        Route::patch('tramites/editar-datos-titulacion/{alumno}', 'updateDatosTitulacion')->name('update-datos-titulacion');  
 
         //FIRMA
         Route::get('firma','firma')->name('firma');
