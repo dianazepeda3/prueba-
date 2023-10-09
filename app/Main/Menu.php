@@ -26,7 +26,7 @@ class Menu
                 'sub_menu' => [
                     'dashboard-overview-1' => [
                         'icon' => '',
-                        'route_name' => 'dashboard-overview-1',
+                        'route_name' => 'inicio',
                         'params' => [
                             // Additional parameters
                         ],
@@ -574,6 +574,171 @@ class Menu
                     ]
                 ]
             ]
+        ];
+    }
+
+    public static function menu_admin()
+    {
+        return [
+            'MENU PRINCIPAL',
+            'dashboard' => [
+                'icon' => 'home',
+                'title' => 'Dashboard',
+                'sub_menu' => [
+                    'dashboard-overview-1' => [
+                        'icon' => '',
+                        'route_name' => 'inicio',
+                        'params' => [
+                            // Additional parameters
+                        ],
+                        'title' => 'Overview 1'
+                    ],
+                    'dashboard-overview-2' => [
+                        'icon' => '',
+                        'route_name' => 'dashboard-overview-2',
+                        'params' => [
+                            // Additional parameters
+                        ],
+                        'title' => 'Overview 2'
+                    ]
+                ]
+            ],
+            'tramites' => [
+                'icon' => 'award',
+                'route_name' => 'tramites',
+                'params' => [
+                    // Additional parameters
+                ],
+                'title' => 'Tramites'
+            ],
+            'usuarios' => [
+                'icon' => 'users',                
+                'title' => 'Usuarios',
+                'sub_menu' => [
+                    'lista-usuarios' => [
+                        'icon' => 'list',
+                        'route_name' => 'usuarios',
+                        'params' => [
+                            // Additional parameters
+                        ],
+                        'title' => 'Ver Usuarios'
+                    ],
+                    'usuarios-form' => [
+                        'icon' => 'user-plus',
+                        'route_name' => 'usuarios-form',
+                        'params' => [
+                            // Additional parameters
+                        ],
+                        'title' => 'Agregar Usuario'
+                    ]
+                ]
+            ],            
+            'maestros' => [
+                'icon' => 'user',
+                'route_name' => 'maestros',
+                'params' => [
+                    // Additional parameters
+                ],
+                'title' => 'Maestros'
+            ],
+            'firma' => [
+                'icon' => 'edit',
+                'route_name' => 'firma',
+                'params' => [
+                    // Additional
+                ],
+                'title' => 'Firma Digital'
+            ],        
+        ];
+    }
+
+    public static function menu_alumno()
+    {    
+        return [
+            'MENU PRINCIPAL',
+            'dashboard' => [
+                'icon' => 'home',
+                'title' => 'Dashboard',
+                'route_name' => 'inicio',
+                'params' => [
+                    // Additional parameters
+                ],                
+            ],            
+            'alumno' => [
+                'icon' => 'user',
+                'route_name' => 'show-datos',
+                'params' => [
+                    // Additional parameters
+                ],
+                'title' => 'Mis Datos'
+            ],
+            'documentos' => [
+                'icon' => 'file-text',
+                'route_name' => 'show-documentos',
+                'params' => [
+                    // Additional parameters
+                ],
+                'title' => 'Mis Documentos'
+            ],          
+        ];
+    }
+
+    public static function menu2()
+    {
+        $alumno = "";
+        $user = Auth::user();
+        if($user)
+            $alumno = $user->alumno;        
+
+        return [
+            'MANUAL DE USUARIO',
+            'inicio' => [
+                'icon' => 'home',
+                'title' => 'Inicio',
+                'route_name' => 'manual_usuario',
+                'params' => [
+                    // Additional parameters
+                ],
+            ],
+            'sesion' => [
+                'icon' => 'log-in',
+                'route_name' => 'manual_usuario_login',
+                'params' => [
+                    // Additional parameters
+                ],
+                'title' => 'Inicio de Sesión'
+            ],
+            'opcion-titulacion' => [
+                'icon' => 'award',
+                'route_name' => 'manual_usuario_modalidad',
+                'params' => [
+                    // Additional parameters
+                ],
+                'title' => 'Seleccionar modalidad'
+            ],
+            'usuarios' => [
+                'icon' => 'users',                
+                'title' => 'Usuarios',
+                'sub_menu' => [
+                    'lista-usuarios' => [
+                        'icon' => 'list',
+                        'route_name' => 'usuarios',
+                        'params' => [
+                            // Additional parameters
+                        ],
+                        'title' => 'Ver Usuarios'
+                    ],
+                    'usuarios-form' => [
+                        'icon' => 'user-plus',
+                        'route_name' => 'usuarios-form',
+                        'params' => [
+                            // Additional parameters
+                        ],
+                        'title' => 'Agregar Usuario'
+                    ]
+                ]
+            ],            
+                                  
         ];
     }
 }

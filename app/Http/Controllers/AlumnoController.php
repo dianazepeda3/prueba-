@@ -317,13 +317,13 @@ class AlumnoController extends Controller
                         $datos = $res->getBody();
                         $aux = explode(',', $datos);    
                         $name =  $aux[2];  
-                        $carrera = $aux[3];                           
+                        $carrera = $aux[3];                                                   
                         
                         // -- CONSULTA KARDEX --
                         $client = new Client();                
                         
                         $res = $client->request('POST', 'https://cuceimobile.space/Titulacion/ws_token.php?codigo='. $codigo); 
-                        $datos = $res->getBody();                                                
+                        $datos = $res->getBody();                                                      
                         
                         // Separa informacion
                         $aux = explode('}', $datos);
@@ -351,14 +351,17 @@ class AlumnoController extends Controller
                                 return redirect()->back()->withErrors([
                                     'codigo' => 'Debes tener tu situación como EGRESADO',
                                 ]);  
-                            }                                                       
+                            }     
+                                                        
+                            $name = $cod["nombre"] . " " . $cod["apellido"];   
+                            $carrera = $cod["carrera"];                        
 
                             //CREAR USUARIO
                             $usuario = new User();
                             $usuario->codigo = $codigo;
                             $usuario->password = bcrypt($nip);
                             $usuario->name = $name;   
-                            
+                    
                             $usuario->save();                            
                             
                             $alumno = new Alumno();                                             
@@ -497,8 +500,6 @@ class AlumnoController extends Controller
                 }  
             } 
         }catch (Exception $e){
-            echo $e;
-            dd();
             return redirect()->back()->withErrors([
                 'codigo' => ' No se pudieron comprobar los datos, intenta de nuevo',
             ]);  
@@ -560,14 +561,7 @@ class AlumnoController extends Controller
             $documento->id_alumno = $alumno->id;
             $documento->tramite_id = $tramite->id;
             $documento->nombre_documento = $nombreArch;
-
-            /*if($tramite->estado == 7){
-                $documento->aprobado = 2;
-            }
-            if($tramite->estado == 5){
-                $documento->aprobado = 6;
-            }*/
-
+   
             $documento->save();
 
             $alumnoDocs = $alumno->alumno_docs;            
@@ -651,6 +645,9 @@ class AlumnoController extends Controller
                 break;
                 case "Certificados CENEVAL":
                     $alumnoDocs->certificados_ceneval = 1;
+                break;
+                case "Pago de Arancel":
+                    $alumnoDocs->pago_arancel = 1;
                 break;
             }                                
             $alumnoDocs->save(); 
@@ -745,9 +742,29 @@ class AlumnoController extends Controller
                 $alumnodocs->save();
             }                                 
             
+        }else if($tramite->estado == 8 || $tramite->estado == 11){
+            if((($tramite->alumno->id_opcion_titulacion == 7 || $tramite->alumno->id_opcion_titulacion == 8 || $tramite->alumno->id_opcion_titulacion == 13 || $tramite->alumno->id_opcion_titulacion == 14 || $tramite->alumno->id_opcion_titulacion == 16)
+                && $alumnodocs->autorizacion_publicacion)
+                || $tramite->alumno->id_opcion_titulacion != 7 && $tramite->alumno->id_opcion_titulacion != 8 && $tramite->alumno->id_opcion_titulacion != 13 && $tramite->alumno->id_opcion_titulacion != 14 && $tramite->alumno->id_opcion_titulacion != 16
+                && ($alumnodocs->pago_arancel && $alumnodocs->constancia_no_adeudo_universidad && $alumnodocs->constancia_no_adeudo_biblioteca)){  
+                foreach ($documentos as $documentos){
+                    if($documentos->aprobado != 1 && $documentos->aprobado != 5 && $documentos->aprobado != 4){
+                        $documentos->aprobado = 3;
+                        $documentos->save();
+                    }
+                }               
+                $alumnodocs->validado = 5;                
+                $alumnodocs->save();     
+                // Estado Documentos Entregados - 3ra Etapa                       
+                Tramite::where('alumno_id', $alumno->id)->update(['estado' => 10]);                                                             
+            }else{
+                $alumnodocs->validado = 6;
+                $alumnodocs->save();
+            }                                 
+            
         }    
         
-        if($alumnodocs->validado == 2 || $alumnodocs->validado == 4)
+        if($alumnodocs->validado == 2 || $alumnodocs->validado == 4 || $alumnodocs->validado == 6)
             return redirect()->route('show-documentos')->with('info','Tus documentos NO estan COMPLETOS');
     
         
@@ -824,6 +841,8 @@ class AlumnoController extends Controller
                 $alumnoDocs->curriculum_academico = 0;
             }else if($nombre == "Certificados CENEVAL"){
                 $alumnoDocs->certificados_ceneval = 0;
+            }else if($nombre == "Pago de Arancel"){
+                $alumnoDocs->pago_arancel = 0;
             }
                 
             $alumnoDocs->save();           
@@ -841,6 +860,43 @@ class AlumnoController extends Controller
         }else{
             return redirect()->route('showTramite')->with('success','Documento "'.$nombre.'" eliminado');
         }        
+    }
+
+    public function descargaFormato01(){
+        //user
+        $user = Auth::User();   
+        $time = Carbon::now();          
+        
+        $dia = $time->format('d');
+        $meses = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");        
+        $mes = $meses[($time->format('n')) - 1];
+        $anio= $time->format('Y');  
+        
+        $pdf = PDF::loadView('layout.alumnos.formato01pdf', compact('user','dia','mes','anio'));
+        $pdf->setPaper('A4', 'portrait');
+        //$pdf->setPaper('letter');   
+        
+        //return $pdf->stream();
+        return $pdf->download('Formato A.pdf');        
+    }
+
+    public function solicitarCarta(AlumnoDocs $alumnoDocs){
+        /*$tramite->estado = 9;
+        $tramite->save();*/
+        $alumnoDocs->solicitud_constancia_no_adeudo_biblioteca = 1;
+        $alumnoDocs->save();
+
+        return redirect()->back()->with('success', 'Carta de No Adeudo solicitada a Biblioteca');         
+    }
+
+    public function solicitarCartaCE(AlumnoDocs $alumnoDocs){
+        /*$tramite->estado = 11;
+        $tramite->save();*/
+        $alumnoDocs->solicitud_constancia_no_adeudo_universidad = 1;
+        $alumnoDocs->save();
+
+        return redirect()->back()->with('success', 'Carta de No Adeudo solicitada a Control Escolar');
+         
     }
 
     public function getSubcategorias($id)

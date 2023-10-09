@@ -7,6 +7,7 @@ use App\Http\Controllers\DarkModeController;
 use App\Http\Controllers\ColorSchemeController;
 use App\Http\Controllers\AlumnoController;
 use App\Http\Controllers\AdminController;
+use App\Models\User;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,6 +19,12 @@ use App\Http\Controllers\AdminController;
 | contains the "web" middleware group. Now create something great!
 |
 */
+Route::get('/',function(){
+    return view('login.index');
+});
+Route::get('manual-usuario',function(User $user){ return view('manual.manual',compact('user'));})->name('manual_usuario');
+Route::get('manual-usuario/iniciar-sesion',function(User $user){ return view('manual.login',compact('user'));})->name('manual_usuario_login');
+Route::get('manual-usuario/modalidad',function(User $user){ return view('manual.modalidad',compact('user'));})->name('manual_usuario_modalidad');
 
 Route::get('dark-mode-switcher', [DarkModeController::class, 'switch'])->name('dark-mode-switcher');
 Route::get('color-scheme-switcher/{color_scheme}', [ColorSchemeController::class, 'switch'])->name('color-scheme-switcher');
@@ -31,6 +38,7 @@ Route::controller(AuthController::class)->middleware('loggedin')->group(function
 
 //Login
 Route::post('login', [AlumnoController::class, 'logSiiau'])->name('log.siiau');
+Route::post('login2', [AdminController::class, 'login'])->name('log.admin');
 
 Route::middleware('auth')->group(function() {
     Route::get('logout', [AuthController::class, 'logout'])->name('logout');
@@ -55,6 +63,10 @@ Route::middleware('auth')->group(function() {
         Route::patch('tramites/documentos/desaprobar/{documento}','desaprobarDocumento')->name('desaprobar-documento');
         Route::get('tramites/documentos/eliminar/{documento}','eliminarDocumento')->name('admin-eliminar-documento');
 
+        Route::get('tramites/documentos/constanciaNoAdeudo/{alumno}', 'generarformatoNoAdeudo')->name('generar_formatoNoAdeudo');
+        Route::get('tramites/documentos/constanciaNoAdeudoCE/{alumno}', 'generarformatoNoAdeudoCE')->name('generar_formatoNoAdeudo_ce');
+        
+
         //FIRMA
         Route::get('firma','firma')->name('firma');
         Route::post('firma/guardar','uploadFirma')->name('guardar-firma');
@@ -74,6 +86,10 @@ Route::middleware('auth')->group(function() {
         Route::get('documentos/descargar/{documento}', 'descargarDocumento')->name('descargar-documento');
         Route::get('documentos/eliminar/{documento}','eliminarDocumento')->name('eliminar-documento');
         Route::post('documento','uploadDocumento')->name('upload-documento');
+        Route::get('documento/descargar/formato-a','descargaFormato01')->name('descargar-formato01');
+        Route::get('documento/solicitar-cna-universidad/{alumnoDocs}','solicitarCartaCE')->name('solicitar_cna_universidad');
+        Route::get('documento/solicitar-cna-biblioteca/{alumnoDocs}','solicitarCarta')->name('solicitar_cna_biblioteca');        
+        
         //Opciones de Titulacion
         Route::get('/alumno/opciones_titulacion/{id}', 'getSubcategorias');
     });
@@ -82,7 +98,7 @@ Route::middleware('auth')->group(function() {
 Route::middleware('auth')->group(function() {
     Route::get('logout', [AuthController::class, 'logout'])->name('logout');
     Route::controller(PageController::class)->group(function() {
-        Route::get('inicio/', 'dashboardOverview1')->name('dashboard-overview-1');
+        Route::get('inicio/', 'dashboardOverview1')->name('inicio');
         Route::get('usuarios', 'usuarios')->name('usuarios');
         Route::get('usuarios/create', 'usuarios_form')->name('usuarios-form');       
         Route::get('maestros', 'maestros')->name('maestros');

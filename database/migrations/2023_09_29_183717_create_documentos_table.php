@@ -30,6 +30,10 @@ class CreateDocumentosTable extends Migration
                5 - Aprobado
                6 - No aprobado
                7 - En revision 
+               3ra etapa
+               8 - Aprobado
+               9 - No aprobado
+               10 - En revision 
                */
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('id_alumno');

@@ -21,7 +21,9 @@ class CreateAlumnosdocsTable extends Migration
                1 - Completo 1er parte
                2 - Incompleto 
                3 - Completo 2da parte
-               4 - Incompleto */ 
+               4 - Incompleto
+               5 - Completo 3ra parte
+               6 - Incompleto */ 
                  
             //$table->unsignedBigInteger('id_opcion_titulacion')->nullable(); 
             $table->boolean('formato_a')->default(0);           

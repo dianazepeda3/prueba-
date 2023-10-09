@@ -9,19 +9,19 @@
         <h2 class="flex items-center text-lg font-medium mr-auto">
             <a href="{{ route('tramites') }}">Trámites</a> <i class="w-4 h-4 mx-2 !stroke-2" data-lucide="arrow-right"></i> {{ $alumno->user->name }}
         </h2>
-        <div class="w-full sm:w-auto flex mt-4 sm:mt-0">
+        <!--<div class="w-full sm:w-auto flex mt-4 sm:mt-0">
             <button class="btn btn-primary shadow-md mr-2">
                 <i class="w-4 h-4 mr-2" data-lucide="file-text"></i> View Full Report
             </button>
-        </div>
+        </div>-->
     </div>
     <div class="intro-y flex flex-col sm:flex-row items-center mt-3">
-        @can('biblioteca')                 
+        <!--can('biblioteca')    -->             
             <div class="col-md-12"> 
-                @if(!$alumnoDocs->constancia_no_adeudo_biblioteca)  
+                @if($alumnoDocs->solicitud_constancia_no_adeudo_biblioteca && !$alumnoDocs->constancia_no_adeudo_biblioteca)  
                     <div class="btn-group mr-2">                        
-                        <a href="{{route('admin.formatoNoAdeudo',$tramite)}}"  class="btn btn-info btn-icon-split" id="citatorio" >
-                            <span class="icon"><i class="fas fa-file-alt"></i></span>
+                        <a href="{{route('generar_formatoNoAdeudo',$tramite)}}"  class="btn btn-primary btn-icon-split" id="citatorio" >
+                            <svg class="svg-inline--fa fa-venus-mars w-4 h-4 text-slate-500 mr-2 blanco" xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 384 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><style>.blanco{fill:#ffffff}</style><path d="M64 0C28.7 0 0 28.7 0 64V448c0 35.3 28.7 64 64 64H320c35.3 0 64-28.7 64-64V160H256c-17.7 0-32-14.3-32-32V0H64zM256 0V128H384L256 0zM112 256H272c8.8 0 16 7.2 16 16s-7.2 16-16 16H112c-8.8 0-16-7.2-16-16s7.2-16 16-16zm0 64H272c8.8 0 16 7.2 16 16s-7.2 16-16 16H112c-8.8 0-16-7.2-16-16s7.2-16 16-16zm0 64H272c8.8 0 16 7.2 16 16s-7.2 16-16 16H112c-8.8 0-16-7.2-16-16s7.2-16 16-16z"/></svg>
                             <span class="text">Generar Formato de No Adeudo</span>
                         </a>                        
                     </div>
@@ -29,16 +29,16 @@
             </div>
             <div class="col-md-12"> 
                 <!-- Boton de Carta de No Adeudo Autorizada -->                
-                @if($tramite->estado == 9 && $alumnoDocs->constancia_no_adeudo_biblioteca)
+                @if($alumnoDocs->solicitud_constancia_no_adeudo_universidad && !$alumnoDocs->constancia_no_adeudo_universidad)  
                     <div class="btn-group mr-2">
-                        <a href="{{route('admin.tramites.carta.autorizada',$tramite)}}"  class="btn btn-primary btn-icon-split" id="aprobar" >
-                            <span class="icon"><i class="fas fa-file-alt"></i></span>
+                        <a href="{{route('generar_formatoNoAdeudo_ce',$tramite)}}"  class="btn btn-primary btn-icon-split" id="aprobar" >
+                            <svg class="svg-inline--fa fa-venus-mars w-4 h-4 text-slate-500 mr-2 blanco" xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 384 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><style>.blanco{fill:#ffffff}</style><path d="M64 0C28.7 0 0 28.7 0 64V448c0 35.3 28.7 64 64 64H320c35.3 0 64-28.7 64-64V160H256c-17.7 0-32-14.3-32-32V0H64zM256 0V128H384L256 0zM112 256H272c8.8 0 16 7.2 16 16s-7.2 16-16 16H112c-8.8 0-16-7.2-16-16s7.2-16 16-16zm0 64H272c8.8 0 16 7.2 16 16s-7.2 16-16 16H112c-8.8 0-16-7.2-16-16s7.2-16 16-16zm0 64H272c8.8 0 16 7.2 16 16s-7.2 16-16 16H112c-8.8 0-16-7.2-16-16s7.2-16 16-16z"/></svg>
                             <span class="text">Carta de No Adeudo Autorizada</span>
                         </a>
                     </div>
                 @endif 
             </div>
-        @endcan
+        <!--endcan-->
         @can('control-escolar')                             
             <div class="col-md-12"> 
                 @if(!$alumnoDocs->constancia_no_adeudo_universidad)  
@@ -54,7 +54,7 @@
         <!--can('admin-coordinador')                  -->            
             <div class="form-inline">
                 <!-- Boton de Finalizar Trámite -->                    
-                @if($tramite->estado == 10)
+                @if($tramite->estado == 15)
                     <div class="btn-group mr-2">
                         <a href="#"  class="btn btn-success btn-icon-split" id="aprobarButton" data-toggle="modal" data-target="#aprobarTramiteModal">
                             <span class="icon"><i class="fas fa-check"></i></span>
@@ -72,7 +72,7 @@
                     </div>
                 @endif
                 <!-- Boton de Validar Documentos -->                
-                @if(($aprobados && $tramite->estado == 3 || $aprobados && $tramite->estado == 7))
+                @if($aprobados && $tramite->estado == 3 || $aprobados && $tramite->estado == 7 || $aprobados && $tramite->estado == 10)
                     <!--Estado - Documentos Entregados -->
                     <div class="btn-group mr-2">
                         <a href="{{route('validar-documentos',$tramite)}}"  class="btn btn-primary btn-icon-split" id="aprobar" >
@@ -80,7 +80,7 @@
                             <span class="text">Validar Documentos</span>
                         </a>
                     </div>
-                @elseif(($revisados && $tramite->estado == 3 || $revisados && $tramite->estado == 7))
+                @elseif(($revisados && $tramite->estado == 3 || $revisados && $tramite->estado == 7 || $revisados && $tramite->estado == 10))
                     <!--Estado - Documentos Entregados -->
                     <div class="btn-group mr-2">
                         <a href="{{route('revisar-documentos',$tramite)}}"  class="btn btn-primary btn-icon-split" id="aprobar" >
@@ -198,7 +198,7 @@
                 @endif
             </div>          
             <!-- Estado - Datos Titulación -->    
-            @if(isset($alumno) && ($tramite->estado >= 10))                  
+            @if(isset($alumno) && ($tramite->estado >= 13))                  
                 <div class="col-md-12 mb-3">
                     @if($tramite->estado == 7 || $tramite->estado == 8 && $alumno->tipo_de_ceremonia == 'INDIVIDUAL')
                         <!-- Boton de descargar Citatorio -->
@@ -487,9 +487,9 @@
                                                     <div class="font-medium whitespace-nowrap text-center">
                                                         @if($documento->aprobado == 0)
                                                             <div class="px-3 py-1 alert-primary-soft border border-primary/10 rounded-full mr-2 mb-2">Entregado</div>                                                                                                                                                                       
-                                                        @elseif ($documento->aprobado == 1 || $documento->aprobado == 5)                                                    
+                                                        @elseif ($documento->aprobado == 1 || $documento->aprobado == 5 || $documento->aprobado == 8)                                                    
                                                             <div class="px-3 py-1 alert-success-soft border border-primary/10 rounded-full mr-2 mb-2">Aprobado</div>                                                    
-                                                        @elseif ($documento->aprobado == 2 || $documento->aprobado == 6)
+                                                        @elseif ($documento->aprobado == 2 || $documento->aprobado == 6 || $documento->aprobado == 9)
                                                             <div class="px-3 py-1 alert-danger-soft border border-primary/10 rounded-full mr-2 mb-2">No Aprobado</div>
                                                         @elseif ($documento->aprobado == 3)
                                                             <div class="px-3 py-1 alert-pending-soft border border-primary/10 rounded-full mr-2 mb-2">En revisión</div>
@@ -515,14 +515,14 @@
                                                             @endcan
                                                         @endcan
                                                         <!-- Documentos Entregados -->
-                                                        @if($tramite->estado == 3 || $tramite->estado == 7)
-                                                            @if($documento->aprobado != 1 && $documento->aprobado != 5)
+                                                        @if($tramite->estado == 3 || $tramite->estado == 7 || $tramite->estado == 10)
+                                                            @if($documento->aprobado != 1 && $documento->aprobado != 5 && $documento->aprobado != 8)
                                                                 <!--Boton de aprobar-->
                                                                 <a class="flex items-center whitespace-nowrap justify-center tooltip" title="Aprobar" href="{{ route('aprobar-documento', $documento) }}">
                                                                     <svg class="svg-inline--fa fa-venus-mars w-8 h-6 text-slate-500 mr-2" xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path fill="rgb(var(--color-success)" d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM369 209L241 337c-9.4 9.4-24.6 9.4-33.9 0l-64-64c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l47 47L335 175c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9z"/></svg>
                                                                 </a>
                                                             @endif
-                                                            @if($documento->aprobado == 3 || ($tramite->estado == 3 && $documento->aprobado == 1) || ($tramite->estado == 7 && $documento->aprobado == 5))                                                            
+                                                            @if($documento->aprobado == 3 || ($tramite->estado == 3 && $documento->aprobado == 1) || ($tramite->estado == 7 && $documento->aprobado == 5) || ($tramite->estado == 10 && $documento->aprobado == 8))                                                            
                                                                 <!--Boton de desaprobar-->
                                                                 <a class="flex items-center whitespace-nowrap justify-center tooltip" title="No Aprobar" href="javascript:;" data-tw-toggle="modal" data-tw-target="#desaprobar-documento{{$documento->id}}">
                                                                     <svg class="svg-inline--fa fa-venus-mars w-8 h-6 text-slate-500 mr-2" xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path fill="rgb(var(--color-danger)" d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM175 175c9.4-9.4 24.6-9.4 33.9 0l47 47 47-47c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9l-47 47 47 47c9.4 9.4 9.4 24.6 0 33.9s-24.6 9.4-33.9 0l-47-47-47 47c-9.4 9.4-24.6 9.4-33.9 0s-9.4-24.6 0-33.9l47-47-47-47c-9.4-9.4-9.4-24.6 0-33.9z"/></svg>

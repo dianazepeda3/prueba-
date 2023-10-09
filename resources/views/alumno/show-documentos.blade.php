@@ -15,6 +15,18 @@
             </button>
         </div>-->
     </div>
+    @if ($alumnoDocs->solicitud_constancia_no_adeudo_universidad && !$alumnoDocs->constancia_no_adeudo_universidad)
+        <div class="alert alert-primary-soft show flex items-center mb-2 mt-5" role="alert"> 
+            <i data-lucide="alert-circle" class="w-6 h-6 mr-2"></i> 
+            Carta de No Adeudo&nbsp;<b>Solicitada</b>&nbsp;a la Universidad, cuando este lista estará disponible en este apartado.
+        </div> 
+    @endif
+    @if ($alumnoDocs->solicitud_constancia_no_adeudo_biblioteca && !$alumnoDocs->constancia_no_adeudo_biblioteca)
+        <div class="alert alert-primary-soft show flex items-center mb-2 mt-5" role="alert"> 
+            <i data-lucide="alert-circle" class="w-6 h-6 mr-2"></i> 
+            Carta de No Adeudo&nbsp;<b>Solicitada</b>&nbsp;a Biblioteca, cuando este lista estará disponible en este apartado.
+        </div> 
+    @endif
     {{-- ERRORES --}}
     <div class="grid grid-cols-12 gap-12 mt-5"> 
         <div class="intro-y col-span-12 lg:col-span-12">  
@@ -62,7 +74,7 @@
                         @if ($alumnoDocs->formato_a) checked  @endif > 
                         <label class="form-label sm:w-40">(Obligatorio)</label><label class="form-label sm:w-20"></label>
                         <label class="form-label sm:w-60">Formato A. (descargarlo y firmarlo)</label>                     
-                        <a class="btn btn-secondary" href="">Descargar Formato A</a>                                                                    
+                        <a class="btn btn-secondary" href="{{ route('descargar-formato01') }}">Descargar Formato A</a>                                                                    
                     </div>        
                     <!-- Kardex -->        
                     <div class="form-inline mt-5">                                         
@@ -306,16 +318,24 @@
                         <input id="checkbox-switch-1" class="form-check-input" type="checkbox" 
                         @if ($alumnoDocs->constancia_no_adeudo_universidad) checked  @endif > 
                         <label class="form-label sm:w-40">(Obligatorio)</label><label class="form-label sm:w-20"></label>
-                        <label class="form-label sm:w-60">Constancia de No Adeudo a la Universidad</label>                                           
-                        <a class="btn btn-secondary" href="">Solicitar</a>                                                                    
+                        <label class="form-label sm:w-60">Constancia de No Adeudo a la Universidad</label>
+                        @if ($alumnoDocs->solicitud_constancia_no_adeudo_universidad && !$alumnoDocs->constancia_no_adeudo_universidad)                                                
+                            <b>SOLICITADA</b>
+                        @elseif (!$alumnoDocs->constancia_no_adeudo_universidad)                                           
+                            <a class="btn btn-secondary" href="{{ route('solicitar_cna_universidad', $alumnoDocs) }}">Solicitar</a>                                                                    
+                        @endif
                     </div>    
                     <!-- Constancia de No Adeudo a la Biblioteca -->     
                     <div class="form-inline mt-5">                                         
                         <input id="checkbox-switch-1" class="form-check-input" type="checkbox" 
                         @if ($alumnoDocs->constancia_no_adeudo_biblioteca) checked  @endif > 
                         <label class="form-label sm:w-40">(Obligatorio)</label><label class="form-label sm:w-20"></label>
-                        <label class="form-label sm:w-60">Constancia de No Adeudo a la Biblioteca</label>                                           
-                        <a class="btn btn-secondary" href="">Solicitar</a>                                                                    
+                        <label class="form-label sm:w-60">Constancia de No Adeudo a la Biblioteca</label>          
+                        @if ($alumnoDocs->solicitud_constancia_no_adeudo_biblioteca && !$alumnoDocs->constancia_no_adeudo_biblioteca)                                                
+                            <b>SOLICITADA</b>
+                        @elseif (!$alumnoDocs->constancia_no_adeudo_biblioteca)                                  
+                            <a class="btn btn-secondary" href="{{ route('solicitar_cna_biblioteca', $alumnoDocs) }}">Solicitar</a>                                                                    
+                        @endif
                     </div>       
                     @if($id_opcion_titulacion == 7 or $id_opcion_titulacion == 11 or  $id_opcion_titulacion == 12 or  $id_opcion_titulacion == 13 or $id_opcion_titulacion == 14 or $id_opcion_titulacion == 16)                    
                         <!-- Autorización para Publicación -->     
@@ -342,7 +362,7 @@
                                 <label>Nombre del archivo requerido:</label>  
                                 <!-- Estado - 2da Etapa -->
                                 @if($tramite->estado >= 6 && $tramite->estado < 10 && $tramite->estado != 8)
-                                    <select class="form-control" name="nombre">                                                                                                                                            
+                                    <select class="form-control tom-select" name="nombre">                                                                                                                                            
                                         <option value="0" selected>Seleccione el nombre del archivo...</option>                                                                                                                                                                                                                                                                                                                 
                                         @if ($alumnoDocs->alumno->id_opcion_titulacion == 3 || $alumnoDocs->alumno->id_opcion_titulacion == 4)
                                             <!-- Examen Global Teorico Practico / Examen Global Teorico --> 
@@ -702,7 +722,7 @@
                         </div>
                     </div>
                     <!-- Estado - Datos Registrados - Documentos Entregados - Documentos No Aprobados-->   
-                    @if ($tramite->estado == 2 || $tramite->estado == 5 || $tramite->estado == 6 || $tramite->estado == 9)
+                    @if ($tramite->estado == 2 || $tramite->estado == 5 || $tramite->estado == 6 || $tramite->estado == 9 || $tramite->estado == 8 || $tramite->estado == 11)
                         <div class="text-center mt-5">
                             <a class="btn btn-primary" href="javascript:;" data-tw-toggle="modal" data-tw-target="#revisionTramiteModal">                                    
                                 <svg class="svg-inline--fa fa-venus-mars w-6 h-4 text-slate-500 mr-2 blanco" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><style>.blanco{fill:#ffffff}</style><path  d="M64 0C28.7 0 0 28.7 0 64V448c0 35.3 28.7 64 64 64H320c35.3 0 64-28.7 64-64V160H256c-17.7 0-32-14.3-32-32V0H64zM256 0V128H384L256 0zM216 408c0 13.3-10.7 24-24 24s-24-10.7-24-24V305.9l-31 31c-9.4 9.4-24.6 9.4-33.9 0s-9.4-24.6 0-33.9l72-72c9.4-9.4 24.6-9.4 33.9 0l72 72c9.4 9.4 9.4 24.6 0 33.9s-24.6 9.4-33.9 0l-31-31V408z"/></svg>

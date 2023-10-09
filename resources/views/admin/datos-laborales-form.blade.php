@@ -179,7 +179,11 @@
                             </div>                                                                                    
                             <div class="sm:ml-20 sm:pl-5 mt-5">
                                 <button class="btn btn-primary" type="submit">Guardar</button>                                               
-                                <a class="btn btn-secondary" href="{{ route('showTramite',$alumno) }}">Cancelar</a>
+                                @can('admin')                                                                    
+                                    <a class="btn btn-secondary" href="{{ route('showTramite',$alumno) }}">Cancelar</a>
+                                @else
+                                    <a class="btn btn-secondary" href="{{ route('update-datos') }}">Regresar</a>
+                                @endcan
                             </div>
                         </form>
                     </div>                   

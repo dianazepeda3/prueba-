@@ -26,6 +26,26 @@ use NumberFormatter;
 
 class AdminController extends Controller
 {
+    public function login(Request $request){ 
+        //VALIDACION DE DATOS
+        $request->validate([            
+            'codigo' => 'required|regex:/(.+)@(.+)\.(.+)/i', 
+            'password' => 'required|string|min:6',
+        ]);
+           
+        $credentials = $request->only('codigo', 'password');
+        if (Auth::attempt($credentials)) {
+            // La autenticación ha sido exitosa
+            $user = Auth::user();                        
+            return redirect()->intended('tramites');            
+        }                         
+
+        // Si la autenticación falla, redirige de vuelta al formulario de inicio de sesión
+        return redirect()->back()->withErrors([
+            'codigo' => 'Tus datos no coinciden con nuestras credenciales',
+        ]);  
+    }
+    
     public function tramites() {
         $user = Auth::user();
         $tramites = Tramite::all();   
@@ -41,14 +61,14 @@ class AdminController extends Controller
         
         $aprobados = true;               
         foreach($documentos as $documento){
-            if ($documento->aprobado == 2 || $documento->aprobado == 3 || $documento->aprobado == 6 || $documento->aprobado == 7){                
+            if ($documento->aprobado == 2 || $documento->aprobado == 3 || $documento->aprobado == 6 || $documento->aprobado == 7 || $documento->aprobado == 9 || $documento->aprobado == 10){                
                 $aprobados = false;
             }            
         }                              
 
         $revisados = true;
         foreach($documentos as $documento){
-            if ($documento->aprobado == 3 || $documento->aprobado == 7){                
+            if ($documento->aprobado == 3 || $documento->aprobado == 7 || $documento->aprobado == 10){                
                 $revisados = false;
             }
         }                        
@@ -278,8 +298,10 @@ class AdminController extends Controller
         $tramite = Tramite::find($documento->tramite_id);        
         if($tramite->estado == 7){
             Documento::where('id', $documento->id)->update(['aprobado' => 5]);
-        }else{
+        }else if($tramite->estado == 3){
             Documento::where('id', $documento->id)->update(['aprobado' => 1]);
+        }else{
+            Documento::where('id', $documento->id)->update(['aprobado' => 8]);
         }
         $alumno = $tramite->alumno;
         return redirect()->route('showTramite', $alumno)->with('success', 'Documento "'. $documento->nombre_documento . '" Aprobado');
@@ -295,8 +317,11 @@ class AdminController extends Controller
         if($tramite->estado == 5){
             Documento::where('id', $documento->id)->update(['aprobado' => 6]);
             Documento::where('id', $documento->id)->update(['comentario' => $request->comentario]);
-        }else{
+        }else if($tramite->estado == 3){
             Documento::where('id', $documento->id)->update(['aprobado' => 2]);
+            Documento::where('id', $documento->id)->update(['comentario' => $request->comentario]);
+        }else{
+            Documento::where('id', $documento->id)->update(['aprobado' => 9]);
             Documento::where('id', $documento->id)->update(['comentario' => $request->comentario]);
         }
         $alumno = $tramite->alumno;
@@ -310,10 +335,15 @@ class AdminController extends Controller
             //Estado - Documentos No Aprobados
             Tramite::where('id', $tramite->id)->update(['estado' => 9]);
             AlumnoDocs::where('alumno_id', $tramite->alumno->id)->update(['validado' => 4]);
-        }else{
+        }else if($tramite->estado == 3){
             //Estado - Documentos No Aprobados
             Tramite::where('id', $tramite->id)->update(['estado' => 5]);
             AlumnoDocs::where('alumno_id', $tramite->alumno->id)->update(['validado' => 2]);
+        }else{
+            //Estado - Documentos No Aprobados
+            Tramite::where('id', $tramite->id)->update(['estado' => 12]);
+            AlumnoDocs::where('alumno_id', $tramite->alumno->id)->update(['validado' => 6]);
+            return redirect()->route('showTramite', $alumno)->with('success', 'Documentos revisados.');
         }
         Tramite::where('id', $tramite->id)->update(['error' => null]);
         
@@ -598,8 +628,12 @@ class AdminController extends Controller
     }
 
     public function pasarEtapa2(Tramite $tramite){
-        Tramite::where('id', $tramite->id)->update(['estado' => 6]);
         $alumno = $tramite->alumno;
+        if($alumno->id_articulo == 1)
+            Tramite::where('id', $tramite->id)->update(['estado' => 8]);
+        else
+            Tramite::where('id', $tramite->id)->update(['estado' => 6]);
+        
         
         //Enviar correo de notificacion
         $details = [
@@ -723,5 +757,177 @@ class AdminController extends Controller
         }
 
         return $maestro;
+    }
+
+    //Retorna el numero de acta en el formato debido
+    public function retornarNumActa(Alumno $alumno){
+        $numero_acta = $alumno->numero_de_consecutivo;
+        //saber cuantos digitos tiene el numero de acta
+        $numero_digitos = strlen($numero_acta);
+        if($numero_digitos == 1){
+            $numero_acta = '00'.$numero_acta;
+        }elseif($numero_digitos == 2){
+            $numero_acta = '0'.$numero_acta;
+        }
+
+        //agregarle /anio al numero de acta
+        $numero_acta = $numero_acta.'/'.$alumno->anio_graduacion;
+
+        return $numero_acta;
+    }
+
+    //Generar Carta de No Adeudo
+    public function generarformatoNoAdeudo(Alumno $alumno)
+    { 
+        //Descargar el documento con los datos
+        try{
+            $time = Carbon::now(); 
+            $fecha_tit = $alumno->fecha_titulacion; //$time->format('d/m/Y');
+            $fecha_titulacion = date("d/m/Y", strtotime($fecha_tit));
+            $hora_actual = $alumno->hora_inicio_citatorio; //$time->format('H:i');
+            $num_acta = $this->retornarNumActa($alumno); //Numero de acta
+            $codigo = $alumno->user->codigo; //Codigo del alumno            
+            $meses = array("enero","febrero","marzo","abril","mayo","junio","julio","agosto","septiembre","octubre","noviembre","diciembre");        
+            $mes = $meses[($time->format('n')) - 1];   
+            $dia = $time->format('d');
+            $anio = $time->format('Y');
+            
+        }catch(\Exception $e){
+            return redirect()->route('showTramite',$alumno)->with('info', 'Ha ocurrido un error al generar el documento.');
+        }  
+        try{
+            $pdf = PDF::loadView('layout.admin.cartaNoAdeudoBiblioteca', compact('alumno','dia','mes','anio'));
+            $pdf->setPaper('letter', 'landscape');
+
+            //return $pdf->stream();
+
+            $tramite = $alumno->tramite;
+            $nombre_ruta = $alumno->user_id . "_" . $alumno->user->name;
+            $ruta = 'alumnos/' . $nombre_ruta . '/documentos/Constancia_No_Adeudo_Biblioteca.pdf';
+
+            //Storage::put($ruta, file_get_contents($tempFile)); // Guardar el contenido del archivo                                
+
+            //GUARDA DATOS DEL DOCUMENTO EN LA BD
+            $documento = new Documento();
+            $documento->ruta = $ruta;
+            $documento->nombre_original = "Constancia de No Adeudo Bilbioteca.pdf";
+            $documento->mime =  "application/pdf";;
+            $documento->user_id = $alumno->user_id;
+            $documento->id_alumno = $alumno->id;
+            $documento->tramite_id = $tramite->id;
+            $documento->nombre_documento = "Constancia de No Adeudo Biblioteca";
+            $documento->aprobado = 4;                                   
+
+            $documento->save();     
+            
+            $alumno->alumno_docs->constancia_no_adeudo_biblioteca = 1;
+            $alumno->alumno_docs->save();
+            
+            //GUARDAR EN CARPETA DE SERVIDOR
+            $content = $pdf->download()->getOriginalContent();
+            $content = $pdf->download()->getOriginalContent();
+            Storage::put($ruta,$content);
+
+            //AlumnoDocs::where('alumno_id', $alumno->id)->update(['carta_autorizacion' => 1]);
+        
+            /*$template = new \PhpOffice\PhpWord\TemplateProcessor('Formato_Carta_No_Adeudo.docx');
+            //$template->setValue('num_acta', $num_acta);
+            $template->setValue('alumno', $alumno->user->name);
+            $template->setValue('codigo', $alumno->user->codigo);
+            $template->setValue('carrera', mb_strtoupper($alumno->carrera->carrera));
+            $template->setValue('dia', $time->format('d'));
+            $template->setValue('mes', $mes);
+            $template->setValue('anio', $time->format('Y'));                                          
+                
+            $tempFile = tempnam(sys_get_temp_dir(), 'PHPWord');
+            $template->saveAs($tempFile);
+
+            $tramite = $alumno->tramite;
+            $nombre_ruta = $alumno->user_id . "_" . $alumno->user->name;
+            $ruta = 'alumnos/' . $nombre_ruta . '/documentos/FormatoNoAdeudo.docx';
+
+            Storage::put($ruta, file_get_contents($tempFile)); // Guardar el contenido del archivo                                
+
+            //GUARDA DATOS DEL DOCUMENTO EN LA BD
+            $documento = new Documento();
+            $documento->ruta = $ruta;
+            $documento->nombre_original = "FormatoNoAdeudo.docx";
+            $documento->mime = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+            $documento->user_id = $alumno->user_id;
+            $documento->id_alumno = $alumno->id;
+            $documento->tramite_id = $tramite->id;
+            $documento->nombre_documento = "Constancia de No Adeudo Biblioteca";
+            $documento->aprobado = 4;                                   
+
+            $documento->save();  
+            // Corregir la cabecera Content-Type
+            $headers = array(
+                'Content-Type' => 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+            );      */      
+
+            //response()->download($tempFile, "FormatoNoAdeudo.docx" , $headers)->deleteFileAfterSend(true);
+            return redirect()->back()->with('success', 'Formato de No Adeudo creado');
+        } catch (\PhpOffice\PhpWord\Exception\Exception $e) {
+            return redirect()->route('showTramite',$alumno)->with('info', 'Ha ocurrido un error al generar el documento');
+        }
+
+    }
+
+    public function generarformatoNoAdeudoCE(Alumno $alumno)
+    { 
+        //Descargar el documento con los datos
+        try{
+            $time = Carbon::now(); 
+            $fecha_tit = $alumno->fecha_titulacion; //$time->format('d/m/Y');
+            $fecha_titulacion = date("d/m/Y", strtotime($fecha_tit));
+            $hora_actual = $alumno->hora_inicio_citatorio; //$time->format('H:i');
+            $num_acta = $this->retornarNumActa($alumno); //Numero de acta
+            $codigo = $alumno->user->codigo; //Codigo del alumno            
+            $meses = array("enero","febrero","marzo","abril","mayo","junio","julio","agosto","septiembre","octubre","noviembre","diciembre");        
+            $mes = $meses[($time->format('n')) - 1];   
+            $dia = $time->format('d');
+            $anio = $time->format('Y');
+            
+        }catch(\Exception $e){
+            return redirect()->route('showTramite',$alumno)->with('info', 'Ha ocurrido un error al generar el documento ' . $e->getMessage());
+        }  
+        try{
+            $pdf = PDF::loadView('layout.admin.cartaNoAdeudoBiblioteca', compact('alumno','dia','mes','anio'));
+            $pdf->setPaper('letter', 'landscape');
+
+            //return $pdf->stream();
+
+            $tramite = $alumno->tramite;
+            $nombre_ruta = $alumno->user_id . "_" . $alumno->user->name;
+            $ruta = 'alumnos/' . $nombre_ruta . '/documentos/Constancia_No_Adeudo_Universidad.pdf';
+
+            //Storage::put($ruta, file_get_contents($tempFile)); // Guardar el contenido del archivo                                
+
+            //GUARDA DATOS DEL DOCUMENTO EN LA BD
+            $documento = new Documento();
+            $documento->ruta = $ruta;
+            $documento->nombre_original = "Constancia de No Adeudo Universidad.pdf";
+            $documento->mime =  "application/pdf";;
+            $documento->user_id = $alumno->user_id;
+            $documento->id_alumno = $alumno->id;
+            $documento->tramite_id = $tramite->id;
+            $documento->nombre_documento = "Constancia de No Adeudo Universidad";
+            $documento->aprobado = 4;                                   
+
+            $documento->save();     
+            
+            $alumno->alumno_docs->constancia_no_adeudo_universidad = 1;
+            $alumno->alumno_docs->save();
+            
+            //GUARDAR EN CARPETA DE SERVIDOR
+            $content = $pdf->download()->getOriginalContent();
+            $content = $pdf->download()->getOriginalContent();
+            Storage::put($ruta,$content);     
+            
+            return redirect()->back()->with('success', 'Formato de No Adeudo creado');
+        } catch (\PhpOffice\PhpWord\Exception\Exception $e) {
+            return redirect()->route('showTramite',$alumno)->with('info', 'Ha ocurrido un error al generar el documento');
+        }
+
     }
 }
