@@ -73,13 +73,27 @@ class Menu
                 ]
             ],            
             'maestros' => [
-                'icon' => 'user',
-                'route_name' => 'maestros',
-                'params' => [
-                    // Additional parameters
-                ],
-                'title' => 'Maestros'
-            ],
+                'icon' => 'users',                
+                'title' => 'Maestros',
+                'sub_menu' => [
+                    'lista-maestros' => [
+                        'icon' => 'list',
+                        'route_name' => 'maestros',
+                        'params' => [
+                            // Additional parameters
+                        ],
+                        'title' => 'Ver Maestros'
+                    ],
+                    'maestros-form' => [
+                        'icon' => 'user-plus',
+                        'route_name' => 'maestros-form',
+                        'params' => [
+                            // Additional parameters
+                        ],
+                        'title' => 'Agregar Maestro'
+                    ]
+                ]
+            ], 
             'firma' => [
                 'icon' => 'edit',
                 'route_name' => 'firma',
@@ -632,15 +646,29 @@ class Menu
                         'title' => 'Agregar Usuario'
                     ]
                 ]
-            ],            
+            ],                      
             'maestros' => [
-                'icon' => 'user',
-                'route_name' => 'maestros',
-                'params' => [
-                    // Additional parameters
-                ],
-                'title' => 'Maestros'
-            ],
+                'icon' => 'users',                
+                'title' => 'Maestros',
+                'sub_menu' => [
+                    'lista-maestros' => [
+                        'icon' => 'list',
+                        'route_name' => 'maestros',
+                        'params' => [
+                            // Additional parameters
+                        ],
+                        'title' => 'Ver Maestros'
+                    ],
+                    'maestros-form' => [
+                        'icon' => 'user-plus',
+                        'route_name' => 'maestros-form',
+                        'params' => [
+                            // Additional parameters
+                        ],
+                        'title' => 'Agregar Maestro'
+                    ]
+                ]
+            ], 
             'firma' => [
                 'icon' => 'edit',
                 'route_name' => 'firma',

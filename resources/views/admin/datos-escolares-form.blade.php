@@ -46,8 +46,12 @@
                 </div>
                 <div id="horizontal-form" class="p-5">
                     <div class="preview">
-                        <form class="form" method="POST" action="{{ route('update-datos-escolares',$alumno) }}" enctype="multipart/form-data">
+                        @if(isset($alumno))
+                            <form class="form" method="POST" action="{{ route('update-datos-escolares',$alumno) }}" enctype="multipart/form-data">
                             @method('PATCH') 
+                        @else
+                            <form class="form" method="POST" action="{{ route('datos-escolares') }}" enctype="multipart/form-data"> 
+                        @endif                                                  
                             @csrf
                             <div class="form-inline">
                                 <label for="nombre" class="form-label sm:w-20">Nombre Completo</label>
@@ -79,12 +83,22 @@
                             </div> 
                             <div class="form-inline mt-5">
                                 <label for="situacion" class="form-label sm:w-20">Situación</label>
-                                <input id="situacion" name="situacion" type="text" class="form-control" placeholder="AC..."
-                                @if(isset($alumno))
-                                    value="{{$alumno->situacion}}"
+                                @can('alumno')
+                                    <input id="situacion" name="situacion" type="text" class="form-control" placeholder="AC..."
+                                    @if(isset($alumno))
+                                        value="{{$alumno->situacion}}"
+                                    @else
+                                        value="{{old('situacion')}}"
+                                    @endif disabled>
                                 @else
-                                    value="{{old('carrera')}}"
-                                @endif disabled>
+                                    <select id="situacion" name="situacion" class="form-control" aria-label=".form-select-sm example">
+                                        <option value="" selected>Seleccione el estado civil...</option>                                   
+                                        <option value="AC"
+                                            @if(isset($alumno) && $alumno->situacion == "AC") selected @endif>Activo</option>                              
+                                        <option value="EG"
+                                            @if(isset($alumno) && $alumno->situacion == "EG") selected @endif>Egresado</option>                            
+                                    </select>
+                                @endif
                                 @can('alumno')
                                     <label for="carrera" class="form-label sm:w-20">Carrera</label>
                                     <input id="carrera" name="carrera" type="text" class="form-control" placeholder="2019A..."
@@ -94,19 +108,19 @@
                                         value="{{old('carrera')}}"
                                     @endif disabled>
                                 @else
-                                <label for="carrera" class="form-label sm:w-20">Carrera</label>
-                                <select id="carrera" name="carrera" data-placeholder="Selecciona la carrera" class="tom-select form-control">                                        
-                                    <option value="0" selected>Selecciona la carrera...</option>
-                                    @foreach ($carreras as $carrera)
-                                        @if ($carrera->id == $alumno->carrera->id)
-                                            <option value="{{$carrera->id}}" selected>{{$carrera->carrera}}</option>
-                                        @else
-                                            <option value="{{$carrera->id}}">{{$carrera->carrera}}</option>
-                                        @endif
-                                    @endforeach                                          
-                                </select>  
+                                    <label for="carrera" class="form-label sm:w-20">Carrera</label>
+                                    <select id="carrera" name="carrera" class="form-control" aria-label=".form-select-sm example">                                                          
+                                        <option value="0" selected>Selecciona la carrera...</option>
+                                        @foreach ($carreras as $carrera)
+                                            @if (isset($alumno) && $carrera->id == $alumno->carrera->id)
+                                                <option value="{{$carrera->id}}" selected>{{$carrera->carrera}}</option>
+                                            @else
+                                                <option value="{{$carrera->id}}">{{$carrera->carrera}}</option>
+                                            @endif
+                                        @endforeach  
+                                    </select>
                                 @endcan
-                            </div>                                               
+                            </div>                                                                          
                             <div class="form-inline mt-5">                           
                                 <label for="ciclo_ingreso" class="form-label sm:w-20">Ciclo Ingreso</label>
                                 <input id="ciclo_ingreso" name="ciclo_ingreso" type="text" class="form-control" placeholder="2019A..."
@@ -128,13 +142,25 @@
                             <div class="form-inline mt-5">
                                 <label for="plan_estudios" class="form-label sm:w-20">Plan de Estudios</label>
                                 <select id="plan_estudios" name="plan_estudios" data-placeholder="Selecciona el plan de estudios" class="tom-select form-control">                                        
-                                    @foreach ($plan_estudios as $plan_estudio)
-                                        @if ($alumno->id_plan_estudios == $plan_estudio->id)
-                                            <option value="{{$plan_estudio->id}}" selected>{{$plan_estudio->nombre}}</option>
-                                        @else
-                                            <option value="{{$plan_estudio->id}}">{{$plan_estudio->nombre}}</option>
-                                        @endif
-                                    @endforeach                                         
+                                    @if (isset($alumno))
+                                        <option value="0">Seleccione su plan de estudios...</option>
+                                        @foreach ($plan_estudios as $plan_estudio)
+                                            @if ($alumno->id_plan_estudios == $plan_estudio->id)
+                                                <option value="{{$plan_estudio->id}}" selected>{{$plan_estudio->nombre}}</option>
+                                            @else
+                                                <option value="{{$plan_estudio->id}}">{{$plan_estudio->nombre}}</option>
+                                            @endif
+                                        @endforeach
+                                    @else
+                                        <option value="0" selected>Seleccione su plan de estudios...</option>
+                                        @foreach ($plan_estudios as $plan_estudio)
+                                            @if ($plan_estudio->id == old('plan_estudios'))
+                                                <option value="{{$plan_estudio->id}}" selected>{{$plan_estudio->nombre}}</option>
+                                            @else
+                                                <option value="{{$plan_estudio->id}}">{{$plan_estudio->nombre}}</option>
+                                            @endif
+                                        @endforeach
+                                    @endif                                      
                                 </select> 
                             </div>   
                             <div class="form-inline mt-5">
@@ -142,7 +168,7 @@
                                 <select id="articulo" name="articulo" class="tom-select2 form-control">                                                                            
                                     <option value="0" selected>Seleccione la modalidad de Titulación...</option>
                                     @foreach ($articulos as $articulo)
-                                        @if ($alumno->id_articulo == $articulo->id)
+                                        @if (isset($alumno) && $alumno->id_articulo == $articulo->id)
                                             <option value="{{$articulo->id}}" selected>{{$articulo->nombre}}</option>
                                         @else
                                             <option value="{{$articulo->id}}">{{$articulo->nombre}}</option>
@@ -153,13 +179,29 @@
                             <div class="form-inline mt-5">
                                 <label for="opciones_titulacion" class="form-label sm:w-20">Opciones de Titulación</label>
                                 <select id="opciones_titulacion" name="opciones_titulacion"  class="tom-select2 form-control">                                        
-                                    @foreach ($opciones_titulacion as $opcion)
-                                        @if ($alumno->id_opcion_titulacion == $opcion->id)
-                                            <option value="{{$opcion->id}}" selected>{{$opcion->nombre}}</option>
-                                        @elseif ($alumno->articulo->id == $opcion->articulo_id)
-                                            <option value="{{$opcion->id}}">{{$opcion->nombre}}</option>
+                                    @if (isset($alumno))
+                                        @foreach ($opciones_titulacion as $opcion)
+                                            @if ($alumno->id_opcion_titulacion == $opcion->id)
+                                                <option value="{{$opcion->id}}" selected>{{$opcion->nombre}}</option>
+                                            @else
+                                                <option value="{{$opcion->id}}">{{$opcion->nombre}}</option>
+                                            @endif
+                                        @endforeach
+                                    @else
+                                        @if (old('opciones_titulacion') == null)
+                                            <option value="0" selected>Seleccione la opcion de Titulación...</option>
                                         @endif
-                                    @endforeach                               
+                                        {{-- <option value="0" selected>Seleccione la opcion de Titulacion...</option> --}}
+                                        @foreach ($opciones_titulacion as $opcion)
+                                            @if ($opcion->id == old('opciones_titulacion'))
+                                                <option value="{{$opcion->id}}" selected>{{$opcion->nombre}}</option>
+                                            @else
+                                                @if ($opcion->articulo_id == old('articulo'))
+                                                    <option value="{{$opcion->id}}">{{$opcion->nombre}}</option>
+                                                @endif
+                                            @endif
+                                        @endforeach
+                                    @endif                              
                                 </select>   
                             </div> 
                             <div id="nombre_del_trabajo" @if(isset($alumno) && ($alumno->id_opcion_titulacion != 7 && $alumno->id_opcion_titulacion != 11 && $alumno->id_opcion_titulacion != 13 && $alumno->id_opcion_titulacion != 14 && $alumno->id_opcion_titulacion != 15 && $alumno->id_opcion_titulacion != 16 )) hidden @elseif(isset($alumno)!=true) hidden @endif >         
@@ -177,21 +219,29 @@
                                     <label class="form-label sm:w-20">¿Ganador de proyecto?</label>
                                     <div class="form-check mr-2 "> 
                                         <input id="ganador_proyecto" class="form-check-input" type="radio" name="ganador_proyecto" value="SI" 
-                                        @if ($alumno->ganador_proyecto_modular) checked @endif> 
+                                        @if (isset($alumno) && $alumno->ganador_proyecto_modular) checked @endif> 
                                         <label class="form-check-label" for="ganador_proyecto">SI</label> 
                                     </div>
                                     <div class="form-check mr-2 mt-2 sm:mt-0"> 
                                         <input id="ganador_proyecto" class="form-check-input" type="radio" name="ganador_proyecto" value="NO"
-                                        @if (!$alumno->ganador_proyecto_modular) checked @endif> 
+                                        @if (isset($alumno) && !$alumno->ganador_proyecto_modular) checked @endif> 
                                         <label class="form-check-label" for="ganador_proyecto">NO</label> 
                                     </div>
                                     </div>
                                 </div>  
-                            </div>                                                    
-                            <div class="sm:ml-20 sm:pl-5 mt-5">
-                                <button class="btn btn-primary" type="submit">Guardar</button>                                               
-                                <a class="btn btn-secondary" href="{{ route('showTramite',$alumno) }}">Cancelar</a>
-                            </div>
+                            </div>   
+                            @if(!isset($alumno))    
+                                <div class="form-inline mt-5">
+                                    <label for="password" class="form-label sm:w-20">Contraseña</label>
+                                    <input id="password" name="password" type="password" class="form-control" placeholder="******">                          
+                                    <label for="password_confirmed" class="form-label sm:w-20">Confirmar Contraseña</label>
+                                    <input id="password_confirmed" name="password_confirmed" type="password" class="form-control" placeholder="******">
+                                </div>                                              
+                                <div class="sm:ml-20 sm:pl-5 mt-5">
+                                    <button class="btn btn-primary" type="submit">Guardar</button>                                               
+                                    <a class="btn btn-secondary" href="{{ route('tramites') }}">Cancelar</a>
+                                </div>
+                            @endif
                         </form>
 
                     </div>

@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Hash;
 use Barryvdh\DomPDF\Facade\PDF;
 use App\Mail\NotificacionTramiteMail;
 use App\Models\User;
@@ -20,6 +21,7 @@ use App\Models\PlanEstudios;
 use App\Models\Articulo;
 use App\Models\OpcionTitulacion;
 use App\Models\AlumnoDocs;
+use App\Models\Coordinador;
 use App\Models\Firma;
 use Carbon\Carbon;
 use NumberFormatter;
@@ -1564,6 +1566,245 @@ class AdminController extends Controller
         return $carrera;
     }
 
+    //Funcion para retornar al maestro de la forma DR. NOMBRE_MAESTRO
+    public function setCarreraGenerosinmayus(Alumno $alumno)
+    {
+        //Buscar la carrera
+        $carrera_id = Carrera::where('id', $alumno->id_carrera)->first();
+
+        //Si es licenciatura
+        if($carrera_id->id == 3){
+            //Poner Licenciada si es mujer o Licenciado si es hombre
+            if($alumno->genero == 'M'){
+                $genero = 'Licenciada';
+            }else{
+                $genero = 'Licenciado';
+            }
+
+            //Sustituir Ingeniería segun el genero
+            $carrera_id = str_replace('Licenciatura', $genero, $carrera_id->carrera);
+
+        }else{
+            //Poner Ingeniera si es mujer o Ingeniero si es hombre
+            if($alumno->genero == 'M'){
+                $genero = 'Ingeniera';
+            }else{
+                $genero = 'Ingeniero';
+            }
+
+            //Sustituir Ingeniería segun el genero
+            $carrera = str_replace('Ingeniería', $genero, $carrera_id->carrera);
+        }
+
+
+        return $carrera;
+    }
+
+    //Retorna la calificacion del alumno en el formato 100 (CIEN)
+    public function retornarHoraLetras($hora_completa){
+        //horas
+        $horas = substr($hora_completa, 0, 2);
+        $horas = $this->setDiaALetras($horas);
+        $horas = mb_strtolower($horas);
+
+        //minutos
+        $minutos = substr($hora_completa, 3, 2);
+        $minutos = $this->setMinutosLetras($minutos);
+        $minutos = mb_strtolower($minutos);
+
+        $hora_completa = $horas." horas y ".$minutos ." minutos";
+
+        return $hora_completa;
+    }
+
+    //Funcion para subir acta firmada
+    public function setMinutosLetras($calificacion)
+    {
+        switch($calificacion){
+        case '01':
+            $calificacion = 'UNO';
+            break;
+        case '02':
+            $calificacion = 'DOS';
+            break;
+        case '03':
+            $calificacion = 'TRES';
+            break;
+        case '04':
+            $calificacion = 'CUATRO';
+            break;
+        case '05':
+            $calificacion = 'CINCO';
+            break;
+        case '06':
+            $calificacion = 'SEIS';
+            break;
+        case '07':
+            $calificacion = 'SIETE';
+            break;
+        case '08':
+            $calificacion = 'OCHO';
+            break;
+        case '09':
+            $calificacion = 'NUEVE';
+            break;
+        case '10':
+            $calificacion = 'DIEZ';
+            break;
+        case '11':
+            $calificacion = 'ONCE';
+            break;
+        case '12':
+            $calificacion = 'DOCE';
+            break;
+        case '13':
+            $calificacion = 'TRECE';
+            break;
+        case '14':
+            $calificacion = 'CATORCE';
+            break;
+        case '15':
+            $calificacion = 'QUINCE';
+            break;
+        case '16':
+            $calificacion = 'DIECISEIS';
+            break;
+        case '17':
+            $calificacion = 'DIECISIETE';
+            break;
+        case '18':
+            $calificacion = 'DIECIOCHO';
+            break;
+        case '19':
+            $calificacion = 'DIECINUEVE';
+            break;
+        case '20':
+            $calificacion = 'VEINTE';
+            break;
+        case '21':
+            $calificacion = 'VEINTIUNO';
+            break;
+        case '22':
+            $calificacion = 'VEINTIDOS';
+            break;
+        case '23':
+            $calificacion = 'VEINTITRES';
+            break;
+        case '24':
+            $calificacion = 'VEINTICUATRO';
+            break;
+        case '25':
+            $calificacion = 'VEINTICINCO';
+            break;
+        case '26':
+            $calificacion = 'VEINTISEIS';
+            break;
+        case '27':
+            $calificacion = 'VEINTISIETE';
+            break;
+        case '28':
+            $calificacion = 'VEINTIOCHO';
+            break;
+        case '29':
+            $calificacion = 'VEINTINUEVE';
+            break;
+        case '30':
+            $calificacion = 'TREINTA';
+            break;
+        case '31':
+            $calificacion = 'TREINTA Y UNO';
+            break;
+        case '32':
+            $calificacion = 'TREINTA Y DOS';
+            break;
+        case '33':
+            $calificacion = 'TREINTA Y TRES';
+            break;
+        case '34':
+            $calificacion = 'TREINTA Y CUATRO';
+            break;
+        case '35':
+            $calificacion = 'TREINTA Y CINCO';
+            break;
+        case '36':
+            $calificacion = 'TREINTA Y SEIS';
+            break;
+        case '37':
+            $calificacion = 'TREINTA Y SIETE';
+            break;
+        case '38':
+            $calificacion = 'TREINTA Y OCHO';
+            break;
+        case '39':
+            $calificacion = 'TREINTA Y NUEVE';
+            break;
+        case '40':
+            $calificacion = 'CUARENTA';
+            break;
+        case '41':
+            $calificacion = 'CUARENTA Y UNO';
+            break;
+        case '42':
+            $calificacion = 'CUARENTA Y DOS';
+            break;
+        case '43':
+            $calificacion = 'CUARENTA Y TRES';
+            break;
+        case '44':
+            $calificacion = 'CUARENTA Y CUATRO';
+            break;
+        case '45':
+            $calificacion = 'CUARENTA Y CINCO';
+            break;
+        case '46':
+            $calificacion = 'CUARENTA Y SEIS';
+            break;
+        case '47':
+            $calificacion = 'CUARENTA Y SIETE';
+            break;
+        case '48':
+            $calificacion = 'CUARENTA Y OCHO';
+            break;
+        case '49':
+            $calificacion = 'CUARENTA Y NUEVE';
+            break;
+        case '50':
+            $calificacion = 'CINCUENTA';
+            break;
+        case '51':
+            $calificacion = 'CINCUENTA Y UNO';
+            break;
+        case '52':
+            $calificacion = 'CINCUENTA Y DOS';
+            break;
+        case '53':
+            $calificacion = 'CINCUENTA Y TRES';
+            break;
+        case '54':
+            $calificacion = 'CINCUENTA Y CUATRO';
+            break;
+        case '55':
+            $calificacion = 'CINCUENTA Y CINCO';
+            break;
+        case '56':
+            $calificacion = 'CINCUENTA Y SEIS';
+            break;
+        case '57':
+            $calificacion = 'CINCUENTA Y SIETE';
+            break;
+        case '58':
+            $calificacion = 'CINCUENTA Y OCHO';
+            break;
+        case '59':
+            $calificacion = 'CINCUENTA Y NUEVE';
+            break;
+        case '60':
+            $calificacion = 'SESENTA';
+            break;
+        }
+        return $calificacion;
+    }
+
      //Funcion para retornar al maestro de la forma DR. NOMBRE_MAESTRO
      public function setFecha($fecha)
      {
@@ -1639,5 +1880,516 @@ class AdminController extends Controller
 
         return redirect()->route('showTramite', $alumno)->with('success','Documento de Acta de Titulación Firmada subido correctamente');
 
+    }
+
+     //Generar Acta Circunstanciada
+     public function generarDocumentoActaCircunstanciada(Alumno $alumno)
+     {
+         //Descargar el documento con los datos
+         $dia_titulacion = $this->setDiaFechaTitulacion($alumno); //Fecha de titulacion
+         $dia_titulacion = mb_strtolower($dia_titulacion);
+         $mes_titulacion = $this->setMesFechaTitulacion($alumno); //Fecha de titulacion
+         $mes_titulacion = mb_strtolower($mes_titulacion);
+         $anio_titulacion = $alumno->anio_graduacion; //Fecha de titulacion
+         $anio_titulacion = mb_strtolower($anio_titulacion);
+ 
+         //Secretario de division
+         $secretario_division_id = Maestro::where('id', $alumno->id_secretario_division)->first();
+ 
+         $secretario_division = $secretario_division_id->nombre;
+ 
+         if($secretario_division_id->grado == 'Doctorado'){
+             if ($secretario_division_id->genero == 'H') {
+                 $secretario_division = 'Dr. ' . $secretario_division;
+             }else{
+                 $secretario_division = 'Dra. ' . $secretario_division;
+             }
+         }
+         else {
+             if ($secretario_division_id->genero == 'H') {
+                 $secretario_division = 'Mtro. ' . $secretario_division;
+             }else{
+                 $secretario_division = 'Mtra. ' . $secretario_division;
+             }
+         }
+ 
+         //Poner si "el _nombre" o "la _nombre"
+         if($alumno->genero == 'H'){
+             $la_el = 'el';
+         }else{
+             $la_el = 'la';
+         }
+ 
+         //Poner si "el _nombre" o "la _nombre" en mayuscula
+         if($alumno->genero == 'H'){
+             $el_la_may = 'El';
+         }else{
+             $el_la_may = 'La';
+         }
+ 
+         $nombre = mb_strtoupper($alumno->user->name); //Nombre del alumno
+         $codigo = $alumno->user->codigo; //Codigo del alumno
+         //Carrera
+         $carrera_id = Carrera::where('id', $alumno->id_carrera)->first();
+         $carrera = $carrera_id->carrera; //Titulo de la carrera
+ 
+         $titulo = $this->setCarreraGenerosinmayus($alumno); //Titulo de la carrera
+ 
+         //poner si es referida o referido
+         if($alumno->genero == 'H'){
+             $referida_referido = 'referido';
+         }else{
+             $referida_referido = 'referida';
+         }
+ 
+ 
+         $num_acta = $this->retornarNumActa($alumno); //Numero de acta
+ 
+         //sacar el dia de la fecha de titulacion
+         $dia_acta = $alumno->fecha_titulacion;
+         $dia_acta = date('d', strtotime($dia_acta));
+         $enlace = $alumno->lugar_de_ceremonia; //Lugar de la ceremonia
+ 
+         $presidente = $this->retornarMaestroGrado($alumno->id_maestro_presidente);//Presidente
+         $secretario = $this->retornarMaestroGrado($alumno->id_maestro_secretario);//Secretario
+         $vocal = $this->retornarMaestroGrado($alumno->id_maestro_vocal);//Vocal
+         //Hora de fin de la ceremonia
+         $hora_fin = $alumno->hora_fin_citatorio;
+         $hora_fin = date('H:i', strtotime($hora_fin));
+ 
+         $hora_letras = $this->retornarHoraLetras($alumno->hora_fin_citatorio); //Hora de fin de la ceremonia
+ 
+         try{
+             $template = new \PhpOffice\PhpWord\TemplateProcessor('Formato_Acta_Circunstanciada_Online.docx');
+             $template->setValue('dia', $dia_titulacion);
+             $template->setValue('mes', $mes_titulacion);
+             $template->setValue('anio', $anio_titulacion);
+             $template->setValue('secretario_division', $secretario_division);
+             $template->setValue('el_la', $la_el);
+             $template->setValue('nombre', $nombre);
+             $template->setValue('codigo', $codigo);
+             $template->setValue('carrera', $carrera);
+             $template->setValue('titulo', $titulo);
+             $template->setValue('referida_referido', $referida_referido);
+             $template->setValue('num_acta', $num_acta);
+             $template->setValue('dia_acta', $dia_acta);
+             $template->setValue('presidente', $presidente);
+             $template->setValue('secretario', $secretario);
+             $template->setValue('vocal', $vocal);
+             $template->setValue('enlace', $enlace);
+             $template->setValue('hora_fin', $hora_fin);
+             $template->setValue('hora_letras', $hora_letras);
+             $template->setValue('el_la_may', $el_la_may);
+ 
+             $tempFile = tempnam(sys_get_temp_dir(), 'PHPWord');
+             $template->saveAs($tempFile);
+ 
+             $headers = array(
+                 'Content-Type' => 'octet-stream',
+             );
+ 
+             $nombre_doc = 'ACTA CIRCUNSTANCIADA '. mb_strtoupper((string)$alumno->user->name).'.docx';
+ 
+             return response()->download($tempFile, $nombre_doc , $headers)->deleteFileAfterSend(true);
+ 
+         } catch (\PhpOffice\PhpWord\Exception\Exception $e) {
+            return redirect()->route('showTramite',$alumno)->with('info', 'Ha ocurrido un error al generar el documento');
+         }
+ 
+     }
+
+     //Tramites
+    public function eliminarTramite(Request $request, Alumno $alumno)
+    {
+        $tramite = $alumno->tramite;
+        $user = $alumno->user;
+        $value = Hash::check($request->password, auth()->user()->password);
+
+        if ($value == false) {
+            $request->validate([
+                'password' => 'required|current_password',
+            ]);
+        }
+
+        try{
+            //Eliminar los documentos del tramite
+            $documentos = Documento::where('tramite_id', $tramite->id)->get();
+
+            //alumno
+            $alumnoDocs = $alumno->alumno_docs;
+
+            $nombre = (string)$alumno->user_id;
+            $nombre_ruta =  $nombre . "_" . $alumno->user->name;
+
+            $directory = 'alumnos/' . $nombre_ruta;
+
+            Storage::deleteDirectory($directory);
+
+            foreach ($documentos as $documento) {
+                //Eliminamos el documento del almacenamiento
+                Storage::delete($documento->ruta);
+
+                //Eliminamos el documento de la base de datos
+                $documento->delete();
+            }
+
+            //Eliminar el tramite
+            $tramite->delete();
+            $alumnoDocs->delete();
+
+            //Eliminar el alumno del tramite            
+            $alumno->delete();
+            $user->delete();
+        } catch (Exception $e) {
+            return redirect()->route('tramites')->with('info', $e.' Ocurrio un error al eliminar el tramite.');
+        }
+
+        return redirect()->route('tramites')->with('success', 'Tramite eliminado correctamente.');
+    }
+
+    public function createTramite()
+    {
+        $carreras = DB::table('carreras')->get();
+        $plan_estudios = DB::table('plan_estudios')->get();
+        $articulos = DB::table('articulos')->get();
+        $opciones_titulacion = DB::table('opciones_titulacion')->get();
+        $user = Auth::user();
+
+        return view('admin.datos-escolares-form', compact('user','carreras','plan_estudios', 'articulos', 'opciones_titulacion'));
+    }
+
+    public function setDatosInfo(Request $request){               
+        //Validacion de campos
+        $request->validate([
+            'nombre' => 'required|string|min:5|max:255',                     
+            'codigo' => 'required|min:9|max:9|unique:users',
+            'promedio' => 'required|numeric|min:0|max:100',
+            'carrera' => 'required',
+            'situacion' => 'required|string',            
+            'ciclo_ingreso' => 'required|string',
+            'ciclo_egreso' => 'required|string',
+            'password' => 'required|string|min:6',
+            'password_confirmed' => 'required|string|min:6',
+            /*'plan_estudios' => 'required|numeric|min:1',
+            'articulo' => 'required|numeric|min:1',
+            'opciones_titulacion' => 'required|numeric|min:1',*/
+        ]);  
+        if ($request->password != $request->password_confirmed) {
+            return redirect()->back()->with('info', 'Las contraseñas no coinciden');
+        }   
+
+        //Creacion del Usuario
+        try{
+            $user = new User();
+            $user->name = $request->nombre;
+            $user->codigo = $request->codigo;
+            $user->password = Hash::make($request->password);
+            $user->save();
+        }catch(Exception $e){
+            return redirect()->back()->with('info', 'Ya existe un alumno con ese código');
+        }
+        //Creacion del Alumno
+        $alumno = new Alumno();
+
+        $alumno->user_id = $user->id;
+        $alumno->ciclo_ingreso = $request->ciclo_ingreso;
+        $alumno->ciclo_egreso = $request->ciclo_egreso;
+        $alumno->id_carrera = $request->carrera; 
+        $alumno->promedio = $request->promedio;  
+                        
+        //Opcion_titulacion
+        if($request->plan_estudios != 0)
+            $alumno->id_articulo = $request->articulo;
+        if($request->opciones_titulacion != 0)
+            $alumno->id_opcion_titulacion = $request->opciones_titulacion;  
+        //Plan_estudios
+        if($request->plan_estudios != 0)
+            $alumno->id_plan_estudios = $request->plan_estudios;                         
+        $alumno->save();
+
+        $id_alumno = DB::table('alumnos')->where('user_id', '=', $user->id)->get();
+
+        //REGISTRAR TRAMITE
+        $tramite = new Tramite();
+        $tramite->alumno_id = $alumno->id;
+        $tramite->estado = 1;
+        $tramite->save();
+
+        $alumnoDocs = new AlumnoDocs();
+        $alumnoDocs->alumno_id = $alumno->id;
+        $alumnoDocs->save(); 
+
+        return redirect()->route('tramites')->with('success', 'El trámite se creo correctamente');
+
+    
+    }
+
+    public function editTramite(Tramite $tramite)
+    {
+
+        $alumno = Alumno::where('id', $tramite->alumno_id)->first();
+        $documentos = Documento::where('tramite_id', $tramite->id)->get();
+
+        $carreras = DB::table('carreras')->get();
+        $plan_estudios = DB::table('plan_estudios')->get();
+        $articulos = DB::table('articulos')->get();
+        $opciones_titulacion = DB::table('opciones_titulacion')->where('articulo_id','=',$alumno->id_articulo)->get();
+
+        return view('admin.createTramite', compact('tramite', 'alumno', 'documentos', 'carreras', 'plan_estudios', 'articulos', 'opciones_titulacion'));
+    }
+
+    //Usuarios
+    public function storeUsuarios(Request $request)
+    {                
+        //VALIDACION DE DATOS
+        $request->validate([
+            'nombre' => 'required|string|min:5|max:255',
+            'tipo' => 'required|numeric',
+            'carrera' =>'nullable|numeric',
+            'password' => 'required|string|min:6',
+            'password_confirmed' => 'required|string|min:6',
+        ]);  
+
+        if(is_numeric($request->codigo)){           
+            $request->validate(['codigo' => 'required|numeric|unique:users',]);
+        }else{
+            $request->validate(['codigo' => 'required|string',]);
+        }
+        
+        if ($request->password != $request->password_confirmed) {
+            return redirect()->route('usuarios-form')->with('info', 'Las contraseñas no coinciden');
+        }
+        if ($request->tipo == 0) {
+            return redirect()->route('usuarios-form')->with('info', 'Selecciona el tipo de usuario');
+        }
+        
+        //CREAR USUARIO
+        $user = new User();
+        $user->name = $request->nombre;
+        $user->codigo = $request->codigo;
+        $user->password = Hash::make($request->password);
+        $user->is_admin = 1;
+        $user->admin_type = $request->tipo;
+        $user->save();        
+
+        /*if($request->tipo == 2){
+            $coordinador = new Coordinador();
+            $coordinador->user_id = $user->id;
+            $coordinador->id_carrera = $request->carrera;
+            $coordinador->save();
+        }*/
+
+        return redirect()->route('usuarios')->with('success', 'Nuevo usuario creado con éxito');
+
+    }
+
+    public function updateUsuario(Request $request, User $user)
+    {               
+        //VALIDACION DE DATOS
+        $request->validate([
+            'nombre' => 'required|string|min:5|max:255',  
+            'tipo' => 'required|numeric',          
+            'carrera' =>'nullable|numeric',
+        ]);
+        if(is_numeric($request->codigo)){
+            if($request->codigo == $user->codigo){
+                $request->validate(['codigo' => 'required|numeric',]);
+            }else{
+                $request->validate(['codigo' => 'required|numeric|unique:users',]);
+            }
+        }else{
+            $request->validate(['codigo' => 'required|string',]);
+        }
+
+        if($request->contra == "SI"){
+            $request->validate([
+                'password' => 'required|string|min:6',
+                'password_confirmed' => 'required|string|min:6',
+            ]);  
+            if ($request->password != $request->password_confirmed) {
+                return redirect()->back()->with('info', 'Las contraseñas no coinciden');
+            }
+            $user->password = Hash::make($request->password);
+        }
+
+        if ($request->tipo == 0) {
+            return redirect()->route('usuarios')->with('info', 'Selecciona el tipo de usuario');
+        }
+
+        //EDITAR USUARIO
+        $user->name = $request->nombre;
+        $user->codigo = $request->codigo;
+        $user->admin_type = $request->tipo;
+        $user->save();           
+
+        /*$coordinador = Coordinador::where('user_id', $user->id)->get()->first(); 
+        if($request->tipo == 2){              
+            if(!isset($coordinador)){
+                $coordinador = new Coordinador();
+            }            
+            $coordinador->user_id = $user->id;
+            $coordinador->id_carrera = $request->carrera;
+            $coordinador->save();
+        }else{
+            if(isset($coordinador)){
+                $coordinador->delete();
+            }
+        }*/
+
+        return redirect()->route('usuarios')->with('success', 'Información actualizada con éxito');
+
+    }
+
+    public function deleteUsuario(Request $request, User $usuario)
+    {
+
+        $value = Hash::check($request->password, auth()->user()->password);
+
+        if ($value == false) {
+            $request->validate([
+                'password' => 'required|current_password',
+            ]);
+        }
+
+        try{
+            //Eliminar los documentos
+            $documentos = Documento::where('user_id', $usuario->id)->get();
+            if ($documentos->count() > 0) {
+                foreach ($documentos as $documento) {
+                    //Eliminamos el documento de la base de datos
+                    $documento->delete();
+                }
+            }
+            //Eliminar el usuario
+            $usuario->delete();
+        }catch(\Exception $e){
+            return redirect()->route('usuarios')->with('info', 'Ocurrio un error al tratar de eliminar el usuario.');
+        }
+
+        return redirect()->route('usuarios')->with('success', 'Usuario eliminado correctamente.');
+    }
+
+    //Maestros
+    public function updateMaestro(Request $request, Maestro $maestro)
+    {
+        //VALIDACION DE DATOS
+        $request->validate([
+            'nombre' => 'required|string|min:5|max:255',
+            'email' => 'required|string|email|max:255',
+            'codigo' => 'required|numeric',
+            'grado' => 'required|string|min:3'
+        ]);
+
+        //ACTUALIZAR USUARIO
+        $user = User::find($maestro->user_id);
+
+        if($request->contra == "SI"){
+            $request->validate([
+                'password' => 'required|string|min:6',
+                'password_confirmed' => 'required|string|min:6',
+            ]);  
+            if ($request->password != $request->password_confirmed) {
+                return redirect()->back()->with('info', 'Las contraseñas no coinciden');
+            }
+            $user->password = Hash::make($request->password);
+            $user->save();
+        }        
+
+        $user->forceFill([
+            'name' => $request['nombre'],
+            'codigo' => $request['codigo'],
+        ])->save();
+
+
+        //ACTUALIZAR MAESTRO
+        $maestro = Maestro::find($maestro->id);
+        $maestro->nombre = $request['nombre'];
+        $maestro->codigo = $request['codigo'];
+        $maestro->grado = $request['grado'];
+        $maestro->genero = $request['genero'];
+        $maestro->save();
+
+        $maestros = Maestro::all();
+
+        return redirect()->route('maestros')->with('success', 'Información actualizada con éxito');
+
+    }
+
+    public function storeMaestro(Request $request)
+    {
+
+        //VALIDACION DE DATOS
+        $request->validate([
+            'nombre' => 'required|string|min:5|max:255',
+            'email' => 'required|string|email|max:255|unique:maestros',
+            'password' => 'required|string|min:6',
+            'codigo' => 'required|numeric|unique:maestros',
+            'grado' => 'required|string|min:3'
+        ]);
+       
+        //CREAR USUARIO
+        $user = User::create([
+            'name' => $request['nombre'],
+            'codigo' => $request['codigo'],
+            'password' => Hash::make($request['password']),
+            'is_teacher' => '1',
+        ]);
+
+        //CREAR MAESTRO
+        Maestro::create([
+            'user_id' => $user->id,
+            'email' => $request->email,
+            'nombre' => $request['nombre'],
+            'codigo' => $request['codigo'],
+            'grado' => $request['grado'],
+            'genero' => $request['genero']
+        ]);
+
+        return redirect()->route('maestros')->with('success', 'Maestro creado con éxito');
+
+    }
+
+    public function deleteMaestro(Request $request, Maestro $maestro)
+    {
+
+        $value = Hash::check($request->password, auth()->user()->password);
+
+        if ($value == false) {
+            $request->validate([
+                'password' => 'required|current_password',
+            ]);
+        }
+
+        try{
+            $maestro = Maestro::find($maestro->id);
+
+            //Eliminar los documentos
+            $documentos = Documento::where('user_id', $maestro->user_id)->get();
+
+            $nombre = (string)$maestro->user_id;
+            $nombre_ruta =  $nombre . "_" . $maestro->nombre;
+
+            $directory = 'maestros/' . $nombre_ruta;
+
+            Storage::deleteDirectory($directory);
+
+            if ($documentos) {
+                foreach ($documentos as $documento) {
+                    //Eliminamos el documento de la base de datos
+                    $documento->delete();
+                }
+            }
+
+            //Eliminar el tramite
+            $maestro->delete();
+
+            //Eliminar el usuario
+            $user = User::find($maestro->user_id);
+            $user->delete();
+        }catch(\Exception $e){
+            return redirect()->route('maestros')->with('info', 'No se pudo eliminar el maestro.');
+        }
+
+        return redirect()->route('maestros')->with('success', 'Maestro eliminado correctamente.');
     }
 }

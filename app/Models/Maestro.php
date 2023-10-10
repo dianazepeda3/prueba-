@@ -8,4 +8,16 @@ use Illuminate\Database\Eloquent\Model;
 class Maestro extends Model
 {
     use HasFactory;
+
+    public $timestamps = false;
+
+    protected $fillable = [
+        'user_id',
+        'email',
+        'nombre',
+        'codigo',
+        'grado',
+        'genero',
+    ];
+    
 }

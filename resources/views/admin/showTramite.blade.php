@@ -65,7 +65,7 @@
                 <!-- Boton de Consultar Kardex -->                
                 @if($tramite->estado == 2)
                     <div class="btn-group mr-2">
-                        <a href="{{route('admin.kardex',$tramite)}}"  class="btn btn-primary btn-icon-split" id="aprobar" >
+                        <a href=" "  class="btn btn-primary btn-icon-split" id="aprobar" >
                             <span class="icon"><i class="fas fa-file-alt"></i></span>
                             <span class="text">Consultar Kárdex</span>
                         </a>
@@ -145,7 +145,7 @@
                 @can('coordinador')
                     @if ($tramite->estado < 6)
                         <div class="btn-group mr-2">
-                            <a  href="{{ route('admin.tramite.edit', $tramite) }}" class="btn btn-warning btn-icon-split" id="editarButton">
+                            <a  href="" class="btn btn-warning btn-icon-split" id="editarButton">
                                 <span class="icon"><i class="fas fa-pen"></i></span>
                                 <span class="text">Editar</span>
                             </a>
@@ -161,7 +161,7 @@
                 @endcan
                 @can('admin')                        
                     <div class="btn-group mr-2">
-                        <a  href="{{ route('admin.tramite.edit', $tramite) }}" class="btn btn-warning btn-icon-split" id="editarButton">
+                        <a  href="" class="btn btn-warning btn-icon-split" id="editarButton">
                             <span class="icon"><i class="fas fa-pen"></i></span>
                             <span class="text">Editar</span>
                         </a>
@@ -244,8 +244,8 @@
                 <div class="intro-y flex flex-col sm:flex-row items-center mt-3">                   
                     <!-- Boton de Descargar Acta circunstanciada -->
                     <div class="mr-2">
-                        <a href=""  class="btn btn-secondary btn-icon-split" id="acta_titulacion">
-                            <span class="icon"><i class="fas fa-file-invoice"></i></span>
+                        <a href="{{ route('descargar_actacirunstanciada',$alumno) }}"  class="btn btn-dark btn-icon-split" id="acta_titulacion">
+                            <svg class="svg-inline--fa fa-venus-mars w-4 h-4 text-slate-500 mr-2 blanco" xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 384 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><style>.blanco{fill:#ffffff}</style><path d="M64 0C28.7 0 0 28.7 0 64V448c0 35.3 28.7 64 64 64H320c35.3 0 64-28.7 64-64V160H256c-17.7 0-32-14.3-32-32V0H64zM256 0V128H384L256 0zM216 232V334.1l31-31c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9l-72 72c-9.4 9.4-24.6 9.4-33.9 0l-72-72c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l31 31V232c0-13.3 10.7-24 24-24s24 10.7 24 24z"/></svg>
                             <span class="text">Descargar Acta Circunstanciada</span>
                         </a>
                     </div>                     

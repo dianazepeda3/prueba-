@@ -44,6 +44,9 @@ Route::middleware('auth')->group(function() {
     Route::get('logout', [AuthController::class, 'logout'])->name('logout');
     Route::controller(AdminController::class)->group(function() {
         Route::get('tramites', 'tramites')->name('tramites');
+        Route::delete('tramites/{alumno}', 'eliminarTramite')->name('eliminar_tramites');
+        Route::get('tramites/crear','createTramite')->name('crear_tramite');
+        Route::post('tramites/crear','setDatosInfo')->name('datos-escolares');
         Route::get('tramites/{alumno}', 'verTramite')->name('showTramite');  
         Route::get('tramites/editar-datos-personales/{alumno}', 'editDatosPersonales')->name('edit-datos-personales');
         Route::patch('tramites/editar-datos-personales/{alumno}', 'updateDatosPersonales')->name('update-datos-personales');           
@@ -70,6 +73,7 @@ Route::middleware('auth')->group(function() {
         Route::get('tramites/documentos/acta-titulacion/{alumno}', 'generarDocumentoActaTitulacion')->name('descargar_acta_titulacion');
         Route::post('tramites/documentos/subir-acta-firmada/{alumno}','subirActaFirmada')->name('subir_acta_firmada');
         Route::get('tramites/documentos/protesta/{alumno}','generarDocumentoProtesta')->name('descargar_protesta');
+        Route::get('tramites/documentos/acta-circunstanciada/{alumno}','generarDocumentoActaCircunstanciada')->name('descargar_actacirunstanciada');
         
         //Datos Titulación
         Route::get('tramites/datos-titulacion/{alumno}','editDatosTitulacion')->name('editar_datos_titulacion');
@@ -79,6 +83,16 @@ Route::middleware('auth')->group(function() {
         Route::get('firma','firma')->name('firma');
         Route::post('firma/guardar','uploadFirma')->name('guardar-firma');
         Route::get('firma/ver-firma/{firma}','visualizarFirma')->name('ver-firma');
+
+        //Usuarios
+        Route::patch('usuarios/update/{user}', 'updateUsuario')->name('usuarios_update');
+        Route::post('usuarios/store', 'storeUsuarios')->name('usuarios_store');
+        Route::delete('usuarios/{usuario}', 'deleteUsuario')->name('eliminar_usuario');
+
+        //Maestros
+        Route::patch('maestros/update/{maestro}', 'updateMaestro')->name('maestros_update');
+        Route::post('maestros/store', 'storeMaestro')->name('maestros_store');
+        Route::delete('maestros/{maestro}', 'deleteMaestro')->name('eliminar_maestro');
     });
 });
 
@@ -108,7 +122,10 @@ Route::middleware('auth')->group(function() {
     Route::controller(PageController::class)->group(function() {
         Route::get('inicio/', 'dashboardOverview1')->name('inicio');
         Route::get('usuarios', 'usuarios')->name('usuarios');
-        Route::get('usuarios/create', 'usuarios_form')->name('usuarios-form');       
+        Route::get('usuarios/create', 'usuarios_form')->name('usuarios-form');   
+        Route::get('usuarios/create/{usuario}', 'usuarios_edit')->name('usuarios-edit');         
+        Route::get('maestros/create', 'maestros_form')->name('maestros-form');  
+        Route::get('maestros/create/{maestro}', 'maestros_edit')->name('maestros-edit');        
         Route::get('maestros', 'maestros')->name('maestros');
 
         Route::get('dashboard-overview-2-page', 'dashboardOverview2')->name('dashboard-overview-2');

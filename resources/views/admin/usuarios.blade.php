@@ -11,10 +11,36 @@
             <a class="btn btn-primary shadow-md mr-2" href="{{route('usuarios-form')}}">
                 <i class="w-4 h-4 mr-2" data-lucide="plus"></i> Agregar Nuevo Usuario
             </a>
-            <!--<button class="btn box">
-                <i class="w-4 h-4 mr-2" data-lucide="file-text"></i> Download Report
-            </button>-->
         </div>
+    </div>
+     {{-- ERRORES --}}
+     <div class="grid grid-cols-12 gap-12 mt-3"> 
+        <div class="intro-y col-span-12 lg:col-span-12">  
+            {{-- Mensaje Alerta --}}
+            @if (session('info'))
+                <div class="alert alert-danger-soft show flex items-center mb-2">
+                    <i data-lucide="alert-octagon" class="w-6 h-6 mr-2"></i>
+                    {{ session('info') }}
+                </div>
+            @endif
+            {{-- Mensaje Exito --}}                 
+            @if (session('success'))
+                <div class="alert alert-success-soft show flex items-center mb-2">
+                    {{ session('success') }}
+                </div>
+            @endif 
+            @if ($errors->any())
+                {{-- Mostrar error --}}
+                <div class="alert alert-danger-soft show flex items-center mb-2">
+                    <i data-lucide="alert-octagon" class="w-6 h-6 mr-2"></i>
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>   
+            @endif 
+        </div> 
     </div>
     <!-- BEGIN: Filter -->
     <div class="intro-y box p-5 mt-7 flex flex-col xl:flex-row gap-y-3">
@@ -57,7 +83,7 @@
                     <th>ACCIONES</th>
                 </tr>
                 @foreach ($usuarios as $usuario)
-                    @if ($usuario->is_admin or $usuario->is_teacher)                                            
+                    @if ($usuario->is_admin)                                            
                     <tr class="intro-x">
                         <!--<td class="w-40 !py-5">
                             <div class="flex">
@@ -99,14 +125,41 @@
                         </td>
                         <td class="table-report__action w-56">
                             <div class="flex justify-center items-center">
-                                <a class="flex items-center mr-3" href="javascript:;">
+                                <a class="flex items-center mr-3" href="{{ route('usuarios-edit',$usuario) }}">
                                     <i data-lucide="check-square" class="w-4 h-4 mr-1"></i> Editar
                                 </a>
-                                <a class="flex items-center text-danger" href="javascript:;" data-tw-toggle="modal" data-tw-target="#delete-confirmation-modal">
+                                <a class="flex items-center text-danger" href="javascript:;" data-tw-toggle="modal" data-tw-target="#delete-modal-preview{{$usuario->id}}">
                                     <i data-lucide="trash-2" class="w-4 h-4 mr-1"></i> Eliminar
                                 </a>
                             </div>
                         </td>
+                         <!-- BEGIN: Modal Eliminar --> 
+                         <div id="delete-modal-preview{{$usuario->id}}" class="modal" tabindex="-1" aria-hidden="true"> 
+                            <div class="modal-dialog"> 
+                                <div class="modal-content"> 
+                                    <div class="modal-body p-0"> 
+                                        <div class="p-5 text-center"> 
+                                            <i data-lucide="x-circle" class="w-16 h-16 text-danger mx-auto mt-3"></i> 
+                                        <div class="text-3xl mt-5">¿Segur@ que deseas eliminar el usuario de {{$usuario->name}}? 
+                                    </div> 
+                                    <div class="text-slate-500 mt-2 text-justify">                                                
+                                        Tenga en cuenta que al eliminar el usuario estará eliminando sus datos y los documentos registrados. Ingrese la contraseña de su usuario para borrarlo.
+                                    </div> 
+                                    <form method="POST" action="{{ route('eliminar_usuario',$usuario) }}">
+                                        @csrf
+                                        @method('DELETE')
+                                        <input id="password" class="form-control mt-2" type="password" name="password" placeholder="Contraseña..." required autofocus />
+                                        @foreach ($errors->all() as $error)
+                                            <p class="text-danger mt-2">{{ $error }}</p>
+                                        @endforeach
+                                        <div class="px-5 pb-8 text-center mt-5"> 
+                                            <button type="button" data-tw-dismiss="modal" class="btn btn-secondary w-24 mr-1">Cancelar</button> 
+                                            <button type="submit" class="btn btn-danger w-24">Eliminar</button> 
+                                        </div> 
+                                    </form>
+                                </div>                                         
+                            </div> 
+                        </div> <!-- END: Modal Eliminar -->  
                     </tr>
                     @endif
                 @endforeach

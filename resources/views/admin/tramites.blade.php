@@ -8,33 +8,9 @@
     <h2 class="intro-y text-lg font-medium mt-10">TRÁMITES</h2>    
     <div class="grid grid-cols-12 gap-6 mt-5">
         <div class="intro-y col-span-12 flex flex-wrap sm:flex-nowrap items-center mt-2">
-            <button class="btn btn-primary shadow-md mr-2">Crear Trámite</button>
-            <div class="dropdown">
-                <button class="dropdown-toggle btn px-2 box" aria-expanded="false" data-tw-toggle="dropdown">
-                    <span class="w-5 h-5 flex items-center justify-center">
-                        <i class="w-4 h-4" data-lucide="plus"></i>
-                    </span>
-                </button>
-                <!--<div class="dropdown-menu w-40">
-                    <ul class="dropdown-content">
-                        <li>
-                            <a href="" class="dropdown-item">
-                                <i data-lucide="printer" class="w-4 h-4 mr-2"></i> Print
-                            </a>
-                        </li>
-                        <li>
-                            <a href="" class="dropdown-item">
-                                <i data-lucide="file-text" class="w-4 h-4 mr-2"></i> Export to Excel
-                            </a>
-                        </li>
-                        <li>
-                            <a href="" class="dropdown-item">
-                                <i data-lucide="file-text" class="w-4 h-4 mr-2"></i> Export to PDF
-                            </a>
-                        </li>
-                    </ul>
-                </div>-->
-            </div>
+            <a class="btn btn-primary shadow-md mr-2" href="{{ route('crear_tramite') }}">
+                <i class="w-4 h-4 mr-2" data-lucide="plus"></i> Crear Trámite
+            </a>           
             <div class="hidden md:block mx-auto text-slate-500">Showing 1 to 10 of 150 entries</div>
             <div class="w-full sm:w-auto mt-3 sm:mt-0 sm:ml-auto md:ml-0">
                 <div class="w-56 relative text-slate-500">
@@ -138,7 +114,10 @@
                                             @break                                                        
                                         @case(12)
                                             <div class="text-center w-40 px-3 py-1 alert-danger-soft border border-primary/10 rounded-full mr-2 mb-2">Documentos No Aprobados - Etapa 3</div>                                                                                                                                                                                                                                                                                                                       
-                                            @break                                                                                                                           
+                                            @break 
+                                        @case(13)
+                                            <div class="text-center w-40 px-3 py-1 alert-warning-soft border border-primary/10 rounded-full mr-2 mb-2">Datos de Titulación Generados</div>                                                                                                                                                                                                                                                                                                                       
+                                            @break                                                                                                                          
                                         @default                                                            
                                     @endswitch  
                                 </td>
@@ -155,12 +134,39 @@
                                             Ver
                                         </a>
                                          
-                                        <a class="flex items-center whitespace-nowrap justify-center text-danger" href="javascript:;" data-tw-toggle="modal" data-tw-target="#delete-modal-preview">
+                                        <a class="flex items-center whitespace-nowrap justify-center text-danger" href="javascript:;" data-tw-toggle="modal" data-tw-target="#delete-modal-preview{{$alumno->id}}">
                                             <svg class="svg-inline--fa fa-venus-mars w-4 h-4 text-slate-500 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path fill="rgb(var(--color-danger)" d="M135.2 17.7C140.6 6.8 151.7 0 163.8 0H284.2c12.1 0 23.2 6.8 28.6 17.7L320 32h96c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 96 0 81.7 0 64S14.3 32 32 32h96l7.2-14.3zM32 128H416V448c0 35.3-28.7 64-64 64H96c-35.3 0-64-28.7-64-64V128zm96 64c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16z"/></svg>                                                         
                                             Eliminar
                                         </a>
                                     </div>
                                 </td>
+                                <!-- BEGIN: Modal Eliminar --> 
+                                <div id="delete-modal-preview{{$alumno->id}}" class="modal" tabindex="-1" aria-hidden="true"> 
+                                    <div class="modal-dialog"> 
+                                        <div class="modal-content"> 
+                                            <div class="modal-body p-0"> 
+                                                <div class="p-5 text-center"> 
+                                                    <i data-lucide="x-circle" class="w-16 h-16 text-danger mx-auto mt-3"></i> 
+                                                <div class="text-3xl mt-5">¿Segur@ que deseas eliminar el tramite de {{$alumno->user->name}}? 
+                                            </div> 
+                                            <div class="text-slate-500 mt-2 text-justify">                                                
+                                                Tenga en cuenta que al eliminar su trámite estará eliminando sus datos y los documentos registrados. Ingrese la contraseña de su usuario para borrarlo.
+                                            </div> 
+                                            <form method="POST" action="{{ route('eliminar_tramites',$alumno) }}">
+                                                @csrf
+                                                @method('DELETE')
+                                                <input id="password" class="form-control mt-2" type="password" name="password" placeholder="Contraseña..." required autofocus />
+                                                @foreach ($errors->all() as $error)
+                                                    <p class="text-danger mt-2">{{ $error }}</p>
+                                                @endforeach
+                                                <div class="px-5 pb-8 text-center mt-5"> 
+                                                    <button type="button" data-tw-dismiss="modal" class="btn btn-secondary w-24 mr-1">Cancelar</button> 
+                                                    <button type="submit" class="btn btn-danger w-24">Eliminar</button> 
+                                                </div> 
+                                            </form>
+                                        </div>                                         
+                                    </div> 
+                                </div> <!-- END: Modal Eliminar -->  
                             </tr>
                         @endforeach
                     <!--endforeach-->
@@ -217,24 +223,5 @@
             </select>
         </div>
         <!-- END: Pagination -->
-    </div>   
-    <!-- BEGIN: Modal Eliminar --> 
-    <div id="delete-modal-preview" class="modal" tabindex="-1" aria-hidden="true"> 
-        <div class="modal-dialog"> 
-            <div class="modal-content"> 
-                <div class="modal-body p-0"> 
-                    <div class="p-5 text-center"> 
-                        <i data-lucide="x-circle" class="w-16 h-16 text-danger mx-auto mt-3"></i> 
-                    <div class="text-3xl mt-5">¿Estas @if ($alumno->genero == "Mujer") segura? @else seguro? @endif
-                </div> 
-                <div class="text-slate-500 mt-2">
-                    @if ($alumno->genero == "Mujer") ¿Segura @else ¿Seguro @endif que deseas eliminar el documento? <br>
-                </div> 
-            </div> 
-            <div class="px-5 pb-8 text-center"> 
-                <button type="button" data-tw-dismiss="modal" class="btn btn-outline-secondary w-24 mr-1">Cancelar</button> 
-                <button type="button" class="btn btn-danger w-24">Eliminar</button> 
-            </div> 
-        </div> 
-    </div> <!-- END: Modal Eliminar -->  
+    </div>       
 @endsection

@@ -45,6 +45,21 @@ class PageController extends Controller
         return view('admin/usuarios-form',compact('user'));
     }
 
+    public function maestros_form() {
+        $user = Auth::user();
+        return view('admin/maestros-form',compact('user'));
+    }
+
+    public function maestros_edit(Maestro $maestro) {
+        $user = Auth::user();
+        return view('admin/maestros-form',compact('user','maestro'));
+    }
+
+    public function usuarios_edit(User $usuario) {
+        $user = Auth::user();
+        return view('admin/usuarios-form',compact('user','usuario'));
+    }
+
     public function tramites() {
         $user = Auth::user();
         $tramites = Tramite::all();   
