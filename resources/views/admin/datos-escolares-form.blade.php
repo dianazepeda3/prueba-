@@ -236,12 +236,13 @@
                                     <input id="password" name="password" type="password" class="form-control" placeholder="******">                          
                                     <label for="password_confirmed" class="form-label sm:w-20">Confirmar Contraseña</label>
                                     <input id="password_confirmed" name="password_confirmed" type="password" class="form-control" placeholder="******">
-                                </div>                                              
+                                </div>   
+                            @endif                                           
                                 <div class="sm:ml-20 sm:pl-5 mt-5">
                                     <button class="btn btn-primary" type="submit">Guardar</button>                                               
                                     <a class="btn btn-secondary" href="{{ route('tramites') }}">Cancelar</a>
                                 </div>
-                            @endif
+                            
                         </form>
 
                     </div>

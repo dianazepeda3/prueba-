@@ -28,6 +28,11 @@ class PageController extends Controller
         ]);
     }
 
+    public function inicioAlumno(){
+        $user = Auth::user();
+        return view('alumno/index', compact('user'));
+    }
+
     /**
      * Show specified view.
      *

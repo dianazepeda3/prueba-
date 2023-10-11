@@ -65,5 +65,10 @@
     "file": "assets/app.c07cb30e.css",
     "src": "resources/css/app.css",
     "isEntry": true
+  },
+  "resources/css/styles.css": {
+    "file": "assets/styles.css",
+    "src": "resources/css/app.css",
+    "isEntry": true
   }
 }

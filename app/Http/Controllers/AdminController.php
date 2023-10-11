@@ -74,7 +74,7 @@ class AdminController extends Controller
                 $revisados = false;
             }
         }                        
-        $maestros = Maestro::all();
+        $maestros = Maestro::all();       
         
         return view('admin/showTramite', compact('user','tramite', 'alumno', 'documentos', 'maestros', 'aprobados','alumnoDocs', 'revisados'));
     }

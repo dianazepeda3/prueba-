@@ -4,7 +4,21 @@
     <title>Mis Documentos - Titulación CUCEI</title>
 @endsection
 
-@section('subcontent')      
+@section('subcontent')  
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script> 
+    <link type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/south-street/jquery-ui.css" rel="stylesheet"> 
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="http://keith-wood.name/js/jquery.signature.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="http://keith-wood.name/css/jquery.signature.css">
+
+    <style>
+        .kbw-signature { width: 100%; height: 100px;}
+        #sig canvas{
+            width: 100% !important;
+            height: auto;
+        }
+    </style>   
     <div class="intro-y flex flex-col sm:flex-row items-center mt-8">
         <h2 class="flex items-center text-lg font-medium mr-auto">
             DOCUMENTACIÓN
@@ -344,7 +358,7 @@
                             @if ($alumnoDocs->autorizacion_publicacion) checked  @endif > 
                             <label class="form-label sm:w-40">(Obligatorio)</label><label class="form-label sm:w-20"></label>
                             <label class="form-label sm:w-60">Autorización para Publicación</label>                                           
-                            <a class="btn btn-secondary" href="">Generar Autorización</a>                                                                    
+                            <a class="btn btn-secondary" href="javascript:;" data-tw-toggle="modal" data-tw-target="#modal-dictamen">Generar Autorización</a>                                                                    
                         </div>    
                     @endif                          
                 </div>
@@ -362,7 +376,7 @@
                                 <label>Nombre del archivo requerido:</label>  
                                 <!-- Estado - 2da Etapa -->
                                 @if($tramite->estado >= 6 && $tramite->estado < 10 && $tramite->estado != 8)
-                                    <select class="form-control tom-select" name="nombre">                                                                                                                                            
+                                    <select class="form-control " name="nombre">                                                                                                                                            
                                         <option value="0" selected>Seleccione el nombre del archivo...</option>                                                                                                                                                                                                                                                                                                                 
                                         @if ($alumnoDocs->alumno->id_opcion_titulacion == 3 || $alumnoDocs->alumno->id_opcion_titulacion == 4)
                                             <!-- Examen Global Teorico Practico / Examen Global Teorico --> 
@@ -593,7 +607,7 @@
                                         <th class="whitespace-nowrap">Nombre Original</th>
                                         <th class="whitespace-nowrap">Fecha de Registro</th>
                                         <th class="whitespace-nowrap">Estado</th>
-                                        <th class="whitespace-nowrap text-center">Acciones</th>
+                                        <th class="whitespace-nowrap">Acciones</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -601,10 +615,10 @@
                                         @if ($documento->aprobado != 4)  
                                             <tr>                                                                                                                                           
                                                 <td>
-                                                    <div class="font-medium whitespace-nowrap">{{ $documento->nombre_documento }}</div>                                                   
+                                                    <div class="font-medium">{{ $documento->nombre_documento }}</div>                                                   
                                                 </td>
                                                 <td>
-                                                    <div class="font-medium whitespace-nowrap">{{ $documento->nombre_original }}</div>                                                   
+                                                    <div class="font-medium">{{ $documento->nombre_original }}</div>                                                   
                                                 </td>
                                                 <td>
                                                     <div class="font-medium whitespace-nowrap">{{ $documento->created_at }}</div>                                                   
@@ -635,7 +649,7 @@
                                                             </a>
                                                         @endif
                                                         <!--Boton de eliminar-->
-                                                        @if($tramite->estado != 3 && $documento->aprobado != 1 && $documento->aprobado != 3 && $documento->aprobado != 5)                                                        
+                                                        @if($tramite->estado != 3 && ($documento->aprobado == 0 or $documento->aprobado == 6 or $documento->aprobado == 9))                                                        
                                                             <a class="flex items-center whitespace-nowrap justify-center tooltip" title="Eliminar" href="javascript:;" data-tw-toggle="modal" data-tw-target="#delete-modal-preview{{$documento->id}}">
                                                                 <svg class="svg-inline--fa fa-venus-mars w-6 h-4 text-slate-500 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path fill="rgb(var(--color-danger)" d="M135.2 17.7C140.6 6.8 151.7 0 163.8 0H284.2c12.1 0 23.2 6.8 28.6 17.7L320 32h96c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 96 0 81.7 0 64S14.3 32 32 32h96l7.2-14.3zM32 128H416V448c0 35.3-28.7 64-64 64H96c-35.3 0-64-28.7-64-64V128zm96 64c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16z"/></svg>                                                         
                                                             </a>
@@ -697,7 +711,7 @@
                                                     <div class="font-medium whitespace-nowrap">{{ $documento->nombre_documento }}</div>                                                   
                                                 </td>
                                                 <td>
-                                                    <div class="font-medium whitespace-nowrap">{{ $documento->nombre_original }}</div>                                                   
+                                                    <div class="">{{ $documento->nombre_original }}</div>                                                   
                                                 </td>
                                                 <td>
                                                     <div class="font-medium whitespace-nowrap">{{ $documento->created_at }}</div>                                                   
@@ -812,8 +826,137 @@
             </div> 
         </div> 
     </div> <!-- END: Modal Mandar a Revisión -->  
-
-    <script>
+    <!-- BEGIN: Modal Content --> 
+    <div id="modal-dictamen" class="modal" tabindex="-1" aria-hidden="true"> 
+        <div class="modal-dialog modal-xl"> 
+            <div class="modal-content"> 
+                <!-- BEGIN: Modal Header --> 
+                <div class="modal-header"> 
+                    <h2 class="font-medium text-base mr-auto">Datos del material a Publicar</h2>                        
+                </div> <!-- END: Modal Header -->                 
+                <form method="POST" action="{{route('autorizacionTesis',$alumno)}}">
+                    @csrf
+                    <!-- BEGIN: Modal Body --> 
+                    <div class="modal-body grid grid-cols-12 gap-4 gap-y-3"> 
+                        {{-- ERRORES --}}                
+                        <div class="intro-y col-span-12 lg:col-span-12">  
+                            {{-- Mensaje Alerta --}}
+                            @if (session('info'))
+                                <div class="alert alert-danger-soft show flex items-center mb-2">
+                                    <i data-lucide="alert-octagon" class="w-6 h-6 mr-2"></i>
+                                    {{ session('info') }}
+                                </div>
+                            @endif
+                            {{-- Mensaje Exito --}}                 
+                            @if (session('success'))
+                                <div class="alert alert-success-soft show flex items-center mb-2">
+                                    {{ session('success') }}
+                                </div>
+                            @endif 
+                            @if ($errors->any())
+                                {{-- Mostrar error --}}
+                                <div class="alert alert-danger-soft show flex items-center mb-2">
+                                    <i data-lucide="alert-octagon" class="w-6 h-6 mr-2"></i>
+                                    <ul>
+                                        @foreach ($errors->all() as $error)
+                                            <li>{{ $error }}</li>
+                                        @endforeach
+                                    </ul>
+                                </div>   
+                            @endif 
+                        </div> 
+                        <div class="col-span-3 sm:col-span-12"> 
+                            <label for="tipo_documento" class="form-label">Tipo de Documento: </label> 
+                            <input id="tipo_documento" type="text" class="form-control" value={{ $alumno->opcion_titulacion->opcion }} disabled> 
+                        </div>
+                        <div class="col-span-3 sm:col-span-12"> 
+                            <label for="fecha_titulacion" class="form-label">Fecha de Titulación: </label> 
+                            <input id="fecha_titulacion" type="date" class="form-control" 
+                            @if(isset($alumno))
+                                value="{{$alumno->fecha_titulacion}}"
+                            @else
+                                value="{{old('fecha_titulacion')}}"
+                            @endif disabled> 
+                        </div>
+                        <div class="col-span-6 sm:col-span-12"> 
+                            <label for="titulo" class="form-label">Titulo Obtenido: </label> 
+                            <input id="titulo" type="text" class="form-control" 
+                            @if(isset($alumno))
+                                value="{{$titulo}}"
+                            @else
+                                value="{{old('titulo')}}"
+                            @endif disabled> 
+                        </div>
+                        <div class="col-span-6 sm:col-span-12"> 
+                            <label for="titulo_del_trabajo" class="form-label">Titulo del Trabajo: </label> 
+                            <input id="titulo_del_trabajo" type="text" class="form-control" value="{{ $alumno->titulo_del_trabajo }}" disabled> 
+                        </div>
+                        <div class="col-span-6 sm:col-span-12"> 
+                            <label for="autores" class="form-label">Autores: </label> 
+                            <input id="autores" name="autores" type="text" class="form-control"
+                            @if(isset($alumno->autores))
+                                value="{{$alumno->autores}}"
+                            @else
+                                value="{{$alumno->user->name}}"
+                            @endif > 
+                        </div>
+                        <div class="col-span-12 sm:col-span-12 font-bold mt-3"> 
+                            <label for="nombre" class="form-label">AUTORIZO</label> 
+                        </div>
+                        <div class="col-span-6 sm:col-span-12"> 
+                            <label for="nombre" class="form-label">Nombre Completo de Autor: </label> 
+                            <input id="nombre" type="text" class="form-control" value="{{$alumno->user->name}}" disabled> 
+                        </div> 
+                        <div class="col-span-6 sm:col-span-12"> 
+                            <label for="direccion" class="form-label">Dirección:</label> 
+                            <input id="direccion" type="text" class="form-control" 
+                            @if(isset($alumno))
+                                value="{{$alumno->dom_calle." #".$alumno->dom_numero.", ".$alumno->dom_colonia.", ".$alumno->dom_CP.", ".$alumno->dom_municipio.", ".$alumno->dom_estado}}"
+                            @else
+                                value="{{old('direccion')}}"
+                            @endif disabled> 
+                        </div> 
+                        <div class="col-span-6 sm:col-span-12"> 
+                            <label for="telefono" class="form-label">Teléfono:</label> 
+                            <input id="telefono" name="telefono" type="text" class="form-control" 
+                            @if(isset($alumno))
+                                value="{{$alumno->telefono_celular}}"
+                            @else
+                                value="{{old('telefono')}}"
+                            @endif disabled>
+                        </div> 
+                        <div class="col-span-6 sm:col-span-12"> 
+                            <label for="email" class="form-label">Email:</label> 
+                            <input id="email" name="email" type="text" class="form-control" 
+                            @if(isset($alumno))
+                                value="{{$alumno->correo_institucional}}"
+                            @else
+                                value="{{old('email')}}"
+                            @endif disabled> 
+                        </div>                         
+                        <div class="col-span-6 sm:col-span-12">                                                                                                                              
+                            
+                            <label class="mt-2 mr-5" for="">Firme la carta de autorización:</label>
+                            <button id="clear" class="btn btn-danger">Borrar Firma</button>                                
+                            <div id="sig" class="mt-3"></div>                                                                  
+                            <!--<button class="btn btn-success" type="submit">Guardar</button>-->                            
+                            <textarea id="signature64" name="firma" style="display: none"></textarea>                         
+                        </div>
+                        <div class="col-span-6 sm:col-span-12 mt-5 mr-3">
+                            <input type="checkbox" class="" id="autorizo" name="autorizo">
+                            <label for="autorizo">Autorizo todo lo mencionado en la <a class="font-bold" href="{{route('visualizar_carta')}}" target="_blank">carta de autorizacion</a></label>            
+                        </div>
+                    </div> <!-- END: Modal Body --> 
+                    <!-- BEGIN: Modal Footer --> 
+                    <div class="modal-footer"> 
+                        <button type="button" data-tw-dismiss="modal" class="btn btn-outline-secondary w-20 mr-1">Cancelar</button> 
+                        <button type="submit" class="btn btn-primary w-20">Generar</button> 
+                    </div> <!-- END: Modal Footer --> 
+                </form>
+            </div> 
+        </div> 
+    </div> <!-- END: Modal Content -->
+    <script type="text/javascript">
         document.getElementById("btnDocsEntregados").addEventListener("click", function () {
             document.getElementById("docs-entregados").style.display = "table";
             document.getElementById("docs-generados").style.display = "none";
@@ -823,5 +966,12 @@
             document.getElementById("docs-entregados").style.display = "none";
             document.getElementById("docs-generados").style.display = "table";
         });
-    </script>    
+
+        var sig = $('#sig').signature({syncField: '#signature64', syncFormat: 'PNG', background: 'transparent'});
+        $('#clear').click(function(e) {
+            e.preventDefault();
+            sig.signature('clear');
+            $("#signature64").val('');
+        });
+    </script>       
 @endsection

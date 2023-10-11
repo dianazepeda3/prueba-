@@ -70,7 +70,7 @@
             Nombre completo de autor: <b>{{ $alumno->user->name }}</b>  <br>
             Dirección: <b>{{ $domicilio }}</b><br>
             Teléfono: <b>{{ $alumno->telefono_celular }}</b><br>
-            Email: <b>{{ $alumno->correo_part }}</b><br>
+            Email: <b>{{ $alumno->correo_institucional }}</b><br>
             Firma: 
         </p>
     </div>

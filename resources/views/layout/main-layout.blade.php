@@ -26,7 +26,7 @@
             </div>
             <div class="scrollable">
                 <ul class="scrollable__content"> 
-                    @foreach ($main_menu as $menuKey => $menu)
+                    <!--@foreach ($main_menu as $menuKey => $menu)
                         @if (is_string($menu))
                             <li class="mb-4 side-nav__devider">{{ $menu }}</li>
                         @else
@@ -81,8 +81,8 @@
                                 @endif
                             </li>
                         @endif
-                    @endforeach 
-                    <!--@can('alumno')
+                    @endforeach -->
+                    @can('alumno')
                         @foreach ($main_menu_alumno as $menuKey => $menu)
                             @if (is_string($menu))
                                 <li class="mb-4 side-nav__devider">{{ $menu }}</li>
@@ -196,7 +196,7 @@
                                 </li>
                             @endif
                         @endforeach
-                    @endcan   -->               
+                    @endcan                 
                     
                 </ul>
             </div>

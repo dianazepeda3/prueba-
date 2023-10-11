@@ -20,7 +20,7 @@ use App\Models\User;
 |
 */
 Route::get('/',function(){
-    return view('login.index');
+    return view('login.welcome');
 });
 Route::get('manual-usuario',function(User $user){ return view('manual.manual',compact('user'));})->name('manual_usuario');
 Route::get('manual-usuario/iniciar-sesion',function(User $user){ return view('manual.login',compact('user'));})->name('manual_usuario_login');
@@ -92,13 +92,13 @@ Route::middleware('auth')->group(function() {
         //Maestros
         Route::patch('maestros/update/{maestro}', 'updateMaestro')->name('maestros_update');
         Route::post('maestros/store', 'storeMaestro')->name('maestros_store');
-        Route::delete('maestros/{maestro}', 'deleteMaestro')->name('eliminar_maestro');
+        Route::delete('maestros/{maestro}', 'deleteMaestro')->name('eliminar_maestro');        
     });
 });
 
 Route::middleware('auth')->group(function() {
     Route::get('logout', [AuthController::class, 'logout'])->name('logout');
-    Route::controller(AlumnoController::class)->group(function() {        
+    Route::controller(AlumnoController::class)->group(function() {               
         Route::get('datos', 'show')->name('show-datos');    
         Route::get('datos/edit', 'edit')->name('edit-datos'); 
         Route::patch('datos/edit', 'update')->name('update-datos'); 
@@ -111,7 +111,13 @@ Route::middleware('auth')->group(function() {
         Route::get('documento/descargar/formato-a','descargaFormato01')->name('descargar-formato01');
         Route::get('documento/solicitar-cna-universidad/{alumnoDocs}','solicitarCartaCE')->name('solicitar_cna_universidad');
         Route::get('documento/solicitar-cna-biblioteca/{alumnoDocs}','solicitarCarta')->name('solicitar_cna_biblioteca');        
+        Route::get('documentos/visualizar-carta','visualizarCarta')->name('visualizar_carta');
+
+        Route::post('documentos/autorizacionTesis/{alumno}','generarformatoaAutorizacionTesis')->name('autorizacionTesis');
         
+        //Carta Autorización
+        Route::get('documentos/carta-autorizacion/{alumno}','autorizacionTesisVista')->name('generar_carta_autorizacion');
+
         //Opciones de Titulacion
         Route::get('/alumno/opciones_titulacion/{id}', 'getSubcategorias');
     });
@@ -120,7 +126,8 @@ Route::middleware('auth')->group(function() {
 Route::middleware('auth')->group(function() {
     Route::get('logout', [AuthController::class, 'logout'])->name('logout');
     Route::controller(PageController::class)->group(function() {
-        Route::get('inicio/', 'dashboardOverview1')->name('inicio');
+        Route::get('inicio2', 'dashboardOverview1')->name('inicio');
+        Route::get('inicio', 'inicioAlumno')->name('inicio_alumno'); 
         Route::get('usuarios', 'usuarios')->name('usuarios');
         Route::get('usuarios/create', 'usuarios_form')->name('usuarios-form');   
         Route::get('usuarios/create/{usuario}', 'usuarios_edit')->name('usuarios-edit');         

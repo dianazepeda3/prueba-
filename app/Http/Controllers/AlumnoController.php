@@ -13,7 +13,9 @@ use App\Models\User;
 use App\Models\AlumnoDocs;
 use App\Models\Tramite;
 use App\Models\Maestro;
+use App\Models\Carrera;
 use App\Models\Documento;
+use App\Models\Firma;
 use GuzzleHttp\Client;
 use Carbon\Carbon;
 //use Barryvdh\DomPDF\Facade as PDF;
@@ -89,7 +91,8 @@ class AlumnoController extends Controller
         }                        
         $maestros = Maestro::all();
         $id_opcion_titulacion = $alumno->id_opcion_titulacion;
-        return view('alumno.show-documentos', compact('user','id_opcion_titulacion','tramite', 'alumno', 'documentos', 'maestros', 'aprobados','alumnoDocs', 'revisados'));
+        $titulo = $this->setCarreraGenero($alumno);
+        return view('alumno.show-documentos', compact('user','id_opcion_titulacion','tramite', 'alumno', 'documentos', 'maestros', 'aprobados','alumnoDocs', 'revisados','titulo'));
     }
 
     /**
@@ -744,11 +747,11 @@ class AlumnoController extends Controller
             
         }else if($tramite->estado == 8 || $tramite->estado == 12){
             if((($tramite->alumno->id_opcion_titulacion == 7 || $tramite->alumno->id_opcion_titulacion == 8 || $tramite->alumno->id_opcion_titulacion == 13 || $tramite->alumno->id_opcion_titulacion == 14 || $tramite->alumno->id_opcion_titulacion == 16)
-                && $alumnodocs->autorizacion_publicacion)
-                || $tramite->alumno->id_opcion_titulacion != 7 && $tramite->alumno->id_opcion_titulacion != 8 && $tramite->alumno->id_opcion_titulacion != 13 && $tramite->alumno->id_opcion_titulacion != 14 && $tramite->alumno->id_opcion_titulacion != 16
+                && $alumnodocs->autorizacion_publicacion && $alumnodocs->pago_arancel && $alumnodocs->constancia_no_adeudo_universidad && $alumnodocs->constancia_no_adeudo_biblioteca)
+                || ($tramite->alumno->id_opcion_titulacion != 7 && $tramite->alumno->id_opcion_titulacion != 8 && $tramite->alumno->id_opcion_titulacion != 13 && $tramite->alumno->id_opcion_titulacion != 14 && $tramite->alumno->id_opcion_titulacion != 16)
                 && ($alumnodocs->pago_arancel && $alumnodocs->constancia_no_adeudo_universidad && $alumnodocs->constancia_no_adeudo_biblioteca)){  
                 foreach ($documentos as $documentos){
-                    if($documentos->aprobado != 1 && $documentos->aprobado != 5 && $documentos->aprobado != 4 && $documentos->aprobado != 9){
+                    if($documentos->aprobado == 0){
                         $documentos->aprobado = 3;
                         $documentos->save();
                     }
@@ -902,5 +905,224 @@ class AlumnoController extends Controller
     public function getSubcategorias($id)
     {
         return DB::table('opciones_titulacion')->where('articulo_id', '=', $id)->get();
+    }
+
+    //Funcion para retornar al maestro de la forma DR. NOMBRE_MAESTRO
+    public function setCarreraGenero(Alumno $alumno)
+    {
+        //Buscar la carrera
+        $carrera_id = Carrera::where('id', $alumno->id_carrera)->first();
+
+        //Si es licenciatura
+        //Genero
+        if($carrera_id->id == 3){
+            //Poner Licenciada si es mujer o Licenciado si es hombre
+            if($alumno->genero == 'M'){
+                $genero = 'LICENCIADA EN INFORMÁTICA';
+            }else{
+                $genero = 'LICENCIADO EN INFORMÁTICA';
+            }
+
+        }else{
+            //Poner Ingeniera si es mujer o Ingeniero si es hombre
+            if($alumno->genero == 'M'){
+                $genero = 'INGENIERA';
+            }else{
+                $genero = 'INGENIERO';
+            }
+        }
+
+        $carrera = $genero;
+
+        if($carrera_id->id == 1){
+            if($alumno->genero == 'H'){
+                $carrera .= ' BIOMÉDICO';
+            }else{
+                $carrera .= ' BIOMÉDICA';
+            }
+        }
+
+        if($carrera_id->id == 2){
+            //Poner Si es informatico Si es femenino como quiera se queda así
+            if($alumno->genero == 'H'){
+                $carrera .= ' INFORMÁTICO';
+            }else{
+                $carrera .= ' INFORMÁTICA';
+            }
+        }
+
+        if($carrera_id->id == 4){
+            $carrera .= ' EN COMUNICACIONES Y ELECTRÓNICA';
+        }
+
+        if($carrera_id->id == 5){
+            $carrera .= ' EN COMPUTACIÓN';
+        }
+
+        if($carrera_id->id == 6){
+            $carrera .= ' EN FOTÓNICA';
+            //Sustituir Robotica por En Robotica
+            // $carrera = str_replace('Fotónica', $info, $carrera);
+        }
+
+        if($carrera_id->id == 7){
+            $carrera .= ' EN ROBÓTICA';
+            //Sustituir Robotica por En Robotica
+            // $carrera = str_replace('Robótica', $info, $carrera);
+        }
+
+        $carrera = mb_strtoupper($carrera);
+
+        return $carrera;
+    }
+
+    //Funcion para retornar al maestro de la forma DR. NOMBRE_MAESTRO
+    public function setCarreraGenerosinmayus(Alumno $alumno)
+    {
+        //Buscar la carrera
+        $carrera_id = Carrera::where('id', $alumno->id_carrera)->first();
+
+        //Si es licenciatura
+        if($carrera_id->id == 3){
+            //Poner Licenciada si es mujer o Licenciado si es hombre
+            if($alumno->genero == 'M'){
+                $genero = 'Licenciada';
+            }else{
+                $genero = 'Licenciado';
+            }
+
+            //Sustituir Ingeniería segun el genero
+            $carrera_id = str_replace('Licenciatura', $genero, $carrera_id->carrera);
+
+        }else{
+            //Poner Ingeniera si es mujer o Ingeniero si es hombre
+            if($alumno->genero == 'M'){
+                $genero = 'Ingeniera';
+            }else{
+                $genero = 'Ingeniero';
+            }
+
+            //Sustituir Ingeniería segun el genero
+            $carrera = str_replace('Ingeniería', $genero, $carrera_id->carrera);
+        }
+
+
+        return $carrera;
+    }
+
+    public function visualizarCarta()
+    {        
+        return response()->file(public_path('CartaAutorizacion_PublicacionTesis.pdf'));        
+    }
+
+     //Generar Carta de Autorizacion de Publicación de Tesis
+     public function generarformatoaAutorizacionTesis(Request $request, Alumno $alumno){                       
+        $request->validate([
+            /*'titulo_del_trabajo' => 'required|string', */
+            'autores' => 'required|string',
+            'autorizo' => 'required',   
+            'firma' => 'required',
+        ]);        
+
+        $alumno->titulo_del_trabajo = $request->titulo_del_trabajo;
+        $alumno->autores = $request->autores;
+        $alumno->save();
+                      
+        $user = auth()->user();
+        $alumno = $user->alumno;
+        $name = $user->id . '_' . $user->name;
+       
+        $folderPath = storage_path('app/firmas-alumnos/');
+        if (!file_exists($folderPath)) {
+            mkdir($folderPath, 0755, true);
+        }
+        
+        $image_parts = explode(";base64,", $request->firma);              
+        $image_type_aux = explode("image/", $image_parts[0]);           
+        $image_type = $image_type_aux[1];        
+        $image_base64 = base64_decode($image_parts[1]);                   
+        $file =  $folderPath . $name .'.'. $image_type;   
+
+        //uniqid()
+        file_put_contents($file, $image_base64);      
+
+        //GUARDAR EN CARPETA DE SERVIDOR
+        Storage::put('firmas-alumnos/' . $name . '.' . $image_type, $image_base64);
+
+        // Crear nueva entrada en la tabla firmas
+        $firm = Firma::where('user_id', auth()->user()->id)->first();    
+        if(!isset($firm)){
+            $firma = new Firma;
+            $firma->nombre_original = "firma";
+            $firma->nombre_documento = $name;
+            $firma->ruta = 'firmas-alumnos/' . $name .'.'. $image_type; 
+            $firma->mime = "image/png";
+            $firma->user_id = auth()->user()->id;
+            $firma->save();
+        }
+
+        try{
+            $fecha_tit = $alumno->fecha_titulacion; //$time->format('d/m/Y');
+            $fecha_titulacion = date("d/m/Y", strtotime($fecha_tit));
+            $hora_actual = $alumno->hora_inicio_citatorio; //$time->format('H:i');
+            $num_acta = $this->retornarNumActa($alumno); //Numero de acta
+            $codigo = $alumno->user->codigo; //Codigo del alumno                                 
+            $titulo = $this->setCarreraGenero($alumno);  
+            $domicilio = $alumno->dom_calle." #".$alumno->dom_numero.", ".$alumno->dom_colonia.", ".$alumno->dom_CP.", ".$alumno->dom_municipio.", ".$alumno->dom_estado;    
+            $fecha_tit = $alumno->fecha_titulacion; 
+            $fecha_titulacion = date("d/m/Y", strtotime($fecha_tit));
+        }catch(\Exception $e){           
+            return redirect()->back()->with('info', 'Ha ocurrido un error al generar el documento ' . $e->getMessage());
+        }                  
+        try{
+            $firma = Firma::where('user_id', auth()->user()->id)->first();  
+            $pdf = PDF::loadView('layout.admin.cartaAutorizacion', compact('firma','alumno','titulo','fecha_titulacion','domicilio'));
+            $pdf->setPaper('letter');        
+            //return $pdf->stream();            
+
+            $tramite = $alumno->tramite;
+            $nombre_ruta = $alumno->user_id . "_" . $alumno->user->name;
+            $ruta = 'alumnos/' . $nombre_ruta . '/documentos/Formato_CartaAutorizacion_PublicaciónTesis.pdf';
+          
+            //GUARDA DATOS DEL DOCUMENTO EN LA BD
+            $documento = new Documento();
+            $documento->ruta = $ruta;
+            $documento->nombre_original = "Autorizacion de Publicación Tesis.pdf";
+            $documento->mime =  "application/pdf";;
+            $documento->user_id = $alumno->user_id;
+            $documento->id_alumno = $alumno->id;
+            $documento->tramite_id = $tramite->id;
+            $documento->nombre_documento = "Autorizacion de Publicación Tesis";
+            $documento->aprobado = 0;                                   
+
+            $documento->save();             
+            
+            //GUARDAR EN CARPETA DE SERVIDOR
+            $content = $pdf->download()->getOriginalContent();
+            $content = $pdf->download()->getOriginalContent();
+            Storage::put($ruta,$content);
+
+            AlumnoDocs::where('alumno_id', $alumno->id)->update(['autorizacion_publicacion' => 1]);                
+        } catch (\PhpOffice\PhpWord\Exception\Exception $e) {
+            return redirect()->back()->with('info', 'Ha ocurrido un error al generar el documento');
+        }
+        return redirect()->route('show-documentos')->with('success', 'Carta de Autorización creada');           
+    }
+
+    //Retorna el numero de acta en el formato debido
+    public function retornarNumActa(Alumno $alumno){
+        $numero_acta = $alumno->numero_de_consecutivo;
+        //saber cuantos digitos tiene el numero de acta
+        $numero_digitos = strlen($numero_acta);
+        if($numero_digitos == 1){
+            $numero_acta = '00'.$numero_acta;
+        }elseif($numero_digitos == 2){
+            $numero_acta = '0'.$numero_acta;
+        }
+
+        //agregarle /anio al numero de acta
+        $numero_acta = $numero_acta.'/'.$alumno->anio_graduacion;
+
+        return $numero_acta;
     }
 }

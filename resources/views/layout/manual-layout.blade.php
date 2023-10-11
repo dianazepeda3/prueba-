@@ -95,7 +95,7 @@
                     <!-- BEGIN: Breadcrumb -->
                     <nav aria-label="breadcrumb" class="-intro-x hidden xl:flex">
                         <ol class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="#">Inicio</a></li>
+                            <!--<li class="breadcrumb-item"><a href="#">Inicio</a></li>-->
                             <!--<li class="breadcrumb-item"><a href="#">Administrator</a></li>
                             <li class="breadcrumb-item active" aria-current="page">Dashboard</li>-->
                         </ol>

@@ -446,10 +446,10 @@ table, th, td {
 
 .firma-digital-carta{
   position: absolute;
-  top: 86.5%;
+  top: 88%;
   left: 20%;
-  width: 150px; 
-  height: 87px; 
+  width: 140px; 
+  height: 60px; 
 }
 
 .firma-digital-dictamen{
