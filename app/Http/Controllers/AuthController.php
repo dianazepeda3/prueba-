@@ -28,7 +28,8 @@ class AuthController extends Controller
      */
     public function loginView()
     {
-        return view('login.main', [
+        $user = Auth::user();
+        return view('login.main',compact('user'), [
             'layout' => 'login-layout'
         ]);
     }
@@ -272,6 +273,6 @@ class AuthController extends Controller
     public function logout()
     {
         Auth::logout();
-        return redirect('login');
+        return redirect()->route('inicio-visitante');
     }
 }

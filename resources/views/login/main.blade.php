@@ -36,6 +36,17 @@
         }
     </style>
     <div class="container">
+        <div class="  fixed z-20  flex items-center h-16">              
+            <a class="flex items-center text-white mr-1 sm:mr-5" href="{{ route('inicio-visitante') }}">
+                <svg class="svg-inline--fa fa-venus-mars w-6 h-6 text-slate-500 mr-2 blanco" xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><style>.blanco{fill:#ffffff}</style><path d="M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.2 288 416 288c17.7 0 32-14.3 32-32s-14.3-32-32-32l-306.7 0L214.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg>                                                   
+                <span class="float-right sm:float-none invisible sm:visible text-[0px] sm:text-sm">Atrás</span>
+            </a>
+            <a class="flex text-white mr-1 sm:mr-5" href="{{ route('manual_usuario') }}">
+                <svg class="svg-inline--fa fa-book h-5 w-5 mr-3" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="book" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" data-fa-i2svg=""><path fill="currentColor" d="M96 0C43 0 0 43 0 96V416c0 53 43 96 96 96H384h32c17.7 0 32-14.3 32-32s-14.3-32-32-32V384c17.7 0 32-14.3 32-32V32c0-17.7-14.3-32-32-32H384 96zm0 384H352v64H96c-17.7 0-32-14.3-32-32s14.3-32 32-32zm32-240c0-8.8 7.2-16 16-16H336c8.8 0 16 7.2 16 16s-7.2 16-16 16H144c-8.8 0-16-7.2-16-16zm16 48H336c8.8 0 16 7.2 16 16s-7.2 16-16 16H144c-8.8 0-16-7.2-16-16s7.2-16 16-16z"></path></svg><!-- <i class="mr-1 sm:mr-2 text-xl sm:text-xl fa-solid fa-book"></i> Font Awesome fontawesome.com -->
+                <span class="float-right sm:float-none invisible sm:visible text-[0px] sm:text-sm">Manual de usuario</span>
+            </a>
+        </div>
+         
         <div class="w-full min-h-screen p-5 flex items-center justify-center">
             <div class="w-96 intro-y">
                 <img class="mx-auto w-32" alt="Logo udg" src="{{ asset('build/assets/images/logo.png') }}">
@@ -63,13 +74,14 @@
                             <div id="error-password" class="login__input-error text-danger mt-2"></div>
                             
                             @if ($errors->any())
-                                <div class="alert text-danger">
+                                <!--<div class="alert text-danger">
                                     <ul>
                                         @foreach ($errors->all() as $error)
                                             <li>{{ $error }}</li>
                                         @endforeach
                                     </ul>
-                                </div>
+                                </div>-->
+                                <div id="error-nip" class="login__input-error text-danger mt-2">Credenciales Invalidas</div>
                             @endif
 
                             <div class="mt-5 xl:mt-8 text-center xl:text-left">
@@ -88,13 +100,14 @@
                             <div id="error-password" class="login__input-error text-danger mt-2"></div>
                             
                             @if ($errors->any())
-                                <div class="alert text-danger">
+                                <!--<div class="alert text-danger">
                                     <ul>
                                         @foreach ($errors->all() as $error)
                                             <li>{{ $error }}</li>
                                         @endforeach
                                     </ul>
-                                </div>
+                                </div>-->
+                                <div id="error-nip" class="login__input-error text-danger mt-2">Credenciales Invalidas</div>
                             @endif
 
                             <div class="mt-5 xl:mt-8 text-center xl:text-left">

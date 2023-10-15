@@ -216,7 +216,7 @@ class Menu
             'MENU PRINCIPAL',
             'dashboard' => [
                 'icon' => 'home',
-                'title' => 'Dashboard',
+                'title' => 'Inicio',
                 'route_name' => 'inicio_alumno',
                 'params' => [
                     // Additional parameters

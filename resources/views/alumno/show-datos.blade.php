@@ -9,11 +9,11 @@
         <h2 class="flex items-center text-lg font-medium mr-auto">
             MIS DATOS
         </h2>
-        <div class="w-full sm:w-auto flex mt-4 sm:mt-0">
+        <!--<div class="w-full sm:w-auto flex mt-4 sm:mt-0">
             <button class="btn btn-primary shadow-md mr-2">
                 <i class="w-4 h-4 mr-2" data-lucide="file-text"></i> View Full Report
             </button>
-        </div>
+        </div>-->
     </div>
     {{-- ERRORES --}}
     <div class="grid grid-cols-12 gap-12 mt-5"> 

@@ -20,8 +20,8 @@ use App\Models\User;
 |
 */
 Route::get('/',function(){
-    return view('login.welcome');
-});
+    return view('login.welcome2');
+})->name('inicio-visitante');
 Route::get('manual-usuario',function(User $user){ return view('manual.manual',compact('user'));})->name('manual_usuario');
 Route::get('manual-usuario/iniciar-sesion',function(User $user){ return view('manual.login',compact('user'));})->name('manual_usuario_login');
 Route::get('manual-usuario/modalidad',function(User $user){ return view('manual.modalidad',compact('user'));})->name('manual_usuario_modalidad');
