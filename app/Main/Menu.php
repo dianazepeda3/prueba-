@@ -210,6 +210,110 @@ class Menu
         ];
     }
 
+    public static function menu_coordi()
+    {
+        return [
+            'MENU PRINCIPAL',
+            'dashboard' => [
+                'icon' => 'home',
+                'title' => 'Dashboard',
+                'sub_menu' => [
+                    'dashboard-overview-1' => [
+                        'icon' => '',
+                        'route_name' => 'inicio',
+                        'params' => [
+                            // Additional parameters
+                        ],
+                        'title' => 'Overview 1'
+                    ],
+                    'dashboard-overview-2' => [
+                        'icon' => '',
+                        'route_name' => 'dashboard-overview-2',
+                        'params' => [
+                            // Additional parameters
+                        ],
+                        'title' => 'Overview 2'
+                    ]
+                ]
+            ],
+            'tramites' => [
+                'icon' => 'award',
+                'route_name' => 'tramites',
+                'params' => [
+                    // Additional parameters
+                ],
+                'title' => 'Tramites'
+            ],                                            
+            'maestros' => [
+                'icon' => 'users',                
+                'title' => 'Maestros',
+                'sub_menu' => [
+                    'lista-maestros' => [
+                        'icon' => 'list',
+                        'route_name' => 'maestros',
+                        'params' => [
+                            // Additional parameters
+                        ],
+                        'title' => 'Ver Maestros'
+                    ],
+                    'maestros-form' => [
+                        'icon' => 'user-plus',
+                        'route_name' => 'maestros-form',
+                        'params' => [
+                            // Additional parameters
+                        ],
+                        'title' => 'Agregar Maestro'
+                    ]
+                ]
+            ], 
+            'firma' => [
+                'icon' => 'edit',
+                'route_name' => 'firma',
+                'params' => [
+                    // Additional
+                ],
+                'title' => 'Firma Digital'
+            ],        
+        ];
+    }
+
+    public static function menu_biblio_ce()
+    {
+        return [
+            'MENU PRINCIPAL',
+            'dashboard' => [
+                'icon' => 'home',
+                'title' => 'Dashboard',
+                'sub_menu' => [
+                    'dashboard-overview-1' => [
+                        'icon' => '',
+                        'route_name' => 'inicio',
+                        'params' => [
+                            // Additional parameters
+                        ],
+                        'title' => 'Overview 1'
+                    ],
+                    'dashboard-overview-2' => [
+                        'icon' => '',
+                        'route_name' => 'dashboard-overview-2',
+                        'params' => [
+                            // Additional parameters
+                        ],
+                        'title' => 'Overview 2'
+                    ]
+                ]
+            ],
+            'tramites' => [
+                'icon' => 'award',
+                'route_name' => 'tramites',
+                'params' => [
+                    // Additional parameters
+                ],
+                'title' => 'Tramites'
+            ],                                                             
+        ];
+    }
+
     public static function menu_alumno()
     {    
         return [

@@ -64,12 +64,12 @@
                 @endif
                 <!-- Boton de Consultar Kardex -->                
                 @if($tramite->estado == 2)
-                    <div class="btn-group mr-2">
+                    <!--<div class="btn-group mr-2">
                         <a href=" "  class="btn btn-primary btn-icon-split" id="aprobar" >
                             <span class="icon"><i class="fas fa-file-alt"></i></span>
                             <span class="text">Consultar Kárdex</span>
                         </a>
-                    </div>
+                    </div>-->
                 @endif
                 <!-- Boton de Validar Documentos -->                
                 @if($aprobados && $tramite->estado == 3 || $aprobados && $tramite->estado == 7 || $aprobados && $tramite->estado == 10)
@@ -141,38 +141,21 @@
                         </a>
                     </div>
                 @endif                                      
-                <!-- Boton de Editar -->
-                @can('coordinador')
-                    @if ($tramite->estado < 6)
-                        <div class="btn-group mr-2">
-                            <a  href="" class="btn btn-warning btn-icon-split" id="editarButton">
-                                <span class="icon"><i class="fas fa-pen"></i></span>
-                                <span class="text">Editar</span>
-                            </a>
-                        </div>
-                        <!-- Boton de Eliminar -->
-                        <div class="btn-group mr-2">
-                            <a  class="btn btn-danger btn-icon-split" id="eliminarButton" href="#" data-toggle="modal" data-target="#eliminarTramiteModal{{$tramite->id}}">
-                                <span class="icon"><i class="fas fa-times"></i></span>
-                                <span class="text">Eliminar</span>
-                            </a>
-                        </div>   
-                    @endif                        
-                @endcan
-                @can('admin')                        
-                    <div class="btn-group mr-2">
+                <!-- Boton de Editar -->                
+                @can('admin-coordinador')                        
+                    <!--<div class="btn-group mr-2">
                         <a  href="" class="btn btn-warning btn-icon-split" id="editarButton">
                             <span class="icon"><i class="fas fa-pen"></i></span>
                             <span class="text">Editar</span>
                         </a>
-                    </div>
+                    </div>-->
                     <!-- Boton de Eliminar -->
                     <div class="btn-group mr-2">
-                        <a  class="btn btn-danger btn-icon-split" id="eliminarButton" href="#" data-toggle="modal" data-target="#eliminarTramiteModal{{$tramite->id}}">
-                            <span class="icon"><i class="fas fa-times"></i></span>
+                        <a  class="btn btn-danger btn-icon-split" href="javascript:;" data-tw-toggle="modal" data-target="#eliminarTramiteModal">
+                            <svg class="svg-inline--fa fa-venus-mars w-4 h-4 text-slate-500 mr-2 blanco" xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512"><style>.blanco{fill:#ffffff}</style><path d="M135.2 17.7C140.6 6.8 151.7 0 163.8 0H284.2c12.1 0 23.2 6.8 28.6 17.7L320 32h96c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 96 0 81.7 0 64S14.3 32 32 32h96l7.2-14.3zM32 128H416V448c0 35.3-28.7 64-64 64H96c-35.3 0-64-28.7-64-64V128zm96 64c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16z"/></svg>
                             <span class="text">Eliminar</span>
                         </a>
-                    </div>   
+                    </div>  
                 @endcan
                                 
                 <!-- Boton de Notificar -->
@@ -189,10 +172,8 @@
                 @else
                     <div class="btn-group mr-2" id="notificarErrorButton" href="#" data-toggle="modal" data-target="#notificarErrorTramite">                    
                         <a href="#" class="btn btn-dark btn-icon-split">
-                            <span class="icon text-white-50">
-                                <i class="fas fa-info-circle"></i>
-                            </span>
-                            <span class="text">Notificar de Error</span>
+                            <svg class="svg-inline--fa fa-venus-mars w-4 h-4 text-slate-500 mr-2 blanco" xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><style>.blanco{fill:#ffffff}</style><path d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM216 336h24V272H216c-13.3 0-24-10.7-24-24s10.7-24 24-24h48c13.3 0 24 10.7 24 24v88h8c13.3 0 24 10.7 24 24s-10.7 24-24 24H216c-13.3 0-24-10.7-24-24s10.7-24 24-24zm40-208a32 32 0 1 1 0 64 32 32 0 1 1 0-64z"/></svg>
+                            <span class="text">Notificar Error</span>
                         </a>
                     </div>
                 @endif
@@ -287,7 +268,9 @@
             <div class="box intro-y p-5 mt-5">
                 <div class="flex items-center border-b border-slate-200/60 dark:border-darkmode-400 pb-5 mb-5">
                     <div class="font-medium text-base truncate">Datos Escolares</div>
-                    <a class="w-4 h-4 text-slate-500 ml-auto" href="{{ route('edit-datos-escolares',$alumno) }}"><i data-lucide="edit"></i></a>
+                    @cannot('biblioteca-ce')                                            
+                        <a class="w-4 h-4 text-slate-500 ml-auto" href="{{ route('edit-datos-escolares',$alumno) }}"><i data-lucide="edit"></i></a>
+                    @endcannot
                 </div>
                 <div class="flex items-center">
                     <svg class="svg-inline--fa fa-venus-mars w-4 h-4 text-slate-500 mr-2" xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 576 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path fill="currentColor" d="M64 32C28.7 32 0 60.7 0 96V416c0 35.3 28.7 64 64 64H512c35.3 0 64-28.7 64-64V96c0-35.3-28.7-64-64-64H64zm80 256h64c44.2 0 80 35.8 80 80c0 8.8-7.2 16-16 16H80c-8.8 0-16-7.2-16-16c0-44.2 35.8-80 80-80zm-32-96a64 64 0 1 1 128 0 64 64 0 1 1 -128 0zm256-32H496c8.8 0 16 7.2 16 16s-7.2 16-16 16H368c-8.8 0-16-7.2-16-16s7.2-16 16-16zm0 64H496c8.8 0 16 7.2 16 16s-7.2 16-16 16H368c-8.8 0-16-7.2-16-16s7.2-16 16-16zm0 64H496c8.8 0 16 7.2 16 16s-7.2 16-16 16H368c-8.8 0-16-7.2-16-16s7.2-16 16-16z"/></svg>
@@ -337,7 +320,9 @@
             <div class="box intro-y p-5 mt-5">
                 <div class="flex items-center border-b border-slate-200/60 dark:border-darkmode-400 pb-5 mb-5">
                     <div class="font-medium text-base truncate">Datos Personales</div>
-                    <a class="w-4 h-4 text-slate-500 ml-auto" href="{{ route('edit-datos-personales',$alumno) }}"><i data-lucide="edit"></i></a>
+                    @cannot('biblioteca-ce')   
+                        <a class="w-4 h-4 text-slate-500 ml-auto" href="{{ route('edit-datos-personales',$alumno) }}"><i data-lucide="edit"></i></a>
+                    @endcannot
                 </div>                                
                 @if($alumno->tramite->estado != 1) 
                     <div class="flex items-center mt-3">
@@ -384,7 +369,9 @@
             <div class="box intro-y p-5 mt-2">
                 <div class="flex items-center border-b border-slate-200/60 dark:border-darkmode-400 pb-5 mb-5">
                     <div class="font-medium text-base truncate">Datos Laborales</div>
-                    <a class="w-4 h-4 text-slate-500 ml-auto" href="{{ route('edit-datos-laborales',$alumno) }}"><i data-lucide="edit"></i></a>
+                    @cannot('biblioteca-ce')   
+                        <a class="w-4 h-4 text-slate-500 ml-auto" href="{{ route('edit-datos-laborales',$alumno) }}"><i data-lucide="edit"></i></a>
+                    @endcannot
                 </div>                                
                 @if($alumno->trabaja)
                     @if ($alumno->afin)                                            
@@ -712,7 +699,34 @@
                 </div>
             </div>
         </div>
-        <!-- END: Product Detail Content -->  
+        <!-- END: Product Detail Content --> 
+        <!-- BEGIN: Modal Eliminar --> 
+        <div id="eliminarTramiteModal" class="modal" tabindex="-1" aria-hidden="true"> 
+            <div class="modal-dialog"> 
+                <div class="modal-content"> 
+                    <div class="modal-body p-0"> 
+                        <div class="p-5 text-center"> 
+                            <i data-lucide="x-circle" class="w-16 h-16 text-danger mx-auto mt-3"></i> 
+                        <div class="text-3xl mt-5">¿Segur@ que deseas eliminar el tramite de {{$alumno->user->name}}? 
+                    </div> 
+                    <div class="text-slate-500 mt-2 text-justify">                                                
+                        Tenga en cuenta que al eliminar su trámite estará eliminando sus datos y los documentos registrados. Ingrese la contraseña de su usuario para borrarlo.
+                    </div> 
+                    <form method="POST" action="{{ route('eliminar_tramites',$alumno) }}">
+                        @csrf
+                        @method('DELETE')
+                        <input id="password" class="form-control mt-2" type="password" name="password" placeholder="Contraseña..." required autofocus />
+                        @foreach ($errors->all() as $error)
+                            <p class="text-danger mt-2">{{ $error }}</p>
+                        @endforeach
+                        <div class="px-5 pb-8 text-center mt-5"> 
+                            <button type="button" data-tw-dismiss="modal" class="btn btn-secondary w-24 mr-1">Cancelar</button> 
+                            <button type="submit" class="btn btn-danger w-24">Eliminar</button> 
+                        </div> 
+                    </form>
+                </div>                                         
+            </div> 
+        </div> <!-- END: Modal Eliminar -->   
         <!-- BEGIN: Modal Content --> 
         <div id="modal-dictamen" class="modal" tabindex="-1" aria-hidden="true"> 
             <div class="modal-dialog"> 

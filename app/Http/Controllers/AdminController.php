@@ -2139,21 +2139,47 @@ class AdminController extends Controller
     }
 
     //Usuarios
+    public function usuarios() {
+        $user = Auth::user();
+        $usuarios = User::all();   
+        return view('admin/usuarios', compact('user','usuarios'));
+    } 
+
+    public function usuarios_edit(User $usuario) {
+        $user = Auth::user();
+        $carreras = Carrera::all();
+        $coordinador = Coordinador::where('user_id', $usuario->id)->get()->first(); 
+        return view('admin/usuarios-form',compact('user','usuario','carreras','coordinador'));
+    }
+
+    public function usuarios_form() {
+        $user = Auth::user();
+        $carreras = Carrera::all();
+        return view('admin/usuarios-form',compact('user','carreras'));
+    }
+
     public function storeUsuarios(Request $request)
     {                
         //VALIDACION DE DATOS
         $request->validate([
             'nombre' => 'required|string|min:5|max:255',
+            'codigo' => 'required|string|email|max:255|unique:users',
             'tipo' => 'required|numeric',
-            'carrera' =>'nullable|numeric',
             'password' => 'required|string|min:6',
             'password_confirmed' => 'required|string|min:6',
         ]);  
+        
 
-        if(is_numeric($request->codigo)){           
+        /*if(is_numeric($request->codigo)){           
             $request->validate(['codigo' => 'required|numeric|unique:users',]);
         }else{
             $request->validate(['codigo' => 'required|string',]);
+        }*/
+
+        if($request->tipo == 2){
+            $request->validate([
+                'carrera' =>'required|numeric',
+            ]);
         }
         
         if ($request->password != $request->password_confirmed) {
@@ -2172,12 +2198,12 @@ class AdminController extends Controller
         $user->admin_type = $request->tipo;
         $user->save();        
 
-        /*if($request->tipo == 2){
+        if($request->tipo == 2){
             $coordinador = new Coordinador();
             $coordinador->user_id = $user->id;
             $coordinador->id_carrera = $request->carrera;
             $coordinador->save();
-        }*/
+        }
 
         return redirect()->route('usuarios')->with('success', 'Nuevo usuario creado con éxito');
 
@@ -2189,9 +2215,14 @@ class AdminController extends Controller
         $request->validate([
             'nombre' => 'required|string|min:5|max:255',  
             'tipo' => 'required|numeric',          
-            'carrera' =>'nullable|numeric',
+            'carrera' =>'nullable|numeric',           
         ]);
-        if(is_numeric($request->codigo)){
+        if($request->codigo == $user->codigo){
+            $request->validate(['codigo' => 'required|string',]);
+        }else{
+            $request->validate(['codigo' => 'required|string|unique:users',]);
+        }
+        /*if(is_numeric($request->codigo)){
             if($request->codigo == $user->codigo){
                 $request->validate(['codigo' => 'required|numeric',]);
             }else{
@@ -2199,6 +2230,12 @@ class AdminController extends Controller
             }
         }else{
             $request->validate(['codigo' => 'required|string',]);
+        }*/
+
+        if($request->tipo == 2){
+            $request->validate([
+                'carrera' =>'required|numeric',
+            ]);
         }
 
         if($request->contra == "SI"){
@@ -2222,7 +2259,7 @@ class AdminController extends Controller
         $user->admin_type = $request->tipo;
         $user->save();           
 
-        /*$coordinador = Coordinador::where('user_id', $user->id)->get()->first(); 
+        $coordinador = Coordinador::where('user_id', $user->id)->get()->first(); 
         if($request->tipo == 2){              
             if(!isset($coordinador)){
                 $coordinador = new Coordinador();
@@ -2234,7 +2271,7 @@ class AdminController extends Controller
             if(isset($coordinador)){
                 $coordinador->delete();
             }
-        }*/
+        }
 
         return redirect()->route('usuarios')->with('success', 'Información actualizada con éxito');
 
@@ -2270,6 +2307,22 @@ class AdminController extends Controller
     }
 
     //Maestros
+    public function maestros() {
+        $user = Auth::user();
+        $maestros = Maestro::all();  
+        return view('admin/maestros', compact('user','maestros'));
+    }
+    
+    public function maestros_form() {
+        $user = Auth::user();
+        return view('admin/maestros-form',compact('user'));
+    }
+
+    public function maestros_edit(Maestro $maestro) {
+        $user = Auth::user();
+        return view('admin/maestros-form',compact('user','maestro'));
+    }
+
     public function updateMaestro(Request $request, Maestro $maestro)
     {
         //VALIDACION DE DATOS

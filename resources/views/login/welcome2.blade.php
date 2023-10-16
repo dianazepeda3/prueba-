@@ -25,11 +25,19 @@
                     <svg class="svg-inline--fa fa-book mr-1 sm:mr-2 text-xl sm:text-xl" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="book" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" data-fa-i2svg=""><path fill="currentColor" d="M96 0C43 0 0 43 0 96V416c0 53 43 96 96 96H384h32c17.7 0 32-14.3 32-32s-14.3-32-32-32V384c17.7 0 32-14.3 32-32V32c0-17.7-14.3-32-32-32H384 96zm0 384H352v64H96c-17.7 0-32-14.3-32-32s14.3-32 32-32zm32-240c0-8.8 7.2-16 16-16H336c8.8 0 16 7.2 16 16s-7.2 16-16 16H144c-8.8 0-16-7.2-16-16zm16 48H336c8.8 0 16 7.2 16 16s-7.2 16-16 16H144c-8.8 0-16-7.2-16-16s7.2-16 16-16z"></path></svg><!-- <i class="mr-1 sm:mr-2 text-xl sm:text-xl fa-solid fa-book"></i> Font Awesome fontawesome.com -->
                     <span class="float-right sm:float-none invisible sm:visible text-[0px] sm:text-sm">Manual de usuario</span>
                 </a>
-                <!-- Autentificación para mostrar la opción "Iniciar sesión" o "Sistema" -->
-                <a class="flex items-center text-white mr-1 sm:mr-5" href="{{ route('login') }}">
-                    <svg class="svg-inline--fa fa-right-to-bracket mr-0 sm:mr-2 text-xl" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="right-to-bracket" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg=""><path fill="currentColor" d="M352 96h64c17.7 0 32 14.3 32 32V384c0 17.7-14.3 32-32 32H352c-17.7 0-32 14.3-32 32s14.3 32 32 32h64c53 0 96-43 96-96V128c0-53-43-96-96-96H352c-17.7 0-32 14.3-32 32s14.3 32 32 32zm-7.5 177.4c4.8-4.5 7.5-10.8 7.5-17.4s-2.7-12.9-7.5-17.4l-144-136c-7-6.6-17.2-8.4-26-4.6s-14.5 12.5-14.5 22v72H32c-17.7 0-32 14.3-32 32v64c0 17.7 14.3 32 32 32H160v72c0 9.6 5.7 18.2 14.5 22s19 2 26-4.6l144-136z"></path></svg><!-- <i class="mr-0 sm:mr-2 text-xl fas fa-right-to-bracket"></i> Font Awesome fontawesome.com -->
-                    <span class="float-right sm:float-none invisible sm:visible text-[0px] sm:text-sm">Iniciar sesión</span>
-                </a>                                                        
+                @if(auth()->check())
+                    <!-- Autentificación para mostrar la opción "Iniciar sesión" o "Sistema" -->
+                    <a class="flex items-center text-white mr-1 sm:mr-5" @can('alumno') href="{{ route('inicio_alumno') }}" @else href="{{ route('inicio') }}" @endcan>
+                        <svg class="svg-inline--fa fa-right-to-bracket mr-0 sm:mr-2 text-xl" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="right-to-bracket" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg=""><path fill="currentColor" d="M352 96h64c17.7 0 32 14.3 32 32V384c0 17.7-14.3 32-32 32H352c-17.7 0-32 14.3-32 32s14.3 32 32 32h64c53 0 96-43 96-96V128c0-53-43-96-96-96H352c-17.7 0-32 14.3-32 32s14.3 32 32 32zm-7.5 177.4c4.8-4.5 7.5-10.8 7.5-17.4s-2.7-12.9-7.5-17.4l-144-136c-7-6.6-17.2-8.4-26-4.6s-14.5 12.5-14.5 22v72H32c-17.7 0-32 14.3-32 32v64c0 17.7 14.3 32 32 32H160v72c0 9.6 5.7 18.2 14.5 22s19 2 26-4.6l144-136z"></path></svg><!-- <i class="mr-0 sm:mr-2 text-xl fas fa-right-to-bracket"></i> Font Awesome fontawesome.com -->
+                        <span class="float-right sm:float-none invisible sm:visible text-[0px] sm:text-sm">Sistema Titulación</span>
+                    </a>
+                @else
+                    <!-- Autentificación para mostrar la opción "Iniciar sesión" o "Sistema" -->
+                    <a class="flex items-center text-white mr-1 sm:mr-5" href="{{ route('login') }}">
+                        <svg class="svg-inline--fa fa-right-to-bracket mr-0 sm:mr-2 text-xl" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="right-to-bracket" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg=""><path fill="currentColor" d="M352 96h64c17.7 0 32 14.3 32 32V384c0 17.7-14.3 32-32 32H352c-17.7 0-32 14.3-32 32s14.3 32 32 32h64c53 0 96-43 96-96V128c0-53-43-96-96-96H352c-17.7 0-32 14.3-32 32s14.3 32 32 32zm-7.5 177.4c4.8-4.5 7.5-10.8 7.5-17.4s-2.7-12.9-7.5-17.4l-144-136c-7-6.6-17.2-8.4-26-4.6s-14.5 12.5-14.5 22v72H32c-17.7 0-32 14.3-32 32v64c0 17.7 14.3 32 32 32H160v72c0 9.6 5.7 18.2 14.5 22s19 2 26-4.6l144-136z"></path></svg><!-- <i class="mr-0 sm:mr-2 text-xl fas fa-right-to-bracket"></i> Font Awesome fontawesome.com -->
+                        <span class="float-right sm:float-none invisible sm:visible text-[0px] sm:text-sm">Iniciar sesión</span>
+                    </a>  
+                @endcan                                                      
             </div>
             <!--<a class="mx-1 sm:mx-5" href="https://practicas.cucei.udg.mx/oferta-programas">
                 <div class="px-3 sm:px-5 py-2 w-fit rounded-b-xl rounded-t-xl drop-shadow font-extrabold text-sm sm:text-base bg-gradient-to-r from-yellow-500 to-golden text-elecBlue">

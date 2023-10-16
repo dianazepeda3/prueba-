@@ -40,24 +40,25 @@ Route::controller(AuthController::class)->middleware('loggedin')->group(function
 Route::post('login', [AlumnoController::class, 'logSiiau'])->name('log.siiau');
 Route::post('login2', [AdminController::class, 'login'])->name('log.admin');
 
-Route::middleware('auth')->group(function() {
+Route::middleware('is_admin')->group(function() {    
+    Route::controller(AdminController::class)->group(function() {                
+        //Usuarios
+        Route::get('usuarios', 'usuarios')->name('usuarios');
+        Route::get('usuarios/create', 'usuarios_form')->name('usuarios-form');   
+        Route::get('usuarios/create/{usuario}', 'usuarios_edit')->name('usuarios-edit');  
+        Route::patch('usuarios/update/{user}', 'updateUsuario')->name('usuarios_update');
+        Route::post('usuarios/store', 'storeUsuarios')->name('usuarios_store');
+        Route::delete('usuarios/{usuario}', 'deleteUsuario')->name('eliminar_usuario');        
+    });
+});
+
+
+Route::middleware('is_administrativo')->group(function() {
     Route::get('logout', [AuthController::class, 'logout'])->name('logout');
     Route::controller(AdminController::class)->group(function() {
+        //Tramite
         Route::get('tramites', 'tramites')->name('tramites');
-        Route::delete('tramites/{alumno}', 'eliminarTramite')->name('eliminar_tramites');
-        Route::get('tramites/crear','createTramite')->name('crear_tramite');
-        Route::post('tramites/crear','setDatosInfo')->name('datos-escolares');
-        Route::get('tramites/{alumno}', 'verTramite')->name('showTramite');  
-        Route::get('tramites/editar-datos-personales/{alumno}', 'editDatosPersonales')->name('edit-datos-personales');
-        Route::patch('tramites/editar-datos-personales/{alumno}', 'updateDatosPersonales')->name('update-datos-personales');           
-        Route::get('tramites/editar-datos-escolares/{alumno}', 'editDatosEscolares')->name('edit-datos-escolares');   
-        Route::patch('tramites/editar-datos-escolares/{alumno}', 'updateDatosEscolares')->name('update-datos-escolares');           
-        Route::get('tramites/editar-datos-laborales/{alumno}', 'editDatosLaborales')->name('edit-datos-laborales');
-        Route::patch('tramites/editar-datos-laborales/{alumno}', 'updateDatosLaborales')->name('update-datos-laborales'); 
-
-        Route::post('tramites/documentos/generar-dictamen/{tramite}','generate_dictamen')->name('generar-dictamen');
-        Route::get('tramites/documentos/generar-comprobante-academico/{tramite}','generate_comprobante_academico')->name('generar_comprobante_academico');        
-        Route::get('tramites/documentos/etapa2/{tramite}','pasarEtapa2')->name('pasar_etapa2');
+        Route::get('tramites/{alumno}', 'verTramite')->name('showTramite');         
         
         Route::get('tramites/documentos/revisar/{tramite}','revisarDocumento')->name('revisar-documentos');
         Route::get('tramites/documentos/validar/{tramite}','validarDocumento')->name('validar-documentos');        
@@ -66,9 +67,32 @@ Route::middleware('auth')->group(function() {
         Route::patch('tramites/documentos/desaprobar/{documento}','desaprobarDocumento')->name('desaprobar-documento');
         Route::get('tramites/documentos/eliminar/{documento}','eliminarDocumento')->name('admin-eliminar-documento');
 
+        //Generar Documentos 
         Route::get('tramites/documentos/constanciaNoAdeudo/{alumno}', 'generarformatoNoAdeudo')->name('generar_formatoNoAdeudo');
-        Route::get('tramites/documentos/constanciaNoAdeudoCE/{alumno}', 'generarformatoNoAdeudoCE')->name('generar_formatoNoAdeudo_ce');
-        
+        Route::get('tramites/documentos/constanciaNoAdeudoCE/{alumno}', 'generarformatoNoAdeudoCE')->name('generar_formatoNoAdeudo_ce');        
+    });
+});
+
+Route::middleware('is_coordi')->group(function() {
+    Route::get('logout', [AuthController::class, 'logout'])->name('logout');
+    Route::controller(AdminController::class)->group(function() {        
+        // Tramite
+        Route::delete('tramites/{alumno}', 'eliminarTramite')->name('eliminar_tramites');
+        Route::get('tramites/crear','createTramite')->name('crear_tramite');
+        Route::post('tramites/crear','setDatosInfo')->name('datos-escolares');    
+        // Editar datos
+        Route::get('tramites/editar-datos-personales/{alumno}', 'editDatosPersonales')->name('edit-datos-personales');
+        Route::patch('tramites/editar-datos-personales/{alumno}', 'updateDatosPersonales')->name('update-datos-personales');           
+        Route::get('tramites/editar-datos-escolares/{alumno}', 'editDatosEscolares')->name('edit-datos-escolares');   
+        Route::patch('tramites/editar-datos-escolares/{alumno}', 'updateDatosEscolares')->name('update-datos-escolares');           
+        Route::get('tramites/editar-datos-laborales/{alumno}', 'editDatosLaborales')->name('edit-datos-laborales');
+        Route::patch('tramites/editar-datos-laborales/{alumno}', 'updateDatosLaborales')->name('update-datos-laborales'); 
+
+        //Generar Documentos
+        Route::post('tramites/documentos/generar-dictamen/{tramite}','generate_dictamen')->name('generar-dictamen');
+        Route::get('tramites/documentos/generar-comprobante-academico/{tramite}','generate_comprobante_academico')->name('generar_comprobante_academico');        
+        Route::get('tramites/documentos/etapa2/{tramite}','pasarEtapa2')->name('pasar_etapa2');
+               
         //Acta
         Route::get('tramites/documentos/acta-titulacion/{alumno}', 'generarDocumentoActaTitulacion')->name('descargar_acta_titulacion');
         Route::post('tramites/documentos/subir-acta-firmada/{alumno}','subirActaFirmada')->name('subir_acta_firmada');
@@ -82,21 +106,19 @@ Route::middleware('auth')->group(function() {
         //FIRMA
         Route::get('firma','firma')->name('firma');
         Route::post('firma/guardar','uploadFirma')->name('guardar-firma');
-        Route::get('firma/ver-firma/{firma}','visualizarFirma')->name('ver-firma');
-
-        //Usuarios
-        Route::patch('usuarios/update/{user}', 'updateUsuario')->name('usuarios_update');
-        Route::post('usuarios/store', 'storeUsuarios')->name('usuarios_store');
-        Route::delete('usuarios/{usuario}', 'deleteUsuario')->name('eliminar_usuario');
+        Route::get('firma/ver-firma/{firma}','visualizarFirma')->name('ver-firma');       
 
         //Maestros
+        Route::get('maestros', 'maestros')->name('maestros');
+        Route::get('maestros/create', 'maestros_form')->name('maestros-form');  
+        Route::get('maestros/create/{maestro}', 'maestros_edit')->name('maestros-edit'); 
         Route::patch('maestros/update/{maestro}', 'updateMaestro')->name('maestros_update');
         Route::post('maestros/store', 'storeMaestro')->name('maestros_store');
         Route::delete('maestros/{maestro}', 'deleteMaestro')->name('eliminar_maestro');        
     });
 });
 
-Route::middleware('auth')->group(function() {
+Route::middleware('is_student')->group(function() {
     Route::get('logout', [AuthController::class, 'logout'])->name('logout');
     Route::controller(AlumnoController::class)->group(function() {               
         Route::get('datos', 'show')->name('show-datos');    
@@ -127,13 +149,7 @@ Route::middleware('auth')->group(function() {
     Route::get('logout', [AuthController::class, 'logout'])->name('logout');
     Route::controller(PageController::class)->group(function() {
         Route::get('inicio2', 'dashboardOverview1')->name('inicio');
-        Route::get('inicio', 'inicioAlumno')->name('inicio_alumno'); 
-        Route::get('usuarios', 'usuarios')->name('usuarios');
-        Route::get('usuarios/create', 'usuarios_form')->name('usuarios-form');   
-        Route::get('usuarios/create/{usuario}', 'usuarios_edit')->name('usuarios-edit');         
-        Route::get('maestros/create', 'maestros_form')->name('maestros-form');  
-        Route::get('maestros/create/{maestro}', 'maestros_edit')->name('maestros-edit');        
-        Route::get('maestros', 'maestros')->name('maestros');
+        Route::get('inicio', 'inicioAlumno')->name('inicio_alumno');                                       
 
         Route::get('dashboard-overview-2-page', 'dashboardOverview2')->name('dashboard-overview-2');
         Route::get('calendar-page', 'calendar')->name('calendar');

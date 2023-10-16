@@ -38,33 +38,8 @@ class PageController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
-     */
-    public function usuarios() {
-        $user = Auth::user();
-        $usuarios = User::all();   
-        return view('admin/usuarios', compact('user','usuarios'));
-    }
-
-    public function usuarios_form() {
-        $user = Auth::user();
-        return view('admin/usuarios-form',compact('user'));
-    }
-
-    public function maestros_form() {
-        $user = Auth::user();
-        return view('admin/maestros-form',compact('user'));
-    }
-
-    public function maestros_edit(Maestro $maestro) {
-        $user = Auth::user();
-        return view('admin/maestros-form',compact('user','maestro'));
-    }
-
-    public function usuarios_edit(User $usuario) {
-        $user = Auth::user();
-        return view('admin/usuarios-form',compact('user','usuario'));
-    }
-
+     */          
+    
     public function tramites() {
         $user = Auth::user();
         $tramites = Tramite::all();   
@@ -77,13 +52,7 @@ class PageController extends Controller
         $tramites = Tramite::all();   
         $alumnos = Alumno::all();
         return view('admin/showTramite', compact('user','tramites','alumno'));
-    }
-
-    public function maestros() {
-        $user = Auth::user();
-        $maestros = Maestro::all();  
-        return view('admin/maestros', compact('user','maestros'));
-    }
+    }    
 
     /**
      * Show specified view.

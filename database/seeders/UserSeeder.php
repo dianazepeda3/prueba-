@@ -18,7 +18,7 @@ class UserSeeder extends Seeder
         $date = Carbon::now()->setTimezone('America/Mexico_City');
         DB::table('users')->insert([
             'name' => 'admin',
-            'codigo' => 'admin@gmail.com',//'987654321',
+            'codigo' => 'admin@cucei.udg.mx',//'987654321',
             'password' => bcrypt('Universidad2023*'),
             'is_admin' => true,           
             'created_at' => $date,

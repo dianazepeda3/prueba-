@@ -124,18 +124,18 @@
                                 @endif>
                         </div>
                         <div class="form-inline mt-5">
-                            <label for="codigo" class="form-label sm:w-20">Código</label>
-                            <input id="codigo" name="codigo" type="text" class="form-control" placeholder="123456789..."
+                            <label for="codigo" class="form-label sm:w-20">Correo</label>
+                            <input id="codigo" name="codigo" type="text" class="form-control" placeholder="correo@cucei.udg.mx..."
                                 @if(isset($usuario))
                                     value="{{$usuario->codigo}}"
                                 @else
-                                    value="{{old('codigo')}}"
+                                    value="{{old('correo')}}"
                                 @endif>
                         </div>
                         <div class="form-inline mt-5">
                             <label for="tipo" class="form-label sm:w-20">Tipo de Usuario</label>
                             <select id="tipo" name="tipo" class="form-control" aria-label=".form-select-sm example">
-                                <option value="0" selected>Seleccione el usuario...</option>   
+                                <option value="" selected>Seleccione el usuario...</option>   
                                 <option value="1"
                                     @if(isset($usuario) && $usuario->admin_type == 1) selected @endif>Administrador</option>                              
                                 <option value="2"
@@ -145,6 +145,32 @@
                                 <option value="4"
                                     @if(isset($usuario) && $usuario->admin_type == 4) selected @endif>Control Escolar</option>                                                             
                             </select>
+                        </div>                       
+                        <div id="carrera-container">                           
+                                <div class="form-inline mt-5">
+                                    <label for="carrera" class="form-label sm:w-20">Carrera</label>
+                                    <select id="carrera" name="carrera" class="form-control" aria-label=".form-select-sm example">
+                                        @if (isset($usuario))                        
+                                            <option value="0" selected>Seleccione la carrera...</option>                        
+                                            @foreach ($carreras as $carrera)
+                                                @if (isset($coordinador) && $carrera->id == $coordinador->id_carrera)
+                                                    <option value="{{$carrera->id}}" selected>{{$carrera->carrera}}</option>
+                                                @else
+                                                    <option value="{{$carrera->id}}">{{$carrera->carrera}}</option>
+                                                @endif
+                                            @endforeach
+                                        @else
+                                            <option value="0" >Seleccione la carrera...</option>
+                                            @foreach ($carreras as $carrera)
+                                                @if ($carrera->id == old('carrera'))
+                                                    <option value="{{$carrera->id}}" selected>{{$carrera->carrera}}</option>
+                                                @else
+                                                    <option value="{{$carrera->id}}">{{$carrera->carrera}}</option>
+                                                @endif
+                                            @endforeach
+                                        @endif    
+                                    </select>     
+                                </div>  
                         </div>
                         @if(isset($usuario))
                             <div class="form-inline mt-5">
@@ -197,9 +223,22 @@
                 
         window.onload = function() { 
             var usuario = "{{isset($usuario)}}";
+            var tipoUsuario = document.getElementById('tipo').value;
+            console.log(tipoUsuario); 
             if(usuario){
                 ocultarInfo();                                      
-            }               
-        }           
-    </script>
+            }              
+            var contenedorCarreras = document.getElementById('carrera-container');
+                 
+            contenedorCarreras.style.display = tipoUsuario === '2' ? 'block' : 'none'; 
+        }       
+        function mostrarOcultarCarreras() {
+            var tipoUsuario = document.getElementById('tipo').value;
+            var contenedorCarreras = document.getElementById('carrera-container');
+                 
+            contenedorCarreras.style.display = tipoUsuario === '2' ? 'block' : 'none';           
+        }
+        // Ejecutar la función cuando cambie el valor de "tipo"
+        document.getElementById('tipo').addEventListener('change', mostrarOcultarCarreras);    
+    </script>    
 @endsection

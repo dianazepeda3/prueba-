@@ -15,6 +15,11 @@ return new class extends Migration
     {
         Schema::create('coordinadors', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('user_id');   
+            $table->unsignedBigInteger('id_carrera')->nullable();            
+
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('id_carrera')->references('id')->on('carreras')->onDelete('cascade')->onUpdate('cascade');                       
             $table->timestamps();
         });
     }

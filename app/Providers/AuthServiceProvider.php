@@ -37,11 +37,6 @@ class AuthServiceProvider extends ServiceProvider
             return $user->admin_type == 1;
         });
 
-        Gate::define('admin', function(){
-            $user = Auth::user();
-            return $user->admin_type == 1;
-        });
-
         Gate::define('admin-coordinador', function(){
             $user = Auth::user();
             if($user->is_admin == 1)
@@ -53,6 +48,11 @@ class AuthServiceProvider extends ServiceProvider
         Gate::define('coordinador', function(){
             $user = Auth::user();
             return $user->admin_type == 2;
+        });
+
+        Gate::define('biblioteca-ce', function(){
+            $user = Auth::user();
+            return $user->admin_type == 3 || $user->admin_type == 4;
         });
 
         Gate::define('biblioteca', function(){

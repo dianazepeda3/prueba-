@@ -24,6 +24,8 @@ class MenuComposer
             $view->with('main_menu2', Menu::menu2());
             $view->with('main_menu_alumno', Menu::menu_alumno());
             $view->with('main_menu_admin', Menu::menu_admin());
+            $view->with('main_menu_coordi', Menu::menu_coordi());
+            $view->with('main_menu_biblio_ce', Menu::menu_biblio_ce());            
             $view->with('first_level_active_index', $activeMenu['first_level_active_index']);
             $view->with('second_level_active_index', $activeMenu['second_level_active_index']);
             $view->with('third_level_active_index', $activeMenu['third_level_active_index']);
