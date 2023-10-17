@@ -25,6 +25,9 @@ Route::get('/',function(){
 Route::get('manual-usuario',function(User $user){ return view('manual.manual',compact('user'));})->name('manual_usuario');
 Route::get('manual-usuario/iniciar-sesion',function(User $user){ return view('manual.login',compact('user'));})->name('manual_usuario_login');
 Route::get('manual-usuario/modalidad',function(User $user){ return view('manual.modalidad',compact('user'));})->name('manual_usuario_modalidad');
+Route::get('manual-usuario/subir-documentacion',function(User $user){ return view('manual.subir-documentacion',compact('user'));})->name('manual_usuario_subir_documentacion');
+Route::get('manual-usuario/editar-informacion',function(User $user){ return view('manual.edit-info',compact('user'));})->name('manual_usuario_editar_info');
+
 
 Route::get('dark-mode-switcher', [DarkModeController::class, 'switch'])->name('dark-mode-switcher');
 Route::get('color-scheme-switcher/{color_scheme}', [ColorSchemeController::class, 'switch'])->name('color-scheme-switcher');
@@ -80,14 +83,7 @@ Route::middleware('is_coordi')->group(function() {
         Route::delete('tramites/{alumno}', 'eliminarTramite')->name('eliminar_tramites');
         Route::get('tramites/crear','createTramite')->name('crear_tramite');
         Route::post('tramites/crear','setDatosInfo')->name('datos-escolares');    
-        // Editar datos
-        Route::get('tramites/editar-datos-personales/{alumno}', 'editDatosPersonales')->name('edit-datos-personales');
-        Route::patch('tramites/editar-datos-personales/{alumno}', 'updateDatosPersonales')->name('update-datos-personales');           
-        Route::get('tramites/editar-datos-escolares/{alumno}', 'editDatosEscolares')->name('edit-datos-escolares');   
-        Route::patch('tramites/editar-datos-escolares/{alumno}', 'updateDatosEscolares')->name('update-datos-escolares');           
-        Route::get('tramites/editar-datos-laborales/{alumno}', 'editDatosLaborales')->name('edit-datos-laborales');
-        Route::patch('tramites/editar-datos-laborales/{alumno}', 'updateDatosLaborales')->name('update-datos-laborales'); 
-
+        
         //Generar Documentos
         Route::post('tramites/documentos/generar-dictamen/{tramite}','generate_dictamen')->name('generar-dictamen');
         Route::get('tramites/documentos/generar-comprobante-academico/{tramite}','generate_comprobante_academico')->name('generar_comprobante_academico');        
@@ -144,6 +140,20 @@ Route::middleware('is_student')->group(function() {
         Route::get('/alumno/opciones_titulacion/{id}', 'getSubcategorias');
     });
 });
+
+Route::middleware('auth')->group(function() {
+    Route::controller(AdminController::class)->group(function() {
+        // Editar datos
+        Route::get('tramites/editar-datos-personales/{alumno}', 'editDatosPersonales')->name('edit-datos-personales');
+        Route::patch('tramites/editar-datos-personales/{alumno}', 'updateDatosPersonales')->name('update-datos-personales');           
+        Route::get('tramites/editar-datos-escolares/{alumno}', 'editDatosEscolares')->name('edit-datos-escolares');   
+        Route::patch('tramites/editar-datos-escolares/{alumno}', 'updateDatosEscolares')->name('update-datos-escolares');           
+        Route::get('tramites/editar-datos-laborales/{alumno}', 'editDatosLaborales')->name('edit-datos-laborales');
+        Route::patch('tramites/editar-datos-laborales/{alumno}', 'updateDatosLaborales')->name('update-datos-laborales'); 
+           
+    });
+});
+
 
 Route::middleware('auth')->group(function() {
     Route::get('logout', [AuthController::class, 'logout'])->name('logout');

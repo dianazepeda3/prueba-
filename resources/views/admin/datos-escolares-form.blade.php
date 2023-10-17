@@ -240,9 +240,10 @@
                             @endif                                           
                                 <div class="sm:ml-20 sm:pl-5 mt-5">
                                     <button class="btn btn-primary" type="submit">Guardar</button>                                               
-                                    <a class="btn btn-secondary" href="{{ route('tramites') }}">Cancelar</a>
-                                </div>
-                            
+                                    <a class="btn btn-secondary" 
+                                    @can('admin-coordinador') href="{{ route('showTramite',$alumno) }}" @elsecan('alumno') href="{{ route('show-datos') }}" @endcan
+                                    >Cancelar</a>
+                                </div>                            
                         </form>
 
                     </div>

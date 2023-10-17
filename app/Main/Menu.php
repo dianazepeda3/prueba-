@@ -378,8 +378,22 @@ class Menu
                 ],
                 'title' => 'Seleccionar modalidad'
             ],
-                      
-                                  
+            'editar-info' => [
+                'icon' => 'edit',
+                'route_name' => 'manual_usuario_editar_info',
+                'params' => [
+                    // Additional parameters
+                ],
+                'title' => 'Editar información'
+            ],
+            'documentacion' => [
+                'icon' => 'file-text',
+                'route_name' => 'manual_usuario_subir_documentacion',
+                'params' => [
+                    // Additional parameters
+                ],
+                'title' => 'Documentos'
+            ],                                          
         ];
     }
 }

@@ -16,7 +16,7 @@
         </div>-->
     </div>
     {{-- ERRORES --}}
-    <div class="grid grid-cols-12 gap-12 mt-5"> 
+    <div class="grid grid-cols-12 gap-12 mt-3"> 
         <div class="intro-y col-span-12 lg:col-span-12">  
              {{-- Mensaje Alerta --}}
             @if (session('info'))
@@ -44,7 +44,7 @@
             @endif 
         </div> 
     </div>   
-    <div class="grid grid-cols-12 gap-5 mt-5">
+    <div class="grid grid-cols-12 gap-5 mt-3">
         <!-- BEGIN: Product Detail Side Menu -->
         <div class="col-span-12 xl:col-span-6">
             <div class="box intro-y p-5 mt-5">

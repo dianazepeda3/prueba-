@@ -189,37 +189,11 @@
                             </div>                                                            
                             <div class="sm:ml-20 sm:pl-5 mt-5">
                                 <button class="btn btn-primary" type="submit">Guardar</button>                                               
-                                <a class="btn btn-secondary" href="{{ route('showTramite',$alumno) }}">Cancelar</a>
+                                <a class="btn btn-secondary" 
+                                @can('admin-coordinador') href="{{ route('showTramite',$alumno) }}" @elsecan('alumno') href="{{ route('show-datos') }}" @endcan
+                                >Cancelar</a>
                             </div>
                         </form>  
-                    </div>
-                    <div class="source-code hidden">
-                        <button data-target="#copy-horizontal-form" class="copy-code btn py-1 px-2 btn-outline-secondary">
-                            <i data-lucide="file" class="w-4 h-4 mr-2"></i> Copy example code
-                        </button>
-                        <div class="overflow-y-auto mt-3 rounded-md">
-                            <pre id="copy-horizontal-form" class="source-preview">
-                                <code class="html">
-                                    {{ str_replace('>', 'HTMLCloseTag', str_replace('<', 'HTMLOpenTag', '
-                                        <div class="form-inline">
-                                            <label for="horizontal-form-1" class="form-label sm:w-20">Email</label>
-                                            <input id="horizontal-form-1" type="text" class="form-control" placeholder="example@gmail.com">
-                                        </div>
-                                        <div class="form-inline mt-5">
-                                            <label for="horizontal-form-2" class="form-label sm:w-20">Password</label>
-                                            <input id="horizontal-form-2" type="password" class="form-control" placeholder="secret">
-                                        </div>
-                                        <div class="form-check sm:ml-20 sm:pl-5 mt-5">
-                                            <input id="horizontal-form-3" class="form-check-input" type="checkbox" value="">
-                                            <label class="form-check-label" for="horizontal-form-3">Remember me</label>
-                                        </div>
-                                        <div class="sm:ml-20 sm:pl-5 mt-5">
-                                            <button class="btn btn-primary">Login</button>
-                                        </div>
-                                    ')) }}
-                                </code>
-                            </pre>
-                        </div>
                     </div>
                 </div>
             </div>

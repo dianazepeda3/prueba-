@@ -34,7 +34,7 @@ License: You must have a valid license purchased only from themeforest(the above
 
         <style>
             .top-bar{margin-left:0px;margin-right:0px;position:sticky;top:0px;}.top-bar:after{border-radius:0px}
-            html{background-image:url(/build/assets/bg-main.3423f63e.jpg);
+            html{
                 background-size: cover;
                 background-color: #ffffff
             };
@@ -58,7 +58,7 @@ License: You must have a valid license purchased only from themeforest(the above
         </style>
         <style>
             .top-bar{margin-left:0px;margin-right:0px;position:sticky;top:0px;}.top-bar:after{border-radius:0px}
-            html{background-image:url(/build/assets/bg-main.3423f63e.jpg);
+            html{
                 background-size: cover;
                 background-color: #ffffff
             };

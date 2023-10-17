@@ -19,7 +19,7 @@
     <!-- BEGIN: Search -->
     <div class="intro-x relative ml-auto sm:mx-auto">
         <div class="search hidden sm:block">
-            <input type="text" class="search__input form-control" placeholder="Buscar... (Ctrl+k)">
+            <input type="text" class="search__input form-control" placeholder="Buscar... ">
             <i data-lucide="search" class="search__icon"></i>
         </div>
         <a class="notification sm:hidden" href="">

@@ -27,7 +27,7 @@
         border-radius: 50%;
         -webkit-animation: .75s linear infinite spinner-border;
         animation: .75s linear infinite spinner-border;
-        }
+        }        
 
         .spinner-border-sm {
         width: 1rem;
