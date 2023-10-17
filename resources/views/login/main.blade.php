@@ -6,6 +6,8 @@
 
 @section('content')
     <style>
+        html:after{background-color:rgb(var(--color-primary))}
+        
         @-webkit-keyframes spinner-border {
         to {
             transform: rotate(360deg);
