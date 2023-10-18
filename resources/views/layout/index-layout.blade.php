@@ -39,24 +39,34 @@ License: You must have a valid license purchased only from themeforest(the above
                 background-color: #ffffff
             };
             @media (min-width: 1024px) {
-            html.dark:after {
-                background-color:rgb(var(--color-primary) / .3);
-            }
+                html.dark:after {
+                    background-color:rgb(var(--color-primary) / .3);
+                }
+                .h-\[2rem\] {
+                    height: 2.8rem; 
+                }
+                .h-\[2rem\] {
+                    height: 2.8rem; 
+                }
             }
             .text-golden {
                 --tw-text-opacity: 1;
                 color: rgb(241 165 68/var(--tw-text-opacity));
             }
             @media (min-width: 640px){
-            .sm\:h-\[2\.8rem\] {
-                height: 2.8rem; 
-            }}
-
-            .h-\[2rem\] {
-                height: 2.8rem; 
+                .sm\:h-\[2\.8rem\] {
+                    height: 2.8rem; 
+                }
+                
             }
+            @media (max-width:640px){
+                .h-\[2rem\] {
+                    height: 2rem; 
+                }
+            }
+            
         </style>
-        <style>
+        <!--<style>
             .top-bar{margin-left:0px;margin-right:0px;position:sticky;top:0px;}.top-bar:after{border-radius:0px}
             html{
                 background-size: cover;
@@ -79,7 +89,7 @@ License: You must have a valid license purchased only from themeforest(the above
             .h-\[2rem\] {
                 height: 2.8rem; 
             }
-        </style>
+        </style>-->
     </head> 
     <!-- END: Head -->
     <body class="main">       

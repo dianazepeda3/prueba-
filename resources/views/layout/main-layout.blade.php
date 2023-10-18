@@ -10,7 +10,7 @@
         <nav class="[&>div]:opacity-0 side-nav">
             <div class="pt-4 mb-4">
                 <div class="flex items-center side-nav__header">
-                    <a href="" class="flex items-center intro-x">
+                    <a href="{{ route('inicio-visitante') }}" class="flex items-center intro-x">
                         <img alt="Rocketman Tailwind HTML Admin Template" class="side-nav__header__logo" src="{{ !$dark_mode ? asset('build/assets/images/logo.png') : asset('build/assets/images/logo.svg') }}">
                         <span class="side-nav__header__text pt-0.5 text-lg ml-2.5">
                             Titulación CUCEI
