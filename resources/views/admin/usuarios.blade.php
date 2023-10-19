@@ -59,8 +59,8 @@
         <div class="form-inline flex-1 flex-col xl:flex-row items-start xl:items-center gap-y-2 xl:mr-6">
             <label for="crud-form-1" class="form-label">Rol</label>
             <select class="form-select w-full" aria-label="Default select example">
-                <option>Alumno</option>
-                <option>Maestro</option>
+                <option>Todos</option>
+                <option>Administrador</option>
                 <option>Coordinador</option>
                 <option>Biblioteca</option>
                 <option>Control Escolar</option>
@@ -77,7 +77,7 @@
             <tbody>
                 <tr>
                     <th>NOMBRE</th>
-                    <th>CÓDIGO</th>
+                    <th>EMAIL</th>
                     <th>FECHA DE CREACIÓN</th>
                     <th>ROL</th>
                     <th>ACCIONES</th>
@@ -106,9 +106,9 @@
                         text-success
                         text-danger                        
                         -->
-                        <td class="text-center">{{ $usuario->codigo }}</td>
-                        <td class="text-center">{{ $usuario->created_at }}</td>
-                        <td class="content-center text-center">
+                        <td class="">{{ $usuario->codigo }}</td>
+                        <td class="">{{ $usuario->created_at }}</td>
+                        <td class="content-center ">
                             @if($usuario->admin_type == 1)
                                 <span class="text-danger ">Administrador</span>
                             @elseif($usuario->admin_type == 2 )

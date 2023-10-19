@@ -43,32 +43,35 @@
         </div> 
     </div>
     <!-- BEGIN: Filter -->
-    <div class="intro-y box p-5 mt-7 flex flex-col xl:flex-row gap-y-3">
-        <div class="form-inline flex-1 flex-col xl:flex-row items-start xl:items-center gap-y-2 xl:mr-6">
-            <label for="crud-form-1" class="form-label">Nombre del Usuario</label>
-            <input id="crud-form-1" type="text" class="form-control w-full" placeholder="Nombre de usuario..">
-        </div>
-        <!--<div class="form-inline flex-1 flex-col xl:flex-row items-start xl:items-center gap-y-2 xl:mr-6">
-            <label for="crud-form-2" class="form-label">Rol</label>
-            <select class="tom-select w-full flex-1" id="crud-form-2" multiple>
-                @foreach (array_slice($fakers, 0, 10) as $key => $faker)
-                    <option value="{{ $faker['products'][0]['category'] }}" {{ $key < 1 ? 'selected' : '' }}>{{ $faker['products'][0]['category'] }}</option>
-                @endforeach
-            </select>
-        </div>-->
-        <div class="form-inline flex-1 flex-col xl:flex-row items-start xl:items-center gap-y-2 xl:mr-6">
-            <label for="crud-form-1" class="form-label">Rol</label>
-            <select class="form-select w-full" aria-label="Default select example">
-                <option>Alumno</option>
-                <option>Maestro</option>
-                <option>Coordinador</option>
-                <option>Biblioteca</option>
-                <option>Control Escolar</option>
-            </select>
-        </div>
-        <button class="btn btn-primary shadow-md">
-            <i class="w-4 h-4 mr-2" data-lucide="search"></i> Filtrar
-        </button>
+    <div class="intro-y box p-5 mt-3 flex flex-col xl:flex-row gap-y-3">
+        <form class="form" method="POST" action="{{ route('filtrar_tramites') }}">
+            @csrf 
+            <div class="form-inline flex-1 flex-col xl:flex-row items-start xl:items-center gap-y-2 xl:mr-6">
+                <label for="nombre" class="form-label">Nombre del Alumno</label>
+                <input id="nombre" name="nombre" type="text" class="form-control mr-5" placeholder="Nombre del alumno.." 
+                    @if ($nombre != "") value="{{ $nombre }}" @endif>
+                <label for="fitrar" class="form-label">Estado</label>
+                <select id="filtrar" name="filtrar"  class="form-control tom-select w-72 mr-5" aria-label="Default select example">
+                    <option value="0" @if ($filtrar == 0) selected @endif>Todos</option>
+                    <option value="1" @if ($filtrar == 1) selected @endif>Datos No Registrados</option>
+                    <option value="2" @if ($filtrar == 2) selected @endif>Datos Registrados</option>
+                    <option value="3" @if ($filtrar == 3) selected @endif>Documentos Entregados</option>
+                    <option value="4" @if ($filtrar == 4) selected @endif>Documentos Validados</option>
+                    <option value="5" @if ($filtrar == 5) selected @endif>Documentos No Aprobados</option>
+                    <option value="6" @if ($filtrar == 6) selected @endif>2da Etapa</option>
+                    <option value="7" @if ($filtrar == 7) selected @endif>Documentos Entregados - 2da Etapa</option>
+                    <option value="8" @if ($filtrar == 8) selected @endif>3ra Etapa</option>
+                    <option value="9" @if ($filtrar == 9) selected @endif>Documentos No Aprobados - 2da Etapa</option>
+                    <option value="10" @if ($filtrar == 10) selected @endif>Documentos Entregados - 3ra Etapa</option>
+                    <option value="11" @if ($filtrar == 11) selected @endif>Documentos Validados - 3ra Etapa</option>
+                    <option value="12" @if ($filtrar == 12) selected @endif>Documentos No Aprobados - 3ra Etapa</option>
+                    <option value="13" @if ($filtrar == 13) selected @endif>Datos de Titulación Generados</option>
+                </select>            
+                <button class="btn btn-primary shadow-md" type="submit">
+                    <i class="w-4 h-4 mr-2" data-lucide="search"></i> Filtrar
+                </button>
+            </div>
+        </form>
     </div>
     <!-- END: Filter -->
     <div class="intro-y overflow-auto lg:overflow-visible">
@@ -89,7 +92,7 @@
                 <!--foreach ($tramites as $tramite) -->
                     @foreach ($alumnos as $alumno)
                         @if (/*$tramite->alumno_id == $alumno->id &&*/ (!isset($user->coordinador) 
-                            || $alumno->id_carrera == $user->coordinador->id_carrera))                                                                                                                                    
+                            || $alumno->id_carrera == $user->coordinador->id_carrera) && ($filtrar == 0 || $filtrar == $alumno->tramite->estado) && ($nombre == "" || stripos($alumno->user->name, $nombre) !== false))                                                                                                                                    
                             @if ($alumno->alumno_docs->solicitud_constancia_no_adeudo_biblioteca && $user->admin_type == 3 || $alumno->alumno_docs->solicitud_constancia_no_adeudo_universidad && $user->admin_type == 4 || ($user->admin_type != 3 && $user->admin_type != 4))
                                 <tr class="intro-x">                                
                                     <td>

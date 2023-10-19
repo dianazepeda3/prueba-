@@ -134,7 +134,7 @@
                         </div>
                         <div class="form-inline mt-5">
                             <label for="tipo" class="form-label sm:w-20">Tipo de Usuario</label>
-                            <select id="tipo" name="tipo" class="form-control" aria-label=".form-select-sm example">
+                            <select id="tipo" name="tipo" class="form-control tom-select w-full" aria-label=".form-select-sm example">
                                 <option value="" selected>Seleccione el usuario...</option>   
                                 <option value="1"
                                     @if(isset($usuario) && $usuario->admin_type == 1) selected @endif>Administrador</option>                              
@@ -149,7 +149,7 @@
                         <div id="carrera-container">                           
                                 <div class="form-inline mt-5">
                                     <label for="carrera" class="form-label sm:w-20">Carrera</label>
-                                    <select id="carrera" name="carrera" class="form-control" aria-label=".form-select-sm example">
+                                    <select id="carrera" name="carrera" class="form-control tom-select w-full" aria-label=".form-select-sm example">
                                         @if (isset($usuario))                        
                                             <option value="0" selected>Seleccione la carrera...</option>                        
                                             @foreach ($carreras as $carrera)

@@ -165,29 +165,40 @@
                             </div>   
                             <div class="form-inline mt-5">
                                 <label for="articulo" class="form-label sm:w-20">Modalidad de Titulación</label>
-                                <select id="articulo" name="articulo" class="tom-select2 form-control">                                                                            
-                                    <option value="0" selected>Seleccione la modalidad de Titulación...</option>
-                                    @foreach ($articulos as $articulo)
-                                        @if (isset($alumno) && $alumno->id_articulo == $articulo->id)
-                                            <option value="{{$articulo->id}}" selected>{{$articulo->nombre}}</option>
-                                        @else
-                                            <option value="{{$articulo->id}}">{{$articulo->nombre}}</option>
-                                        @endif
-                                    @endforeach                                                              
+                                <select id="articulo" name="articulo" class="tom-select form-control">                                        
+                                    @if (isset($alumno))
+                                        <option value="0" selected>Seleccione la modalidad de Titulación...</option>
+                                        @foreach ($articulos as $articulo)
+                                            @if ($alumno->id_articulo == $articulo->id)
+                                                <option value="{{$articulo->id}}" selected>{{$articulo->nombre}}</option>
+                                            @else
+                                                <option value="{{$articulo->id}}">{{$articulo->nombre}}</option>
+                                            @endif
+                                        @endforeach
+                                    @else
+                                        <option value="0" selected>Seleccione la modalidad de Titulación...</option>
+                                        @foreach ($articulos as $articulo)
+                                            @if ($articulo->id == old('articulo'))
+                                                <option value="{{$articulo->id}}" selected>{{$articulo->nombre}}</option>
+                                            @else
+                                                <option value="{{$articulo->id}}">{{$articulo->nombre}}</option>
+                                            @endif
+                                        @endforeach
+                                    @endif                                       
                                 </select>   
                             </div>                                                        
                             <div class="form-inline mt-5">
                                 <label for="opciones_titulacion" class="form-label sm:w-20">Opciones de Titulación</label>
-                                <select id="opciones_titulacion" name="opciones_titulacion"  class="tom-select2 form-control">                                        
-                                    @if (isset($alumno))
+                                <select id="opciones_titulacion" name="opciones_titulacion"  class="form-control">                                        
+                                    @if (isset($alumno) && $alumno->tramite->estado != 1)
                                         @foreach ($opciones_titulacion as $opcion)
                                             @if ($alumno->id_opcion_titulacion == $opcion->id)
                                                 <option value="{{$opcion->id}}" selected>{{$opcion->nombre}}</option>
-                                            @else
+                                            @elseif ($alumno->id_articulo == $opcion->articulo_id)
                                                 <option value="{{$opcion->id}}">{{$opcion->nombre}}</option>
                                             @endif
-                                        @endforeach
-                                    @else
+                                        @endforeach 
+                                    @else                                  
                                         @if (old('opciones_titulacion') == null)
                                             <option value="0" selected>Seleccione la opcion de Titulación...</option>
                                         @endif
@@ -201,7 +212,7 @@
                                                 @endif
                                             @endif
                                         @endforeach
-                                    @endif                              
+                                    @endif                             
                                 </select>   
                             </div> 
                             <div id="nombre_del_trabajo" @if(isset($alumno) && ($alumno->id_opcion_titulacion != 7 && $alumno->id_opcion_titulacion != 11 && $alumno->id_opcion_titulacion != 13 && $alumno->id_opcion_titulacion != 14 && $alumno->id_opcion_titulacion != 15 && $alumno->id_opcion_titulacion != 16 )) hidden @elseif(isset($alumno)!=true) hidden @endif >         
@@ -241,40 +252,17 @@
                                 <div class="sm:ml-20 sm:pl-5 mt-5">
                                     <button class="btn btn-primary" type="submit">Guardar</button>                                               
                                     <a class="btn btn-secondary" 
-                                    @can('admin-coordinador') href="{{ route('showTramite',$alumno) }}" @elsecan('alumno') href="{{ route('show-datos') }}" @endcan
+                                    @can('admin-coordinador') 
+                                        @if (isset($alumno))
+                                            href="{{ route('showTramite',$alumno) }}"
+                                        @else
+                                            href="{{ route('tramites') }}"
+                                        @endif                                         
+                                    @elsecan('alumno') href="{{ route('show-datos') }}" @endcan
                                     >Cancelar</a>
                                 </div>                            
                         </form>
-
-                    </div>
-                    <div class="source-code hidden">
-                        <button data-target="#copy-horizontal-form" class="copy-code btn py-1 px-2 btn-outline-secondary">
-                            <i data-lucide="file" class="w-4 h-4 mr-2"></i> Copy example code
-                        </button>
-                        <div class="overflow-y-auto mt-3 rounded-md">
-                            <pre id="copy-horizontal-form" class="source-preview">
-                                <code class="html">
-                                    {{ str_replace('>', 'HTMLCloseTag', str_replace('<', 'HTMLOpenTag', '
-                                        <div class="form-inline">
-                                            <label for="horizontal-form-1" class="form-label sm:w-20">Email</label>
-                                            <input id="horizontal-form-1" type="text" class="form-control" placeholder="example@gmail.com">
-                                        </div>
-                                        <div class="form-inline mt-5">
-                                            <label for="horizontal-form-2" class="form-label sm:w-20">Password</label>
-                                            <input id="horizontal-form-2" type="password" class="form-control" placeholder="secret">
-                                        </div>
-                                        <div class="form-check sm:ml-20 sm:pl-5 mt-5">
-                                            <input id="horizontal-form-3" class="form-check-input" type="checkbox" value="">
-                                            <label class="form-check-label" for="horizontal-form-3">Remember me</label>
-                                        </div>
-                                        <div class="sm:ml-20 sm:pl-5 mt-5">
-                                            <button class="btn btn-primary">Login</button>
-                                        </div>
-                                    ')) }}
-                                </code>
-                            </pre>
-                        </div>
-                    </div>
+                    </div>                    
                 </div>
             </div>
             <!-- END: Horizontal Form -->                       
@@ -283,8 +271,8 @@
     <script src="https://code.jquery.com/jquery-3.4.1.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
 
     <script>                             
-        // Funcion para mostrar las opciones de titulacion
-        $(document).ready(function(){
+       // Funcion para mostrar las opciones de titulacion
+       $(document).ready(function(){
             jQuery('#articulo').on('change', function(){
                 let id = $(this).val();
                 console.log('Valor de id:', id);
@@ -297,7 +285,7 @@
                     success: function(data){                    
                         jQuery('#opciones_titulacion').empty();
                         jQuery('#opciones_titulacion').append('<option value="0" disabled selected>Seleccione la opcion de Titulacion...</option>');
-                        jQuery.each(data, function(index, opcion_titulacion){        
+                        jQuery.each(data, function(index, opcion_titulacion){                        
                             jQuery('#opciones_titulacion').append('<option value="'+opcion_titulacion.id+'">'+opcion_titulacion.nombre+'</option>');                        
                         });
                     }

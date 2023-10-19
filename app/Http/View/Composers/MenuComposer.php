@@ -22,6 +22,7 @@ class MenuComposer
 
             $view->with('main_menu', Menu::menu());
             $view->with('main_menu2', Menu::menu2());
+            $view->with('main_menu2_admin', Menu::menu2_admin());
             $view->with('main_menu_alumno', Menu::menu_alumno());
             $view->with('main_menu_admin', Menu::menu_admin());
             $view->with('main_menu_coordi', Menu::menu_coordi());

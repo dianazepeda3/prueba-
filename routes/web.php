@@ -51,7 +51,12 @@ Route::middleware('is_admin')->group(function() {
         Route::get('usuarios/create/{usuario}', 'usuarios_edit')->name('usuarios-edit');  
         Route::patch('usuarios/update/{user}', 'updateUsuario')->name('usuarios_update');
         Route::post('usuarios/store', 'storeUsuarios')->name('usuarios_store');
-        Route::delete('usuarios/{usuario}', 'deleteUsuario')->name('eliminar_usuario');        
+        Route::delete('usuarios/{usuario}', 'deleteUsuario')->name('eliminar_usuario');     
+        
+        //Manual
+        Route::get('manual-usuario/tramites',function(User $user){ return view('manual-admin.tramites',compact('user'));})->name('manual_usuario_tramites');
+        Route::get('manual-usuario/usuarios',function(User $user){ return view('manual-admin.usuarios',compact('user'));})->name('manual_usuario_usuarios');
+        Route::get('manual-usuario/maestros',function(User $user){ return view('manual-admin.maestros',compact('user'));})->name('manual_usuario_maestros');
     });
 });
 
@@ -61,7 +66,8 @@ Route::middleware('is_administrativo')->group(function() {
     Route::controller(AdminController::class)->group(function() {
         //Tramite
         Route::get('tramites', 'tramites')->name('tramites');
-        Route::get('tramites/{alumno}', 'verTramite')->name('showTramite');         
+        Route::get('tramites/{alumno}', 'verTramite')->name('showTramite'); 
+        Route::post('tramites/fitrar', 'filtrar_tramites')->name('filtrar_tramites');        
         
         Route::get('tramites/documentos/revisar/{tramite}','revisarDocumento')->name('revisar-documentos');
         Route::get('tramites/documentos/validar/{tramite}','validarDocumento')->name('validar-documentos');        
@@ -77,18 +83,17 @@ Route::middleware('is_administrativo')->group(function() {
 });
 
 Route::middleware('is_coordi')->group(function() {
-    Route::get('logout', [AuthController::class, 'logout'])->name('logout');
-    Route::controller(AdminController::class)->group(function() {        
-        // Tramite
-        Route::delete('tramites/{alumno}', 'eliminarTramite')->name('eliminar_tramites');
-        Route::get('tramites/crear','createTramite')->name('crear_tramite');
-        Route::post('tramites/crear','setDatosInfo')->name('datos-escolares');    
-        
+    Route::controller(AdminController::class)->group(function() {                         
         //Generar Documentos
         Route::post('tramites/documentos/generar-dictamen/{tramite}','generate_dictamen')->name('generar-dictamen');
         Route::get('tramites/documentos/generar-comprobante-academico/{tramite}','generate_comprobante_academico')->name('generar_comprobante_academico');        
         Route::get('tramites/documentos/etapa2/{tramite}','pasarEtapa2')->name('pasar_etapa2');
                
+        // Tramite        
+        Route::get('tramite/crear', 'createTramite')->name('crear_tramite');
+        Route::post('tramites/store','setDatosInfo')->name('datos-escolares'); 
+        Route::delete('tramites/{alumno}', 'eliminarTramite')->name('eliminar_tramites');          
+
         //Acta
         Route::get('tramites/documentos/acta-titulacion/{alumno}', 'generarDocumentoActaTitulacion')->name('descargar_acta_titulacion');
         Route::post('tramites/documentos/subir-acta-firmada/{alumno}','subirActaFirmada')->name('subir_acta_firmada');
@@ -134,10 +139,7 @@ Route::middleware('is_student')->group(function() {
         Route::post('documentos/autorizacionTesis/{alumno}','generarformatoaAutorizacionTesis')->name('autorizacionTesis');
         
         //Carta Autorización
-        Route::get('documentos/carta-autorizacion/{alumno}','autorizacionTesisVista')->name('generar_carta_autorizacion');
-
-        //Opciones de Titulacion
-        Route::get('/alumno/opciones_titulacion/{id}', 'getSubcategorias');
+        Route::get('documentos/carta-autorizacion/{alumno}','autorizacionTesisVista')->name('generar_carta_autorizacion');        
     });
 });
 
@@ -151,6 +153,8 @@ Route::middleware('auth')->group(function() {
         Route::get('tramites/editar-datos-laborales/{alumno}', 'editDatosLaborales')->name('edit-datos-laborales');
         Route::patch('tramites/editar-datos-laborales/{alumno}', 'updateDatosLaborales')->name('update-datos-laborales'); 
            
+        //Opciones de Titulacion
+        Route::get('/alumno/opciones_titulacion/{id}', 'getSubcategorias');
     });
 });
 

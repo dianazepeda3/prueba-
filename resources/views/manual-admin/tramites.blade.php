@@ -10,24 +10,47 @@
     <div class="col-span-12 xl:col-span-12">
         <div class="box intro-y p-8 mt-5">
             <div class="flex items-center border-b border-slate-200/60 dark:border-darkmode-400 pb-5 mb-5">
-                <div class="font-medium text-2xl font-bold truncate">DOCUMENTOS</div>
+                <div class="font-medium text-2xl font-bold truncate">TRÁMITES</div>
             </div>
             <div>
             <div class="form-inline text-lg font-bold"> 
-                <label>#Subir Documentos</label>
-            </div>   
+                <label>#Ver Trámites</label>
+            </div>  
+            <div class="text-center text-base mt-3">   
+                <label> En la seccion de <b>Trámites</b> se visualizan todos los trámites, con su nombre, código, estado del trámite y otros datos. Para ver uno en especifico simplemente se debe presionar el botón de <b>Ver</b>.</label>                 
+            </div>  
+            <img class="mx-auto w-3/4 mt-3" alt="Ver Tramites" src="{{ asset('build/assets/images/ver-tramites-admin.png') }}">                         
+            <div class="text-center text-base mt-3">   
+                <label> Se pueden visualizar los datos escolares, personales y laborales del alumno.</label>                                 
+            </div>  
+            <img class="mx-auto w-3/4 mt-3" alt="Ver Tramite" src="{{ asset('build/assets/images/ver-tramites-admin2.png') }}">
+            <div class="alert alert-primary-soft show flex items-center mb-2 mt-3 text" role="alert"> 
+                <i data-lucide="alert-circle" class="w-6 h-6 mr-2"></i> 
+                Dependiendo del estado del trámite se pueden realizar distintos procesos.
+            </div>  
+            <div class="form-inline text-lg font-bold mt-5"> 
+                <label>#Agregar Trámites</label>
+            </div>  
+            <div class="text-center text-base mt-3">   
+                <label> Para agregar un nuevo trámite, se debe presionar el botón de <b>Crear Trámite</b> en la parte de ver trámites.</label>                 
+            </div> 
+            <img class="mx-auto w-3/6 mt-3" alt="Agregar Trámites" src="{{ asset('build/assets/images/crear-tramite-admin.png') }}">
+            <div class="text-center text-base mt-3">   
+                <label>Debe de llenar todos los datos del nuevo usuario y presionar el botón de <b>Guardar</b>. </label>                
+            </div>  
+            <img class="mx-auto w-3/4 mt-3" alt="Guardar Usuario" src="{{ asset('build/assets/images/crear-tramite-admin2.png') }}">            
             <div class="text-center text-base mt-3">   
                 <label> Para subir documentos, en la seccion de <b>Mis Documentos</b> se visualizan todos los documentos requeridos dependiendo la modalidad elegida.</label>                 
             </div>  
-            <img class="mx-auto w-3/4 mt-3" alt="Documentos" src="{{ asset('build/assets/images/documentacion.png') }}">
+            <img class="mx-auto w-3/4 mt-3" alt="Documentos" src="{{ asset('build/assets/images/validar-admin.png') }}">
             <div class="text-center text-base mt-3">   
                 <label>Debe seleccionar el nombre del archivo que desea subir. </label>                
             </div>  
-            <img class="mx-auto w-3/4 mt-3" alt="Seleccionar nombre" src="{{ asset('build/assets/images/subir-documentos.png') }}">
+            <img class="mx-auto w-3/4 mt-3" alt="Seleccionar nombre" src="{{ asset('build/assets/images/validar-admin2.png') }}">
             <div class="text-center text-base mt-3">   
                 <label>Seguido, deberás cargar el documento y presionar el botón de <b>Subir</b>.</label>                 
             </div>
-            <img class="mx-auto w-3/4 mt-3" alt="Cargar documento" src="{{ asset('build/assets/images/subir-documentos2.png') }}">
+            <img class="mx-auto w-3/4 mt-3" alt="Cargar documento" src="{{ asset('build/assets/images/validar-admin3.png') }}">
             <div class="text-center text-base mt-3">   
                 <label>Al subir un documento se puede visualizar en la tabla de abajo en los documentos entregados, lo puedes visualizar o eliminar y volver a subir otro documento.</label>                 
             </div>            

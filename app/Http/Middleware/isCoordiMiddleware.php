@@ -16,7 +16,7 @@ class isCoordiMiddleware
      */
     public function handle(Request $request, Closure $next)
     {        
-        if(!auth()->check() || (!auth()->user()->is_admin || (auth()->user()->admin_type != 1 && auth()->user()->admin_type != 2)))
+        if(!auth()->check() || (!auth()->user()->is_admin && (auth()->user()->admin_type != 1 && auth()->user()->admin_type != 2)))
         {
             return redirect('/login');
         }

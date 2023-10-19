@@ -900,12 +900,7 @@ class AlumnoController extends Controller
 
         return redirect()->back()->with('success', 'Carta de No Adeudo solicitada a Control Escolar');
          
-    }
-
-    public function getSubcategorias($id)
-    {
-        return DB::table('opciones_titulacion')->where('articulo_id', '=', $id)->get();
-    }
+    }    
 
     //Funcion para retornar al maestro de la forma DR. NOMBRE_MAESTRO
     public function setCarreraGenero(Alumno $alumno)

@@ -20,9 +20,9 @@ class Menu
 
         return [
             'MENU PRINCIPAL',
-            'dashboard' => [
+            'Inicio' => [
                 'icon' => 'home',
-                'title' => 'Dashboard',
+                'title' => 'Inicio',
                 'sub_menu' => [
                     'dashboard-overview-1' => [
                         'icon' => '',
@@ -125,9 +125,9 @@ class Menu
     {
         return [
             'MENU PRINCIPAL',
-            'dashboard' => [
+            'Inicio' => [
                 'icon' => 'home',
-                'title' => 'Dashboard',
+                'title' => 'Inicio',
                 'sub_menu' => [
                     'dashboard-overview-1' => [
                         'icon' => '',
@@ -214,9 +214,9 @@ class Menu
     {
         return [
             'MENU PRINCIPAL',
-            'dashboard' => [
+            'inicio' => [
                 'icon' => 'home',
-                'title' => 'Dashboard',
+                'title' => 'Inicio',
                 'sub_menu' => [
                     'dashboard-overview-1' => [
                         'icon' => '',
@@ -281,9 +281,9 @@ class Menu
     {
         return [
             'MENU PRINCIPAL',
-            'dashboard' => [
+            'inicio' => [
                 'icon' => 'home',
-                'title' => 'Dashboard',
+                'title' => 'Inicio',
                 'sub_menu' => [
                     'dashboard-overview-1' => [
                         'icon' => '',
@@ -318,7 +318,7 @@ class Menu
     {    
         return [
             'MENU PRINCIPAL',
-            'dashboard' => [
+            'Inicio' => [
                 'icon' => 'home',
                 'title' => 'Inicio',
                 'route_name' => 'inicio_alumno',
@@ -385,6 +385,58 @@ class Menu
                     // Additional parameters
                 ],
                 'title' => 'Editar información'
+            ],
+            'documentacion' => [
+                'icon' => 'file-text',
+                'route_name' => 'manual_usuario_subir_documentacion',
+                'params' => [
+                    // Additional parameters
+                ],
+                'title' => 'Documentos'
+            ],                                          
+        ];
+    }
+
+    public static function menu2_admin()
+    {
+        $alumno = "";
+        $user = Auth::user();
+        if($user)
+            $alumno = $user->alumno;        
+
+        return [
+            'MANUAL DE USUARIO',
+            'inicio' => [
+                'icon' => 'home',
+                'title' => 'Inicio',
+                'route_name' => 'manual_usuario',
+                'params' => [
+                    // Additional parameters
+                ],
+            ],           
+            'tramites' => [
+                'icon' => 'award',                
+                'title' => 'Trámites',
+                'route_name' => 'manual_usuario_tramites',
+                'params' => [
+                    // Additional parameters
+                ],                
+            ],          
+            'usuarios' => [
+                'icon' => 'users',
+                'route_name' => 'manual_usuario_usuarios',
+                'params' => [
+                    // Additional parameters
+                ],
+                'title' => 'Usuarios'
+            ],            
+            'maestros' => [
+                'icon' => 'users',
+                'route_name' => 'manual_usuario_maestros',
+                'params' => [
+                    // Additional parameters
+                ],
+                'title' => 'Maestros'
             ],
             'documentacion' => [
                 'icon' => 'file-text',

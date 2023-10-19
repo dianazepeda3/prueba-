@@ -52,7 +52,18 @@ class AdminController extends Controller
         $user = Auth::user();
         $tramites = Tramite::all();   
         $alumnos = Alumno::all();
-        return view('admin/tramites', compact('user','tramites','alumnos'));
+        $filtrar = 0;
+        $nombre = "";
+        return view('admin/tramites', compact('user','tramites','alumnos','filtrar','nombre'));
+    }
+
+    public function filtrar_tramites(Request $request) {
+        $user = Auth::user();
+        $tramites = Tramite::all();   
+        $alumnos = Alumno::all();
+        $filtrar = $request->filtrar;
+        $nombre = $request->nombre;
+        return view('admin/tramites', compact('user','tramites','alumnos','filtrar','nombre'));
     }
 
     public function verTramite(Alumno $alumno){
@@ -84,7 +95,7 @@ class AdminController extends Controller
         return view('admin/datos-pesonales-form', compact('user','alumno'));
     }
 
-    public function editDatosEscolares(Alumno $alumno){
+    public function editDatosEscolares(Alumno $alumno){        
         $user = Auth::user();
         $carreras = Carrera::all();
         $plan_estudios = PlanEstudios::all();
@@ -101,7 +112,7 @@ class AdminController extends Controller
                 'codigo' =>'required|digits:9|numeric',                                  
                 'carrera' => 'required|string',
                 'promedio' =>'required|numeric',   
-                /*'situacion' => 'required|string',*/
+                'situacion' => 'required|string',
                 'ciclo_ingreso' => 'required|string',
                 'ciclo_egreso' => 'required|string',                      
             ]);  
@@ -158,6 +169,7 @@ class AdminController extends Controller
             $alumno->promedio = $request->promedio;
             $alumno->ciclo_ingreso = $request->ciclo_ingreso;
             $alumno->ciclo_egreso = $request->ciclo_egreso;
+            $alumno->situacion = $request->situacion;
         }
 
         if($request->ganador_proyecto == "SI"){
@@ -177,7 +189,7 @@ class AdminController extends Controller
             return redirect()->route('show-datos',$alumno)->with('success','Información Escolar actualizada');    
         }
 
-        return redirect()->back()->with('success','Información Escolar actualizada');
+        return redirect()->route('showTramite',$alumno)->with('success','Información Escolar actualizada');
     }
 
     public function updateDatosPersonales(Request $request, Alumno $alumno){
@@ -2444,5 +2456,10 @@ class AdminController extends Controller
         }
 
         return redirect()->route('maestros')->with('success', 'Maestro eliminado correctamente.');
+    }
+
+    public function getSubcategorias($id)
+    {
+        return DB::table('opciones_titulacion')->where('articulo_id', '=', $id)->get();
     }
 }
