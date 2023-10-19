@@ -438,6 +438,14 @@ class Menu
                 ],
                 'title' => 'Maestros'
             ],
+            'firma' => [
+                'icon' => 'edit',
+                'route_name' => 'manual_usuario_firma',
+                'params' => [
+                    // Additional parameters
+                ],
+                'title' => 'Firma Digital'
+            ],
             'documentacion' => [
                 'icon' => 'file-text',
                 'route_name' => 'manual_usuario_subir_documentacion',

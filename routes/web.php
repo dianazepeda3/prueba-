@@ -57,6 +57,7 @@ Route::middleware('is_admin')->group(function() {
         Route::get('manual-usuario/tramites',function(User $user){ return view('manual-admin.tramites',compact('user'));})->name('manual_usuario_tramites');
         Route::get('manual-usuario/usuarios',function(User $user){ return view('manual-admin.usuarios',compact('user'));})->name('manual_usuario_usuarios');
         Route::get('manual-usuario/maestros',function(User $user){ return view('manual-admin.maestros',compact('user'));})->name('manual_usuario_maestros');
+        Route::get('manual-usuario/firma',function(User $user){ return view('manual-admin.firma',compact('user'));})->name('manual_usuario_firma');        
     });
 });
 
