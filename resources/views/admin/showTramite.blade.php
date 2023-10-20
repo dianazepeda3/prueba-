@@ -26,9 +26,9 @@
                         </a>                        
                     </div>
                 @endif
-                @if($alumnoDocs->constancia_no_adeudo_biblioteca)  
+                @if($alumnoDocs->constancia_no_adeudo_biblioteca && !$alumnoDocs->validacion_constancia_biblioteca)  
                     <div class="btn-group mr-2">                        
-                        <a href="" class="btn btn-primary btn-icon-split" id="citatorio" >
+                        <a href="{{ route('autorizar_cartaNoAdeudo',$alumno) }}" class="btn btn-primary btn-icon-split" id="citatorio" >
                             <svg class="svg-inline--fa fa-venus-mars w-4 h-4 text-slate-500 mr-2 blanco" xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 384 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><style>.blanco{fill:#ffffff}</style><path d="M64 0C28.7 0 0 28.7 0 64V448c0 35.3 28.7 64 64 64H320c35.3 0 64-28.7 64-64V160H256c-17.7 0-32-14.3-32-32V0H64zM256 0V128H384L256 0zM112 256H272c8.8 0 16 7.2 16 16s-7.2 16-16 16H112c-8.8 0-16-7.2-16-16s7.2-16 16-16zm0 64H272c8.8 0 16 7.2 16 16s-7.2 16-16 16H112c-8.8 0-16-7.2-16-16s7.2-16 16-16zm0 64H272c8.8 0 16 7.2 16 16s-7.2 16-16 16H112c-8.8 0-16-7.2-16-16s7.2-16 16-16z"/></svg>
                             <span class="text">Autorizar Carta de No Adeudo</span>
                         </a>                        
@@ -41,19 +41,27 @@
                 <!-- Boton de Carta de No Adeudo Autorizada -->                
                 @if($alumnoDocs->solicitud_constancia_no_adeudo_universidad && !$alumnoDocs->constancia_no_adeudo_universidad)  
                     <div class="btn-group mr-2">
-                        <a href="{{route('generar_formatoNoAdeudo_ce',$tramite)}}"  class="btn btn-primary btn-icon-split" id="aprobar" >
+                        <a href="javascript:;" data-tw-toggle="modal" data-tw-target="#modal-carta-no-adeudo-ce"  class="btn btn-primary btn-icon-split" id="aprobar" >
                             <svg class="svg-inline--fa fa-venus-mars w-4 h-4 text-slate-500 mr-2 blanco" xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 384 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><style>.blanco{fill:#ffffff}</style><path d="M64 0C28.7 0 0 28.7 0 64V448c0 35.3 28.7 64 64 64H320c35.3 0 64-28.7 64-64V160H256c-17.7 0-32-14.3-32-32V0H64zM256 0V128H384L256 0zM112 256H272c8.8 0 16 7.2 16 16s-7.2 16-16 16H112c-8.8 0-16-7.2-16-16s7.2-16 16-16zm0 64H272c8.8 0 16 7.2 16 16s-7.2 16-16 16H112c-8.8 0-16-7.2-16-16s7.2-16 16-16zm0 64H272c8.8 0 16 7.2 16 16s-7.2 16-16 16H112c-8.8 0-16-7.2-16-16s7.2-16 16-16z"/></svg>
                             <span class="text">Generar Carta de No Adeudo Autorizada</span>
                         </a>
                     </div>
                 @endif 
+                @if($alumnoDocs->constancia_no_adeudo_universidad && !$alumnoDocs->validacion_constancia_universidad)  
+                    <div class="btn-group mr-2">                        
+                        <a href="{{ route('autorizar_cartaNoAdeudo_ce',$alumno) }}" class="btn btn-primary btn-icon-split" id="citatorio" >
+                            <svg class="svg-inline--fa fa-venus-mars w-4 h-4 text-slate-500 mr-2 blanco" xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 384 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><style>.blanco{fill:#ffffff}</style><path d="M64 0C28.7 0 0 28.7 0 64V448c0 35.3 28.7 64 64 64H320c35.3 0 64-28.7 64-64V160H256c-17.7 0-32-14.3-32-32V0H64zM256 0V128H384L256 0zM112 256H272c8.8 0 16 7.2 16 16s-7.2 16-16 16H112c-8.8 0-16-7.2-16-16s7.2-16 16-16zm0 64H272c8.8 0 16 7.2 16 16s-7.2 16-16 16H112c-8.8 0-16-7.2-16-16s7.2-16 16-16zm0 64H272c8.8 0 16 7.2 16 16s-7.2 16-16 16H112c-8.8 0-16-7.2-16-16s7.2-16 16-16z"/></svg>
+                            <span class="text">Autorizar Carta de No Adeudo</span>
+                        </a>                        
+                    </div>
+                @endif  
             </div>
         @endcan
         <!--@can('control-escolar')                             
             <div class="col-md-12"> 
                 @if(!$alumnoDocs->constancia_no_adeudo_universidad)  
                     <div class="btn-group mr-2">                        
-                        <a href="{{route('admin.formatoNoAdeudoCE',$tramite)}}"  class="btn btn-info btn-icon-split" id="citatorio" >
+                        <a href="{{route('generar_cartaNoAdeudo_ce',$tramite)}}"  class="btn btn-info btn-icon-split" id="citatorio" >
                             <span class="icon"><i class="fas fa-file-alt"></i></span>
                             <span class="text">Generar Formato de No Adeudo</span>
                         </a>                        
@@ -624,9 +632,17 @@
                                                             <a class="flex items-center whitespace-nowrap justify-center tooltip" title="Eliminar" href="javascript:;" data-tw-toggle="modal" data-tw-target="#delete-modal-preview{{$documento->id}}">
                                                                 <svg class="svg-inline--fa fa-venus-mars w-6 h-4 text-slate-500 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path fill="rgb(var(--color-danger)" d="M135.2 17.7C140.6 6.8 151.7 0 163.8 0H284.2c12.1 0 23.2 6.8 28.6 17.7L320 32h96c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 96 0 81.7 0 64S14.3 32 32 32h96l7.2-14.3zM32 128H416V448c0 35.3-28.7 64-64 64H96c-35.3 0-64-28.7-64-64V128zm96 64c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16z"/></svg>                                                         
                                                             </a>                                                            
-                                                        @endcan
+                                                        @endcannot
                                                         @can('biblioteca')
                                                             @if ($alumno->alumno_docs->constancia_no_adeudo_biblioteca && ($documento->nombre_documento == "Constancia de No Adeudo Biblioteca" || $documento->nombre_documento == "Autorizacion de Publicación Tesis"))
+                                                                <!--Boton de eliminar-->
+                                                                <a class="flex items-center whitespace-nowrap justify-center tooltip" title="Eliminar" href="javascript:;" data-tw-toggle="modal" data-tw-target="#delete-modal-preview{{$documento->id}}">
+                                                                    <svg class="svg-inline--fa fa-venus-mars w-6 h-4 text-slate-500 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path fill="rgb(var(--color-danger)" d="M135.2 17.7C140.6 6.8 151.7 0 163.8 0H284.2c12.1 0 23.2 6.8 28.6 17.7L320 32h96c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 96 0 81.7 0 64S14.3 32 32 32h96l7.2-14.3zM32 128H416V448c0 35.3-28.7 64-64 64H96c-35.3 0-64-28.7-64-64V128zm96 64c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16z"/></svg>                                                         
+                                                                </a>
+                                                            @endif                                                            
+                                                        @endcan
+                                                        @can('control-escolar')
+                                                            @if ($alumno->alumno_docs->constancia_no_adeudo_universidad && $documento->nombre_documento == "Constancia de No Adeudo Universidad")
                                                                 <!--Boton de eliminar-->
                                                                 <a class="flex items-center whitespace-nowrap justify-center tooltip" title="Eliminar" href="javascript:;" data-tw-toggle="modal" data-tw-target="#delete-modal-preview{{$documento->id}}">
                                                                     <svg class="svg-inline--fa fa-venus-mars w-6 h-4 text-slate-500 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path fill="rgb(var(--color-danger)" d="M135.2 17.7C140.6 6.8 151.7 0 163.8 0H284.2c12.1 0 23.2 6.8 28.6 17.7L320 32h96c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 96 0 81.7 0 64S14.3 32 32 32h96l7.2-14.3zM32 128H416V448c0 35.3-28.7 64-64 64H96c-35.3 0-64-28.7-64-64V128zm96 64c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16z"/></svg>                                                         
@@ -815,7 +831,7 @@
                     </form>
                 </div> 
             </div> 
-        </div> <!-- END: Modal Content --> 
+        </div> <!-- END: Modal Content -->         
         <!-- BEGIN: Modal Content --> 
         <div id="modal-carta-no-adeudo" class="modal" tabindex="-1" aria-hidden="true"> 
             <div class="modal-dialog"> 
@@ -824,7 +840,41 @@
                     <div class="modal-header"> 
                         <h2 class="font-medium text-base mr-auto">Datos para Carta de No Adeudo</h2>                        
                     </div> <!-- END: Modal Header --> 
-                    <form method="POST" action="{{route('generar_formatoNoAdeudo',$tramite)}}">
+                    <form method="POST" action="{{route('generar_cartaNoAdeudo',$tramite)}}">
+                        @csrf
+                        <!-- BEGIN: Modal Body --> 
+                        <div class="modal-body grid grid-cols-12 gap-4 gap-y-3"> 
+                            <div class="col-span-12 sm:col-span-12"> 
+                                <label for="nombre" class="form-label">Nombre Completo:</label> 
+                                <input id="nombre" type="text" class="form-control" value="{{$alumno->user->name}}" disabled> 
+                            </div> 
+                            <div class="col-span-12 sm:col-span-6"> 
+                                <label for="codigo" class="form-label">Código:</label> 
+                                <input id="codigo" type="text" class="form-control" value="{{$alumno->user->codigo}}" disabled> 
+                            </div> 
+                            <div class="col-span-12 sm:col-span-6"> 
+                                <label for="numero_de_consecutivo" class="form-label">N° de Consecutivo:</label> 
+                                <input id="numero_de_consecutivo" name="numero_de_consecutivo" type="text" class="form-control" value="{{old('numero_de_consecutivo')}}"> 
+                            </div>                                                       
+                        </div> <!-- END: Modal Body --> 
+                        <!-- BEGIN: Modal Footer --> 
+                        <div class="modal-footer"> 
+                            <button type="button" data-tw-dismiss="modal" class="btn btn-outline-secondary w-20 mr-1">Cancelar</button> 
+                            <button type="submit" class="btn btn-primary w-20">Generar</button> 
+                        </div> <!-- END: Modal Footer --> 
+                    </form>
+                </div> 
+            </div> 
+        </div> <!-- END: Modal Content -->
+        <!-- BEGIN: Modal Content --> 
+        <div id="modal-carta-no-adeudo-ce" class="modal" tabindex="-1" aria-hidden="true"> 
+            <div class="modal-dialog"> 
+                <div class="modal-content"> 
+                    <!-- BEGIN: Modal Header --> 
+                    <div class="modal-header"> 
+                        <h2 class="font-medium text-base mr-auto">Datos para Carta de No Adeudo</h2>                        
+                    </div> <!-- END: Modal Header --> 
+                    <form method="POST" action="{{route('generar_cartaNoAdeudo_ce',$alumno)}}">
                         @csrf
                         <!-- BEGIN: Modal Body --> 
                         <div class="modal-body grid grid-cols-12 gap-4 gap-y-3"> 

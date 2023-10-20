@@ -19,5 +19,9 @@ class Maestro extends Model
         'grado',
         'genero',
     ];
+
+    public function division(){
+        return $this->hasOne(Division::class);
+    }
     
 }

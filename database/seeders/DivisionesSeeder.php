@@ -16,16 +16,17 @@ class MaestrosSeeder extends Seeder
     public function run()
     {
         $date = Carbon::now()->setTimezone('America/Mexico_City');
-         $user_id = DB::table('users')->insertGetId([
-            'name' => 'Alma Yolanda Alanís García',            
-            'codigo' => '123987220',            
+        $user_id = DB::table('users')->insertGetId([
+            'name' => 'Oscar Blanco Alonso',            
+            'codigo' => '000000001',            
             'password' => bcrypt('Universidad2023*'),
-            'is_teacher' => true,           
+            'is_admin' => true,           
             'created_at' => $date,
             'updated_at' => $date, 
+            'admin_type' => 1, 
         ]);
         DB::table('maestros')->insert([
-            'nombre' => 'Alma Yolanda Alanís García',
+            'nombre' => 'Oscar Blanco Alonso',
             'email' => 'divtic@cucei.udg.mx',
             'codigo' => '123987220',
             'grado' => 'Doctorado',

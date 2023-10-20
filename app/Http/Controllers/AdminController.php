@@ -1006,10 +1006,14 @@ class AdminController extends Controller
 
     }
 
-    public function generarformatoNoAdeudoCE(Alumno $alumno)
+    public function generarformatoNoAdeudoCE(Request $request, Alumno $alumno)
     { 
+        $request->validate([
+            'numero_de_consecutivo' => 'required|numeric'
+        ]);
         //Descargar el documento con los datos
         try{
+            $consecutivo = $request->numero_de_consecutivo;
             $time = Carbon::now(); 
             $fecha_tit = $alumno->fecha_titulacion; //$time->format('d/m/Y');
             $fecha_titulacion = date("d/m/Y", strtotime($fecha_tit));
@@ -1025,7 +1029,7 @@ class AdminController extends Controller
             return redirect()->route('showTramite',$alumno)->with('info', 'Ha ocurrido un error al generar el documento ' . $e->getMessage());
         }  
         try{
-            $pdf = PDF::loadView('layout.admin.cartaNoAdeudoBiblioteca', compact('alumno','dia','mes','anio'));
+            $pdf = PDF::loadView('layout.admin.cartaNoAdeudoBiblioteca', compact('alumno','dia','mes','anio','consecutivo'));
             $pdf->setPaper('letter', 'landscape');
 
             //return $pdf->stream();
@@ -1057,11 +1061,49 @@ class AdminController extends Controller
             $content = $pdf->download()->getOriginalContent();
             Storage::put($ruta,$content);     
             
-            return redirect()->back()->with('success', 'Formato de No Adeudo creado');
+            return redirect()->back()->with('success', 'Carta de No Adeudo creada');
         } catch (\PhpOffice\PhpWord\Exception\Exception $e) {
             return redirect()->route('showTramite',$alumno)->with('info', 'Ha ocurrido un error al generar el documento');
         }
 
+    }
+
+    public function autorizarCartaNoAdeudo(Alumno $alumno){
+        AlumnoDocs::where('alumno_id',$alumno->id)->update(['validacion_constancia_biblioteca' => 1]);
+
+        //Enviar correo de notificacion
+        $details = [
+            'title' => 'Carta de No Adeudo de Biblioteca',
+            'alumno' => $alumno->user->name,
+            'body' => "Le informamos que su carta de No Adeudo de la Biblioteca ha sido generada exitosamente, ingrese a la plataforma para visualizarla.",
+        ];
+
+        try{
+            Mail::to($alumno->correo_institucional)->send(new NotificacionTramiteMail($details));
+        } catch (\Exception $e) {
+            return redirect()->route('showTramite', $alumno)->with('info', 'Carta de No Adeudo autorizada. No se pudo enviar el correo.');
+        }
+
+        return redirect()->route('showTramite', $alumno)->with('success','Carta de No Adeudo autorizada');
+    }
+
+    public function autorizarCartaNoAdeudoCE(Alumno $alumno){
+        AlumnoDocs::where('alumno_id',$alumno->id)->update(['validacion_constancia_universidad' => 1]);
+
+        //Enviar correo de notificacion
+        $details = [
+            'title' => 'Carta de No Adeudo de Control Escolar',
+            'alumno' => $alumno->user->name,
+            'body' => "Le informamos que su carta de No Adeudo de la Control Escolar ha sido generada exitosamente, ingrese a la plataforma para visualizarla.",
+        ];
+
+        try{
+            Mail::to($alumno->correo_institucional)->send(new NotificacionTramiteMail($details));
+        } catch (\Exception $e) {
+            return redirect()->route('showTramite', $alumno)->with('info', 'Carta de No Adeudo autorizada. No se pudo enviar el correo.');
+        }
+
+        return redirect()->route('showTramite', $alumno)->with('success','Carta de No Adeudo autorizada');
     }
 
     //Generar Acta de Titulacion
@@ -1085,9 +1127,7 @@ class AdminController extends Controller
 
             $carrera_id = Carrera::where('id', $alumno->id_carrera)->first();
             $carrera = mb_strtoupper($carrera_id->carrera) ; //Titulo de la carrera
-        }catch(\Exception $e){
-            echo $e;
-            dd();
+        }catch(\Exception $e){      
             return redirect()->route('showTramite',$alumno)->with('info', 'Ha ocurrido un error al generar el documento ' . $e->getMessage());
         }        
 

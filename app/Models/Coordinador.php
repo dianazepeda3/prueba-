@@ -9,6 +9,8 @@ class Coordinador extends Model
 {
     use HasFactory;
 
+    public $timestamps = false;
+
     protected $fillable = [
         'admin_id',
         'id_carrera',

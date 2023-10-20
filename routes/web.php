@@ -80,8 +80,10 @@ Route::middleware('is_administrativo')->group(function() {
         Route::get('tramites/documentos/eliminar/{documento}','eliminarDocumento')->name('admin-eliminar-documento');
 
         //Generar Documentos 
-        Route::post('tramites/documentos/constanciaNoAdeudo/{alumno}', 'generarformatoNoAdeudo')->name('generar_formatoNoAdeudo');
-        Route::get('tramites/documentos/constanciaNoAdeudoCE/{alumno}', 'generarformatoNoAdeudoCE')->name('generar_formatoNoAdeudo_ce');        
+        Route::post('tramites/documentos/cartsNoAdeudo/{alumno}', 'generarformatoNoAdeudo')->name('generar_cartaNoAdeudo');
+        Route::get('tramites/documentos/autorizar-cartaNoAdeudo/{alumno}', 'autorizarCartaNoAdeudo')->name('autorizar_cartaNoAdeudo');        
+        Route::post('tramites/documentos/cartaNoAdeudoCE/{alumno}', 'generarformatoNoAdeudoCE')->name('generar_cartaNoAdeudo_ce');        
+        Route::get('tramites/documentos/autorizar-cartaNoAdeudoCE/{alumno}', 'autorizarCartaNoAdeudoCE')->name('autorizar_cartaNoAdeudo_ce');                
     });
 });
 
