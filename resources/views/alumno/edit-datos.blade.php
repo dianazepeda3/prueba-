@@ -135,7 +135,7 @@
                                     </div>   
                                     <div class="form-inline mt-5">
                                         <label for="articulo" class="form-label sm:w-20">Modalidad de Titulación</label>
-                                        <select id="articulo" name="articulo" class="tom-select form-control">                                        
+                                        <select id="articulo" name="articulo" class="form-control tom-select ">                                        
                                             @if (isset($alumno))
                                                 <option value="0" selected>Seleccione la modalidad de Titulación...</option>
                                                 @foreach ($articulos as $articulo)
@@ -159,7 +159,7 @@
                                     </div>                                                                                              
                                     <div class="form-inline mt-5">
                                         <label for="opciones_titulacion" class="form-label sm:w-20">Opciones de Titulación</label>
-                                        <select id="opciones_titulacion" name="opciones_titulacion"  class="tom-select2 form-control">                                        
+                                        <select id="opciones_titulacion" name="opciones_titulacion"  class="form-control">                                        
                                             @if ($alumno->tramite->estado != 1)
                                                 @foreach ($opciones_titulacion as $opcion)
                                                     @if ($alumno->id_opcion_titulacion == $opcion->id)
@@ -368,40 +368,7 @@
     <script src="https://code.jquery.com/jquery-3.4.1.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
 
     
-    <script>   
-        function mostrarInfo() {
-            document.getElementById("campos-trabajo").style.display = "block";
-            document.getElementById("no-afin").style.display = "none";
-        }
-        function ocultarInfo() {
-            document.getElementById("no-afin").style.display = "block";
-            document.getElementById("campos-trabajo").style.display = "none";
-        }
-        function mostrarPreg() {
-            var afin = "{{ $alumno->afin}}"; 
-            document.getElementById("si-trabaja").style.display = "block";
-            
-            if (afin == 1) {
-                mostrarInfo();
-            }else{                            
-                ocultarInfo();
-            } 
-        }
-        function ocultarPreg() {
-            document.getElementById("si-trabaja").style.display = "none";
-            document.getElementById("no-afin").style.display = "none";
-            document.getElementById("campos-trabajo").style.display = "none";
-        }
-                
-        window.onload = function() { 
-            var afin = "{{$alumno->afin}}";
-            var trabaja = "{{$alumno->trabaja}}";            
-            if(trabaja == 1){
-                mostrarPreg();                                      
-            }else{
-                ocultarPreg();             
-            }                
-        }                 
+    <script>                                               
         // Funcion para mostrar las opciones de titulacion
         $(document).ready(function(){
             jQuery('#articulo').on('change', function(){

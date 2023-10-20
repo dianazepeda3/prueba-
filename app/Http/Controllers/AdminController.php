@@ -944,10 +944,14 @@ class AdminController extends Controller
     }
 
     //Generar Carta de No Adeudo
-    public function generarformatoNoAdeudo(Alumno $alumno)
+    public function generarformatoNoAdeudo(Request $request, Alumno $alumno)
     { 
+        $request->validate([
+            'numero_de_consecutivo' => 'required|numeric'
+        ]);
         //Descargar el documento con los datos
         try{
+            $consecutivo = $request->numero_de_consecutivo;
             $time = Carbon::now(); 
             $fecha_tit = $alumno->fecha_titulacion; //$time->format('d/m/Y');
             $fecha_titulacion = date("d/m/Y", strtotime($fecha_tit));
@@ -963,7 +967,7 @@ class AdminController extends Controller
             return redirect()->route('showTramite',$alumno)->with('info', 'Ha ocurrido un error al generar el documento.');
         }  
         try{
-            $pdf = PDF::loadView('layout.admin.cartaNoAdeudoBiblioteca', compact('alumno','dia','mes','anio'));
+            $pdf = PDF::loadView('layout.admin.cartaNoAdeudoBiblioteca', compact('alumno','dia','mes','anio','consecutivo'));
             $pdf->setPaper('letter', 'landscape');
 
             //return $pdf->stream();
@@ -994,46 +998,8 @@ class AdminController extends Controller
             $content = $pdf->download()->getOriginalContent();
             $content = $pdf->download()->getOriginalContent();
             Storage::put($ruta,$content);
-
-            //AlumnoDocs::where('alumno_id', $alumno->id)->update(['carta_autorizacion' => 1]);
-        
-            /*$template = new \PhpOffice\PhpWord\TemplateProcessor('Formato_Carta_No_Adeudo.docx');
-            //$template->setValue('num_acta', $num_acta);
-            $template->setValue('alumno', $alumno->user->name);
-            $template->setValue('codigo', $alumno->user->codigo);
-            $template->setValue('carrera', mb_strtoupper($alumno->carrera->carrera));
-            $template->setValue('dia', $time->format('d'));
-            $template->setValue('mes', $mes);
-            $template->setValue('anio', $time->format('Y'));                                          
-                
-            $tempFile = tempnam(sys_get_temp_dir(), 'PHPWord');
-            $template->saveAs($tempFile);
-
-            $tramite = $alumno->tramite;
-            $nombre_ruta = $alumno->user_id . "_" . $alumno->user->name;
-            $ruta = 'alumnos/' . $nombre_ruta . '/documentos/FormatoNoAdeudo.docx';
-
-            Storage::put($ruta, file_get_contents($tempFile)); // Guardar el contenido del archivo                                
-
-            //GUARDA DATOS DEL DOCUMENTO EN LA BD
-            $documento = new Documento();
-            $documento->ruta = $ruta;
-            $documento->nombre_original = "FormatoNoAdeudo.docx";
-            $documento->mime = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
-            $documento->user_id = $alumno->user_id;
-            $documento->id_alumno = $alumno->id;
-            $documento->tramite_id = $tramite->id;
-            $documento->nombre_documento = "Constancia de No Adeudo Biblioteca";
-            $documento->aprobado = 4;                                   
-
-            $documento->save();  
-            // Corregir la cabecera Content-Type
-            $headers = array(
-                'Content-Type' => 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-            );      */      
-
-            //response()->download($tempFile, "FormatoNoAdeudo.docx" , $headers)->deleteFileAfterSend(true);
-            return redirect()->back()->with('success', 'Formato de No Adeudo creado');
+    
+            return redirect()->back()->with('success', 'Carta de No Adeudo creado');
         } catch (\PhpOffice\PhpWord\Exception\Exception $e) {
             return redirect()->route('showTramite',$alumno)->with('info', 'Ha ocurrido un error al generar el documento');
         }
@@ -2461,5 +2427,19 @@ class AdminController extends Controller
     public function getSubcategorias($id)
     {
         return DB::table('opciones_titulacion')->where('articulo_id', '=', $id)->get();
+    }
+
+    public function visualizarDocumento(Documento $documento)
+    {
+        $user_id = Auth::user()->id;   
+        $alumno = Alumno::where('id', $documento->id_alumno)->first();
+       
+        try{
+            //Visualize the file without downloading it
+            return response()->file(storage_path('app/' . $documento->ruta));
+        } catch(Exception $e) {
+            return redirect()->route('showTramite', $alumno)->with('error', 'No tienes permisos para ver este archivo');
+        }
+
     }
 }

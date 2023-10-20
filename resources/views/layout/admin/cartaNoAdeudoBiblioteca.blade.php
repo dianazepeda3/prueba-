@@ -18,7 +18,7 @@
     <div >
         <img class="cabecera-biblioteca" src="{{ public_path("img/formato_biblioteca.png") }}" >
     </div>
-    <p class="folio-biblioteca bold letra15"> CUCEI/UDB/CID/1566/2023 </p>     
+    <p class="folio-biblioteca bold letra15"> CUCEI/UDB/CID/{{$consecutivo}}/{{$alumno->anio_graduacion}} </p>     
     <div class="pos-biblioteca datos-biblioteca letra15 interlineado">        
         <p>
             <b>A QUIEN CORRESPONDA:</b><br>

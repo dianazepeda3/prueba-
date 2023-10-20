@@ -303,7 +303,7 @@ class AlumnoController extends Controller
 
         $codigo = $request->input('codigo');  
         $nip = $request->input('password');            
-        $cons = DB::table('users')->where('codigo','=',$codigo)->get();          
+        $cons = DB::table('users')->where('codigo','=',$codigo)->get();              
         $client = new Client();  
         try{                        
             if($cons == "[]"){              

@@ -65,6 +65,8 @@ Route::middleware('is_admin')->group(function() {
 Route::middleware('is_administrativo')->group(function() {
     Route::get('logout', [AuthController::class, 'logout'])->name('logout');
     Route::controller(AdminController::class)->group(function() {
+        Route::get('tramites/documento/{documento}', 'visualizarDocumento')->name('ver-documento-admin');
+
         //Tramite
         Route::get('tramites', 'tramites')->name('tramites');
         Route::get('tramites/{alumno}', 'verTramite')->name('showTramite'); 
@@ -78,7 +80,7 @@ Route::middleware('is_administrativo')->group(function() {
         Route::get('tramites/documentos/eliminar/{documento}','eliminarDocumento')->name('admin-eliminar-documento');
 
         //Generar Documentos 
-        Route::get('tramites/documentos/constanciaNoAdeudo/{alumno}', 'generarformatoNoAdeudo')->name('generar_formatoNoAdeudo');
+        Route::post('tramites/documentos/constanciaNoAdeudo/{alumno}', 'generarformatoNoAdeudo')->name('generar_formatoNoAdeudo');
         Route::get('tramites/documentos/constanciaNoAdeudoCE/{alumno}', 'generarformatoNoAdeudoCE')->name('generar_formatoNoAdeudo_ce');        
     });
 });

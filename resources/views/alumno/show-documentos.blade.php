@@ -315,7 +315,8 @@
             <div class="col-span-12 xl:col-span-12">
                 <div class="box intro-y p-5 mt-5">
                     <div class="flex items-center border-b border-slate-200/60 dark:border-darkmode-400 pb-5 mb-5">
-                        <div class="font-medium text-base truncate">Documentos obligatorios que deberá presentar en el área de pasantes</div>
+                        <div class="font-medium text-base truncate">Documentos obligatorios</div>
+                        <!--<div class="font-medium text-base truncate">Documentos obligatorios que deberá presentar en el área de pasantes</div>-->
                     </div>
                     <h5><b>MODALIDAD:&nbsp; </b>
                         {{ $alumno->opcion_titulacion->opcion }}             
