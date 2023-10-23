@@ -117,7 +117,7 @@
                         <div class="form-inline">
                             <label for="tipo" class="form-label sm:w-20">Tipo de Usuario</label>
                             <select id="tipo" name="tipo" class="form-control tom-select w-full" data-placeholder="Seleccione el usuario" aria-label=".form-select-sm example">
-                                <option value="" selected>Seleccione el usuario...</option>   
+                                <option value="0" selected>Seleccione el usuario...</option>   
                                 <option value="1"
                                     @if(isset($usuario) && $usuario->admin_type == 1) selected @endif>Administrador</option>                                                                                        
                                 <option value="2"

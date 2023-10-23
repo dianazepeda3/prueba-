@@ -46,35 +46,30 @@
             @endif 
         </div> 
     </div>
-    <!-- BEGIN: Filter -->
-    <div class="intro-y box p-5 mt-7 flex flex-col xl:flex-row gap-y-3">
-        <div class="form-inline flex-1 flex-col xl:flex-row items-start xl:items-center gap-y-2 xl:mr-6">
-            <label for="crud-form-1" class="form-label">Nombre del Usuario</label>
-            <input id="crud-form-1" type="text" class="form-control w-full" placeholder="Nombre de usuario..">
-        </div>
-        <!--<div class="form-inline flex-1 flex-col xl:flex-row items-start xl:items-center gap-y-2 xl:mr-6">
-            <label for="crud-form-2" class="form-label">Rol</label>
-            <select class="tom-select w-full flex-1" id="crud-form-2" multiple>
-                @foreach (array_slice($fakers, 0, 10) as $key => $faker)
-                    <option value="{{ $faker['products'][0]['category'] }}" {{ $key < 1 ? 'selected' : '' }}>{{ $faker['products'][0]['category'] }}</option>
-                @endforeach
-            </select>
-        </div>-->
-        <div class="form-inline flex-1 flex-col xl:flex-row items-start xl:items-center gap-y-2 xl:mr-6">
-            <label for="crud-form-1" class="form-label">Rol</label>
-            <select class="form-select w-full" aria-label="Default select example">
-                <option>Todos</option>
-                <option>Administrador</option>
-                <option>Coordinador</option>
-                <option>Biblioteca</option>
-                <option>Control Escolar</option>
-            </select>
-        </div>
-        <button class="btn btn-primary shadow-md">
-            <i class="w-4 h-4 mr-2" data-lucide="search"></i> Filtrar
-        </button>
+     <!-- BEGIN: Filter -->
+     <div class="intro-y box p-5 mt-3 flex flex-col xl:flex-row gap-y-3">
+        <form class="form" method="POST" action="{{ route('filtrar_usuarios') }}">
+            @csrf 
+            <div class="form-inline flex-1 flex-col xl:flex-row items-start xl:items-center gap-y-2 xl:mr-6">
+                <label for="nombre" class="form-label">Nombre del Usuario</label>
+                <input id="nombre" name="nombre" type="text" class="form-control mr-5" placeholder="Nombre del alumno.." 
+                    @if ($nombre != "") value="{{ $nombre }}" @endif>
+                <label for="fitrar" class="form-label">Rol</label>
+                <select id="filtrar" name="filtrar"  class="form-control tom-select w-72 mr-5" aria-label="Default select example">
+                    <option value="0" @if ($filtrar == 0) selected @endif>Todos</option>
+                    <option value="1" @if ($filtrar == 1) selected @endif>Administrador</option>
+                    <option value="5" @if ($filtrar == 5) selected @endif>División</option>
+                    <option value="2" @if ($filtrar == 2) selected @endif>Coordinador</option>
+                    <option value="3" @if ($filtrar == 3) selected @endif>Biblioteca</option>
+                    <option value="4" @if ($filtrar == 4) selected @endif>Control Escolar</option>                    
+                </select>            
+                <button class="btn btn-primary shadow-md" type="submit">
+                    <i class="w-4 h-4 mr-2" data-lucide="search"></i> Filtrar
+                </button>
+            </div>
+        </form>
     </div>
-    <!-- END: Filter -->
+    <!-- END: Filter -->    
     <!-- BEGIN: Data List -->
     <div class="intro-y overflow-auto lg:overflow-visible">
         <table class="table table-report">
@@ -87,23 +82,10 @@
                     <th>ACCIONES</th>
                 </tr>
                 @foreach ($usuarios as $usuario)
-                    @if ($usuario->is_admin)                                            
-                    <tr class="intro-x">
-                        <!--<td class="w-40 !py-5">
-                            <div class="flex">
-                                <div class="w-10 h-10 image-fit zoom-in">
-                                    <img alt="Rocketman - HTML Admin Templateate" class="tooltip rounded-full" src="{{ asset('build/assets/images/' . $faker['images'][0]) }}" title="Uploaded at {{ $faker['dates'][0] }}">
-                                </div>
-                                <div class="w-10 h-10 image-fit zoom-in -ml-5">
-                                    <img alt="Rocketman - HTML Admin Templateate" class="tooltip rounded-full" src="{{ asset('build/assets/images/' . $faker['images'][1]) }}" title="Uploaded at {{ $faker['dates'][0] }}">
-                                </div>
-                                <div class="w-10 h-10 image-fit zoom-in -ml-5">
-                                    <img alt="Rocketman - HTML Admin Templateate" class="tooltip rounded-full" src="{{ asset('build/assets/images/' . $faker['images'][2]) }}" title="Uploaded at {{ $faker['dates'][0] }}">
-                                </div>
-                            </div>
-                        </td>-->
+                    @if ($usuario->is_admin && ($filtrar == 0 || $filtrar == $usuario->admin_type) && ($nombre == "" || stripos($usuario->name, $nombre) !== false))                                                                                                                                                                               
+                    <tr class="intro-x">                       
                         <td>
-                            <a href="" class="font-medium whitespace-nowrap">{{ $usuario->name}}</a>
+                            <a href="" class="font-medium whitespace-nowrap">{{$usuario->name}}</a>
                             <!--<div class="text-slate-500 text-xs whitespace-nowrap mt-0.5">{{ $usuario->codigo }}</div>-->
                         </td>
                         <!--
@@ -117,27 +99,33 @@
                                 <span class="text-danger ">Administrador</span>
                             @elseif($usuario->admin_type == 2)
                                 <span class="text-success">Coordinador</span>
+                                @if(isset($usuario->coordinador)) {{"(".$usuario->coordinador->carrera->clave.")"}} @endif
                             @elseif($usuario->admin_type == 3)
                                 <span class="text-success">Biblioteca</span>
                             @elseif($usuario->admin_type == 4)
                                 <span class="text-success">Control Escolar</span>
                             @elseif($usuario->admin_type == 5)
-                                <span class="text-success">División</span>
+                                <span class="text-success">División</span><br>
+                                @if(isset($usuario->maestro) && ($usuario->maestro->is_director_division))(Director) @endif
+                                @if(isset($usuario->maestro) && ($usuario->maestro->is_secretario_division))(Secretario) @endif
                             @elseif($usuario->is_teacher == 1)
                                 <span class="">Maestro</span>
                             @elseif($usuario->is_admin == 0 && $usuario->is_teacher == 0)
                                 <span class="badge badge-secondary">Alumno</span>
-                            @endif
-                            @if(isset($usuario->coordinador)) {{"(".$usuario->coordinador->carrera->clave.")"}} @endif
+                            @endif                           
                         </td>                        
                         <td class="table-report__action w-56">
                             <div class="flex justify-center items-center">
-                                <a class="flex items-center mr-3" href="{{ route('usuarios-edit',$usuario) }}">
-                                    <i data-lucide="check-square" class="w-4 h-4 mr-1"></i> Editar
-                                </a>
-                                <a class="flex items-center text-danger" href="javascript:;" data-tw-toggle="modal" data-tw-target="#delete-modal-preview{{$usuario->id}}">
-                                    <i data-lucide="trash-2" class="w-4 h-4 mr-1"></i> Eliminar
-                                </a>
+                                @if(isset($usuario->maestro) && ($usuario->maestro->is_director_division or $usuario->maestro->is_secretario_division))
+                                    En apartado de maestros
+                                @else
+                                    <a class="flex items-center mr-3" href="{{ route('usuarios-edit',$usuario) }}">
+                                        <i data-lucide="check-square" class="w-4 h-4 mr-1"></i> Editar
+                                    </a>
+                                    <a class="flex items-center text-danger" href="javascript:;" data-tw-toggle="modal" data-tw-target="#delete-modal-preview{{$usuario->id}}">
+                                        <i data-lucide="trash-2" class="w-4 h-4 mr-1"></i> Eliminar
+                                    </a>
+                                @endif
                             </div>
                         </td>
                          <!-- BEGIN: Modal Eliminar --> 
@@ -174,8 +162,100 @@
         </table>
     </div>
     <!-- END: Data List -->
-     <!-- BEGIN: Modal Division --> 
-     <div id="modal-division" class="modal" tabindex="-1" aria-hidden="true"> 
+    <!-- BEGIN: Modal Division --> 
+    <div id="modal-division" class="modal" tabindex="-1" aria-hidden="true"> 
+        <div class="modal-dialog"> 
+            <div class="modal-content"> 
+                <!-- BEGIN: Modal Header --> 
+                <div class="modal-header"> 
+                    <h2 class="font-medium text-base mr-auto">Editar Director y Secretario de Division</h2>                        
+                </div> <!-- END: Modal Header --> 
+                <form method="POST" action="{{ route('editar_director_secretario') }}">
+                    @csrf
+                    <!-- BEGIN: Modal Body --> 
+                    <div class="modal-body grid grid-cols-12 gap-4 gap-y-3"> 
+                        <div class="col-span-12 sm:col-span-12">
+                            <label class="font-bold" for="division">División:</label>
+                            <select id="division" name="division" data-placeholder="Seleccione la división" class="tom-select w-full">
+                                @foreach($divisiones as $division)
+                                    <option value="{{$division->id}}" data-director="{{$division->director_id}}">{{$division->nombre_division}}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                    <div class="modal-body grid grid-cols-12 gap-4 gap-y-3" id="div1">
+                        <div class="col-span-6 sm:col-span-12">
+                            <label for="director1">Director de División:</label>
+                            <select id="director1" name="director1" data-placeholder="Selecciona el presidente" class="tom-select w-full">
+                                <option value="0">Seleccione al Director...</option>
+                                @foreach($maestros as $director)
+                                    <option value="{{$director->id}}" @if($div->director_id == $director->id) selected @endif>{{$director->nombre}}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-span-12 sm:col-span-12 mt-5">
+                            <label for="secretario1">Secretario de División:</label>
+                            <select id="secretario1" name="secretario1" data-placeholder="Selecciona el presidente" class="tom-select w-full">
+                                <option value="0">Seleccione al Secretario...</option>
+                                @foreach($maestros as $director)
+                                    <option value="{{$director->id}}" @if($div->secretario_id == $director->id) selected @endif>{{$director->nombre}}</option>
+                                @endforeach
+                            </select>
+                        </div>   
+                    </div>  
+                    <div class="modal-body grid grid-cols-12 gap-4 gap-y-3" id="div2">
+                        <div class="col-span-12 sm:col-span-12">
+                            <label for="director2">Director de División:</label>
+                            <select id="director2" name="director2" data-placeholder="Selecciona el presidente" class="tom-select w-full">
+                                <option value="0">Seleccione al Director...</option>
+                                @foreach($maestros as $director)
+                                    <option value="{{$director->id}}" @if(isset($div2) && $div2->director_id == $director->id) selected @endif>{{$director->nombre}}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-span-12 sm:col-span-12 mt-5">
+                            <label for="secretario2">Secretario de División:</label>
+                            <select id="secretario2" name="secretario2" data-placeholder="Selecciona el presidente" class="tom-select w-full">
+                                <option value="0">Seleccione al Secretario...</option>
+                                @foreach($maestros as $director)
+                                    <option value="{{$director->id}}" @if(isset($div2) && $div2->secretario_id == $director->id) selected @endif>{{$director->nombre}}</option>
+                                @endforeach
+                            </select>
+                        </div>    
+                    </div> 
+                    <div class="modal-body grid grid-cols-12 gap-4 gap-y-3" id="div3">
+                        <div class="col-span-12 sm:col-span-12">
+                            <label for="director3">Director de División:</label>
+                            <select id="director3" name="director3" data-placeholder="Selecciona el presidente" class="tom-select w-full">
+                                <option value="0">Seleccione al Director...</option>
+                                @foreach($maestros as $director)
+                                    <option value="{{$director->id}}" @if(isset($div3) && $div3->director_id == $director->id) selected @endif>{{$director->nombre}}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-span-12 sm:col-span-12 mt-5">
+                            <label for="secretario3">Secretario de División:</label>
+                            <select id="secretario3" name="secretario3" data-placeholder="Selecciona el presidente" class="tom-select w-full">
+                                <option value="0">Seleccione al Secretario...</option>
+                                @foreach($maestros as $director)
+                                    <option value="{{$director->id}}" @if(isset($div3) && $div3->secretario_id == $director->id) selected @endif>{{$director->nombre}}</option>
+                                @endforeach
+                            </select>
+                        </div>  
+                    </div>   
+                                 
+                    <!-- END: Modal Body --> 
+                    <!-- BEGIN: Modal Footer --> 
+                    <div class="modal-footer"> 
+                        <button type="button" data-tw-dismiss="modal" class="btn btn-outline-secondary w-20 mr-1">Cancelar</button> 
+                        <button type="submit" class="btn btn-primary w-20">Confirmar</button> 
+                    </div> <!-- END: Modal Footer --> 
+                </form>
+            </div> 
+        </div> 
+    </div> <!-- END: Modal Division -->  
+    <!-- BEGIN: Modal Division --> 
+    <div id="modal-division2" class="modal" tabindex="-1" aria-hidden="true"> 
         <div class="modal-dialog"> 
             <div class="modal-content"> 
                 <!-- BEGIN: Modal Header --> 
@@ -274,7 +354,38 @@
     <!-- END: Pagination -->
     <script src="https://code.jquery.com/jquery-3.4.1.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
     <script>
+        function mostrarDivision1() {
+            document.getElementById("div1").style.display = "block";
+            document.getElementById("div2").style.display = "none";
+            document.getElementById("div3").style.display = "none";
+        }
+        function mostrarDivision2() {
+            document.getElementById("div1").style.display = "none";
+            document.getElementById("div2").style.display = "block";
+            document.getElementById("div3").style.display = "none";
+        }
+        function mostrarDivision3() {
+            document.getElementById("div1").style.display = "none";
+            document.getElementById("div2").style.display = "none";
+            document.getElementById("div3").style.display = "block";
+        }
+                
+        window.onload = function() { 
+            mostrarDivision1();          
+        }       
         $(document).ready(function(){
+            $('#division').on('change', function(){
+                let id = $(this).val();
+                if(id == 1){
+                    mostrarDivision1(); 
+                }else if(id == 2){
+                    mostrarDivision2(); 
+                }else{
+                    mostrarDivision3() 
+                }
+            });
+        });
+        /*$(document).ready(function(){
             $('#division').on('change', function(){
                 let id = $(this).val();
                 console.log('Valor de id:', id);
@@ -311,6 +422,6 @@
                     }
                 });
             });
-        });
+        });*/
     </script>
 @endsection

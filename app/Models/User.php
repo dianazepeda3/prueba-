@@ -74,4 +74,8 @@ class User extends Authenticatable
     public function coordinador(){
         return $this->hasOne(Coordinador::class);
     }
+
+    public function division(){
+        return $this->hasOne(Division::class);
+    }
 }

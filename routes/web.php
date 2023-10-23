@@ -52,6 +52,7 @@ Route::middleware('is_admin')->group(function() {
         Route::patch('usuarios/update/{user}', 'updateUsuario')->name('usuarios_update');
         Route::post('usuarios/store', 'storeUsuarios')->name('usuarios_store');
         Route::delete('usuarios/{usuario}', 'deleteUsuario')->name('eliminar_usuario');   
+        Route::post('usuarios/fitrar', 'filtrar_usuarios')->name('filtrar_usuarios');     
         
         Route::get('/maestros/{id}', 'getMaestros');
         Route::post('/maestros/edit-director-secretario','edit_director_secretario')->name('editar_director_secretario');        

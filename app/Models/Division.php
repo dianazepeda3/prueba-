@@ -11,8 +11,17 @@ class Division extends Model
 
     public $timestamps = false;
 
+    protected $fillable = [
+        'director_id',
+        'secretario_id',
+    ];
+
     public function maestro(){
         return $this->belongsTo(Maestro::class);
+    }
+
+    public function user(){
+        return $this->belongsTo(User::class);
     }
 
 }

@@ -2164,8 +2164,12 @@ class AdminController extends Controller
         $maestros = Maestro::all();
         $divisiones = Division::all();
         $div = Division::first();
+        $div2 = Division::where('id',2)->first();
+        $div3 = Division::where('id',3)->first();
+        $filtrar = 0;
+        $nombre = "";
 
-        return view('admin/usuarios', compact('user','usuarios','maestros','divisiones','div'));
+        return view('admin/usuarios', compact('user','usuarios','maestros','divisiones','div','div2','div3','filtrar','nombre'));
     } 
 
     public function usuarios_edit(User $usuario) {
@@ -2262,6 +2266,9 @@ class AdminController extends Controller
             'tipo' => 'required|numeric',          
             'carrera' =>'nullable|numeric',           
         ]);
+        if($request->tipo == 0){
+            return redirect()->back()->with('info','Elije el tipo de usuario');
+        }
         if($request->codigo == $user->codigo){
             $request->validate(['codigo' => 'required|string',]);
         }else{
@@ -2350,7 +2357,6 @@ class AdminController extends Controller
 
     public function deleteUsuario(Request $request, User $usuario)
     {
-
         $value = Hash::check($request->password, auth()->user()->password);
 
         if ($value == false) {
@@ -2370,6 +2376,25 @@ class AdminController extends Controller
             ]);  
             $coordinador = Coordinador::where('user_id',$user->id)->first();
             $coordinador->delete();          
+        /*}else if($usuario->admin_type == 5){ 
+            //$division = $usuario->division;
+            echo $usuario->division->nombre;
+            dd();
+            if($usuario->maestro->is_secretario_division){
+                $maestro = Maestro::where('id', $division->director_id)->first(); 
+                Maestro::where('id', $usuario->division->director_id)->update(['is_director_division' => false]);
+                Division::where('id', $usuario->director->id)->where(['director_id' => null]); 
+            }else if($usuario->maestro->is_secretario_division){
+                $maestro = Maestro::where('id', $division->secretario_id)->first(); 
+                Maestro::where('id', $usuario->division->secretario_id)->update(['is_secretario_division' => false]);
+                Division::where('id', $usuario->division->id)->where(['secretario_id' => null]);                   
+            }
+                  
+            User::where('id',$maestro->user_id)->update([
+                'is_admin' => false,
+                'is_teacher' => true,
+                'admin_type' => 0,
+            ]);   */                                                                                     
         }else{
             try{
                 //Eliminar los documentos
@@ -2388,6 +2413,20 @@ class AdminController extends Controller
         }
 
         return redirect()->route('usuarios')->with('success', 'Usuario eliminado correctamente.');
+    }
+
+    public function filtrar_usuarios(Request $request) {
+        $user = Auth::user();
+        $usuarios = User::all();  
+        $maestros = Maestro::all();
+        $divisiones = Division::all();
+        $div = Division::first();
+        $div2 = Division::where('id',2)->first();
+        $div3 = Division::where('id',3)->first();
+        
+        $filtrar = $request->filtrar;
+        $nombre = $request->nombre;        
+        return view('admin/usuarios', compact('user','usuarios','maestros','divisiones','div','div2','div3','filtrar','nombre'));
     }
 
     //Maestros
@@ -2435,7 +2474,7 @@ class AdminController extends Controller
 
         $user->forceFill([
             'name' => $request['nombre'],
-            'codigo' => $request['codigo'],
+            'codigo' => $request['email'],
         ])->save();
 
 
@@ -2556,45 +2595,79 @@ class AdminController extends Controller
 
     }
 
-    public function edit_director_secretario(Request $request){  
-        $request->validate([            
-            'director' => 'required', 
-            'secretario' => 'required',
-        ]);                            
-        $division = Division::where('id',$request->division)->first();  
-           
-        if(isset($division->director_id) && $division->director_id != $request->director){
-            $director = Maestro::where('id', $division->director_id)->first();
+    public function edit_director_secretario(Request $request){          
+        if($request->division == 1){
+            $request->validate([            
+                'director1' => 'required', 
+                'secretario1' => 'required',
+            ]);                               
+            $dir = $request->director1;  
+            $secre = $request->secretario1;   
+        }else  if($request->division == 2){
+            $request->validate([            
+                'director2' => 'required', 
+                'secretario2' => 'required',
+            ]);                         
+            $dir = $request->director2;
+            $secre = $request->secretario2;
+        }else  if($request->division == 3){
+            $request->validate([            
+                'director3' => 'required', 
+                'secretario3' => 'required',
+            ]);                         
+            $dir = $request->director3;
+            $secre = $request->secretario3;
+        }   
+        //echo "dir: ".$dir ."  secre: ".$secre;
+        //dd();  
+        if($dir == $secre)
+        return redirect()->route('usuarios')->with('info','No puede ser Director y Secretario el mismo maestro');
+     
+        $director = Maestro::where('id', $dir)->first();  
+        $secretario = Maestro::where('id', $secre)->first(); 
+        
+        $division = Division::where('id',$request->division)->first();
+        if((!isset($division->director_id) or isset($division->director_id) && $division->director_id != $dir )&& ($director->is_director_division or $secretario->is_secretario_division))
+            return redirect()->route('usuarios')->with('info','Director y/o Secretario ya asignados a una division');
+                        
+        if(isset($division->director_id) && $division->director_id != $dir){ 
+            $director = Maestro::where('id', $division->director_id)->first();          
             User::where('id',$director->user_id)->update([
                 'is_admin' => false,
                 'is_teacher' => true,
                 'admin_type' => 0,
             ]);
+            Maestro::where('id', $division->director_id)->update(['is_director_division' => false]);
+            Maestro::where('id', $division->secretario_id)->update(['is_secretario_division' => false]);
         }  
-        if(isset($division->secretario_id) && $division->secretario_id != $request->secretario){
+        if(isset($division->secretario_id) && $division->secretario_id != $secre){
             $secretario = Maestro::where('id', $division->secretario_id)->first();
-            User::where('id',$director->user_id)->update([
+           User::where('id',$secretario->user_id)->update([
                 'is_admin' => false,
                 'is_teacher' => true,
                 'admin_type' => 0,
             ]);
+            Maestro::where('id', $division->director_id)->update(['is_director_division' => false]);
+            Maestro::where('id', $division->secretario_id)->update(['is_secretario_division' => false]);
         }
-        $division->director_id = $request->director;
-        $division->secretario_id = $request->secretario;
+        $division->director_id = $dir;
+        $division->secretario_id = $secre;
         $division->save();
 
-        $director = Maestro::where('id', $request->director)->first();
+        $director = Maestro::where('id', $dir)->first();
         User::where('id',$director->user_id)->update([
             'is_admin' => true,
             'is_teacher' => false,
             'admin_type' => 5,
         ]);
-        $secretario = Maestro::where('id', $request->secretario)->first();
+        Maestro::where('id', $dir)->update(['is_director_division' => true]);
+        $secretario = Maestro::where('id', $secre)->first();
         User::where('id',$secretario->user_id)->update([
             'is_admin' => true,
             'is_teacher' => false,
             'admin_type' => 5,
         ]);
+        Maestro::where('id', $secre)->update(['is_secretario_division' => true]);
 
         return redirect()->route('usuarios')->with('success','Director y Secretario actualizados');
     }

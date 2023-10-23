@@ -32,7 +32,7 @@ class MaestrosSeeder extends Seeder
             'codigo' => '000000001',
             'grado' => 'Doctorado',
             'genero' => 'H',
-            'is_director_division' => 1,     
+            //'is_director_division' => 1,     
             'user_id' => $user_id,        
         ]);
         $user_id = DB::table('users')->insertGetId([
@@ -49,7 +49,7 @@ class MaestrosSeeder extends Seeder
             'codigo' => '000000002',
             'grado' => 'Maestría',
             'genero' => 'M',
-            'is_secretario_division' => 1,  
+            //'is_secretario_division' => 1,  
             'user_id' => $user_id,              
         ]);
 
@@ -68,7 +68,7 @@ class MaestrosSeeder extends Seeder
             'codigo' => '000000003',
             'grado' => 'Doctorado',
             'genero' => 'H',
-            'is_director_division' => 1,     
+            //'is_director_division' => 1,     
             'user_id' => $user_id,        
         ]);
         $user_id = DB::table('users')->insertGetId([
@@ -85,7 +85,7 @@ class MaestrosSeeder extends Seeder
             'codigo' => '000000004',
             'grado' => 'Maestría',
             'genero' => 'M',
-            'is_secretario_division' => 1,  
+            //'is_secretario_division' => 1,  
             'user_id' => $user_id,              
         ]);
 
@@ -104,7 +104,7 @@ class MaestrosSeeder extends Seeder
             'codigo' => '000000005',
             'grado' => 'Doctorado',
             'genero' => 'M',
-            'is_director_division' => 1,     
+            //'is_director_division' => 1,     
             'user_id' => $user_id,        
         ]);
         $user_id = DB::table('users')->insertGetId([
@@ -121,7 +121,7 @@ class MaestrosSeeder extends Seeder
             'codigo' => '000000006',
             'grado' => 'Maestría',
             'genero' => 'H',
-            'is_secretario_division' => 1,  
+            //'is_secretario_division' => 1,  
             'user_id' => $user_id,              
         ]);
 
