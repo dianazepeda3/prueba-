@@ -23,6 +23,7 @@ use App\Models\OpcionTitulacion;
 use App\Models\AlumnoDocs;
 use App\Models\Coordinador;
 use App\Models\Firma;
+use App\Models\Division;
 use Carbon\Carbon;
 use NumberFormatter;
 
@@ -2159,34 +2160,37 @@ class AdminController extends Controller
     //Usuarios
     public function usuarios() {
         $user = Auth::user();
-        $usuarios = User::all();   
-        return view('admin/usuarios', compact('user','usuarios'));
+        $usuarios = User::all();  
+        $maestros = Maestro::all();
+        $divisiones = Division::all();
+        $div = Division::first();
+
+        return view('admin/usuarios', compact('user','usuarios','maestros','divisiones','div'));
     } 
 
     public function usuarios_edit(User $usuario) {
         $user = Auth::user();
         $carreras = Carrera::all();
         $coordinador = Coordinador::where('user_id', $usuario->id)->get()->first(); 
-        return view('admin/usuarios-form',compact('user','usuario','carreras','coordinador'));
+        $maestros = Maestro::all();
+        return view('admin/usuarios-form',compact('user','usuario','carreras','coordinador','maestros'));
     }
 
     public function usuarios_form() {
         $user = Auth::user();
         $carreras = Carrera::all();
-        return view('admin/usuarios-form',compact('user','carreras'));
+        $maestros = Maestro::all();
+        return view('admin/usuarios-form',compact('user','carreras','maestros'));
     }
 
     public function storeUsuarios(Request $request)
     {                
         //VALIDACION DE DATOS
-        $request->validate([
-            'nombre' => 'required|string|min:5|max:255',
-            'codigo' => 'required|string|email|max:255|unique:users',
+        $request->validate([                      
             'tipo' => 'required|numeric',
             'password' => 'required|string|min:6',
             'password_confirmed' => 'required|string|min:6',
-        ]);  
-        
+        ]);                         
 
         /*if(is_numeric($request->codigo)){           
             $request->validate(['codigo' => 'required|numeric|unique:users',]);
@@ -2197,7 +2201,19 @@ class AdminController extends Controller
         if($request->tipo == 2){
             $request->validate([
                 'carrera' =>'required|numeric',
-            ]);
+                'maestro' => 'required',
+            ]);  
+            if(Coordinador::where('id_carrera',$request->carrera)->first() != null){
+                return redirect()->route('usuarios-form')->with('info', 'Ya existe un usuario de coordinador de esta carrera');
+            }   
+            if(Coordinador::where('id_maestro',$request->maestro)->first() != null){
+                return redirect()->route('usuarios-form')->with('info', 'Ya existe un usuario de coordinador con este maestro');
+            }        
+        }else{
+            $request->validate([
+                'codigo' => 'required|string|email|max:255|unique:users',   
+                'nombre' => 'required|string|min:5|max:255',            
+            ]);  
         }
         
         if ($request->password != $request->password_confirmed) {
@@ -2206,22 +2222,33 @@ class AdminController extends Controller
         if ($request->tipo == 0) {
             return redirect()->route('usuarios-form')->with('info', 'Selecciona el tipo de usuario');
         }
-        
-        //CREAR USUARIO
-        $user = new User();
-        $user->name = $request->nombre;
-        $user->codigo = $request->codigo;
-        $user->password = Hash::make($request->password);
-        $user->is_admin = 1;
-        $user->admin_type = $request->tipo;
-        $user->save();        
 
         if($request->tipo == 2){
-            $coordinador = new Coordinador();
+            $coordinador = new Coordinador();        
+            $coordinador->id_maestro = $request->maestro;
+            $coordinador->id_carrera = $request->carrera;            
+            $carrera = Carrera::where('id', $request->carrera)->first();                          
+            $coordi = Maestro::where('id', $request->maestro)->first();
+            $user = User::where('id',$coordi->user_id)->first();
+            User::where('id',$coordi->user_id)->update([
+                'is_admin' => true,
+                'is_teacher' => false,
+                'admin_type' => 2,
+                'password' => Hash::make($request->password),
+            ]);
             $coordinador->user_id = $user->id;
-            $coordinador->id_carrera = $request->carrera;
             $coordinador->save();
-        }
+            Carrera::where('id',$carrera->id)->update(['coordinador_id' => $coordinador->id]);
+        }else{        
+            //CREAR USUARIO
+            $user = new User();
+            $user->name = $request->nombre;
+            $user->codigo = $request->codigo;
+            $user->password = Hash::make($request->password);
+            $user->is_admin = 1;
+            $user->admin_type = $request->tipo;
+            $user->save();   
+        }     
 
         return redirect()->route('usuarios')->with('success', 'Nuevo usuario creado con éxito');
 
@@ -2271,25 +2298,51 @@ class AdminController extends Controller
             return redirect()->route('usuarios')->with('info', 'Selecciona el tipo de usuario');
         }
 
-        //EDITAR USUARIO
-        $user->name = $request->nombre;
-        $user->codigo = $request->codigo;
-        $user->admin_type = $request->tipo;
-        $user->save();           
-
-        $coordinador = Coordinador::where('user_id', $user->id)->get()->first(); 
-        if($request->tipo == 2){              
+        //EDITAR USUARIO        
+        if($request->tipo == 2){                             
+            User::where('id',$user->id)->update([
+                'is_admin' => false,
+                'is_teacher' => true,
+                'admin_type' => 0,                
+            ]); 
+            if(Coordinador::where('id_carrera',$request->carrera)->first() != null){
+                return redirect()->back()->with('info', 'Ya existe un usuario de coordinador de esta carrera');
+            }   
+            if(Coordinador::where('id_maestro',$request->maestro)->first() != null){
+                return redirect()->back()->with('info', 'Ya existe un usuario de coordinador con este maestro');
+            }
+            if(isset($user->coordinador))
+            Carrera::where('id',$user->coordinador->id_carrera)->update(['coordinador_id' => null]);                       
+            $carrera = Carrera::where('id', $request->carrera)->first();                          
+            $coordi = Maestro::where('id', $request->maestro)->first();                       
+            $coordinador = $user->coordinador;
             if(!isset($coordinador)){
                 $coordinador = new Coordinador();
-            }            
-            $coordinador->user_id = $user->id;
+            }
+                     
             $coordinador->id_carrera = $request->carrera;
+            $coordinador->id_maestro = $request->maestro;          
+            $user = User::where('id',$coordi->user_id)->first();
+            User::where('id',$user->id)->update([
+                'is_admin' => true,
+                'is_teacher' => false,
+                'admin_type' => 2,
+                'password' => Hash::make($request->password),
+            ]);
+            $coordinador->user_id = $user->id;
             $coordinador->save();
-        }else{
+            Carrera::where('id',$carrera->id)->update(['coordinador_id' => $coordinador->id]);
+        }else{  
+            $coordinador = $user->coordinador;
+            Carrera::where('id',$user->coordinador->id_carrera)->update(['coordinador_id' => null]);                                   
             if(isset($coordinador)){
                 $coordinador->delete();
-            }
-        }
+            }  
+            $user->name = $request->nombre;
+            $user->codigo = $request->codigo;
+            $user->admin_type = $request->tipo;
+            $user->save();    
+        }               
 
         return redirect()->route('usuarios')->with('success', 'Información actualizada con éxito');
 
@@ -2306,19 +2359,32 @@ class AdminController extends Controller
             ]);
         }
 
-        try{
-            //Eliminar los documentos
-            $documentos = Documento::where('user_id', $usuario->id)->get();
-            if ($documentos->count() > 0) {
-                foreach ($documentos as $documento) {
-                    //Eliminamos el documento de la base de datos
-                    $documento->delete();
+        if($usuario->admin_type == 2){                                               
+            Carrera::where('id',$usuario->coordinador->id_carrera )->update(['coordinador_id' => null]);
+            $coordi = Maestro::where('id', $usuario->coordinador->id_maestro)->first();
+            $user = User::where('id',$coordi->user_id)->first();
+            User::where('id',$coordi->user_id)->update([
+                'is_admin' => false,
+                'is_teacher' => true,
+                'admin_type' => 0,                
+            ]);  
+            $coordinador = Coordinador::where('user_id',$user->id)->first();
+            $coordinador->delete();          
+        }else{
+            try{
+                //Eliminar los documentos
+                $documentos = Documento::where('user_id', $usuario->id)->get();
+                if ($documentos->count() > 0) {
+                    foreach ($documentos as $documento) {
+                        //Eliminamos el documento de la base de datos
+                        $documento->delete();
+                    }
                 }
+                //Eliminar el usuario
+                $usuario->delete();
+            }catch(\Exception $e){
+                return redirect()->route('usuarios')->with('info', 'Ocurrio un error al tratar de eliminar el usuario.');
             }
-            //Eliminar el usuario
-            $usuario->delete();
-        }catch(\Exception $e){
-            return redirect()->route('usuarios')->with('info', 'Ocurrio un error al tratar de eliminar el usuario.');
         }
 
         return redirect()->route('usuarios')->with('success', 'Usuario eliminado correctamente.');
@@ -2327,7 +2393,8 @@ class AdminController extends Controller
     //Maestros
     public function maestros() {
         $user = Auth::user();
-        $maestros = Maestro::all();  
+        $maestros = Maestro::all();          
+        
         return view('admin/maestros', compact('user','maestros'));
     }
     
@@ -2469,6 +2536,12 @@ class AdminController extends Controller
         return DB::table('opciones_titulacion')->where('articulo_id', '=', $id)->get();
     }
 
+    public function getMaestros($id)
+    {
+        return Division::where('id',$id)->first();
+        //return Maestro::all();
+    }
+
     public function visualizarDocumento(Documento $documento)
     {
         $user_id = Auth::user()->id;   
@@ -2481,5 +2554,48 @@ class AdminController extends Controller
             return redirect()->route('showTramite', $alumno)->with('error', 'No tienes permisos para ver este archivo');
         }
 
+    }
+
+    public function edit_director_secretario(Request $request){  
+        $request->validate([            
+            'director' => 'required', 
+            'secretario' => 'required',
+        ]);                            
+        $division = Division::where('id',$request->division)->first();  
+           
+        if(isset($division->director_id) && $division->director_id != $request->director){
+            $director = Maestro::where('id', $division->director_id)->first();
+            User::where('id',$director->user_id)->update([
+                'is_admin' => false,
+                'is_teacher' => true,
+                'admin_type' => 0,
+            ]);
+        }  
+        if(isset($division->secretario_id) && $division->secretario_id != $request->secretario){
+            $secretario = Maestro::where('id', $division->secretario_id)->first();
+            User::where('id',$director->user_id)->update([
+                'is_admin' => false,
+                'is_teacher' => true,
+                'admin_type' => 0,
+            ]);
+        }
+        $division->director_id = $request->director;
+        $division->secretario_id = $request->secretario;
+        $division->save();
+
+        $director = Maestro::where('id', $request->director)->first();
+        User::where('id',$director->user_id)->update([
+            'is_admin' => true,
+            'is_teacher' => false,
+            'admin_type' => 5,
+        ]);
+        $secretario = Maestro::where('id', $request->secretario)->first();
+        User::where('id',$secretario->user_id)->update([
+            'is_admin' => true,
+            'is_teacher' => false,
+            'admin_type' => 5,
+        ]);
+
+        return redirect()->route('usuarios')->with('success','Director y Secretario actualizados');
     }
 }

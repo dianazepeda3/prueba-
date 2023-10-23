@@ -20,6 +20,10 @@ class Maestro extends Model
         'genero',
     ];
 
+    public function user(){
+        return $this->belongsTo(User::class);
+    }
+
     public function division(){
         return $this->hasOne(Division::class);
     }

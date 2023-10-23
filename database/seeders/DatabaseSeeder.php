@@ -17,6 +17,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
+        $this->call(DivisionesSeeder::class);
         $this->call(CarrerasSeeder::class);
         $this->call(PlanestudiosSeeder::class);
         $this->call(ArticulosSeeder::class);
@@ -41,7 +42,7 @@ class DatabaseSeeder extends Seeder
         //Tramite::factory()->count(10)->create();
         
 
-        $this->call(MaestrosSeeder::class);
+        $this->call(MaestrosSeeder::class);        
         
         // $this->call(AlumnosSeeder::class);
         // $this->call(TramitesSeeder::class);

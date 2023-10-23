@@ -51,7 +51,10 @@ Route::middleware('is_admin')->group(function() {
         Route::get('usuarios/create/{usuario}', 'usuarios_edit')->name('usuarios-edit');  
         Route::patch('usuarios/update/{user}', 'updateUsuario')->name('usuarios_update');
         Route::post('usuarios/store', 'storeUsuarios')->name('usuarios_store');
-        Route::delete('usuarios/{usuario}', 'deleteUsuario')->name('eliminar_usuario');     
+        Route::delete('usuarios/{usuario}', 'deleteUsuario')->name('eliminar_usuario');   
+        
+        Route::get('/maestros/{id}', 'getMaestros');
+        Route::post('/maestros/edit-director-secretario','edit_director_secretario')->name('editar_director_secretario');        
         
         //Manual
         Route::get('manual-usuario/tramites',function(User $user){ return view('manual-admin.tramites',compact('user'));})->name('manual_usuario_tramites');
@@ -159,7 +162,7 @@ Route::middleware('auth')->group(function() {
         Route::patch('tramites/editar-datos-laborales/{alumno}', 'updateDatosLaborales')->name('update-datos-laborales'); 
            
         //Opciones de Titulacion
-        Route::get('/alumno/opciones_titulacion/{id}', 'getSubcategorias');
+        Route::get('/alumno/opciones_titulacion/{id}', 'getSubcategorias');        
     });
 });
 

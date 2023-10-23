@@ -15,9 +15,10 @@ return new class extends Migration
     {
         Schema::create('carreras', function (Blueprint $table) {
             $table->id();
+
             $table->string('clave', 10);
             $table->string('carrera');
-            $table->string('nombre_coordinador');
+            //$table->string('nombre_coordinador');
         });
     }
 

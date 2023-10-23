@@ -8,4 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 class Carrera extends Model
 {
     use HasFactory;
+
+    public $timestamps = false;
+
+    public function coordinador(){
+        return $this->hasOne(Coordinador::class);
+    }
 }

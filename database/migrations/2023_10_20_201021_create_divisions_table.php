@@ -16,12 +16,16 @@ return new class extends Migration
         Schema::create('divisions', function (Blueprint $table) {
             $table->id();
            
-            $table->unsignedBigInteger('user_id');   
-            $table->unsignedBigInteger('id_carrera')->nullable();            
+            //$table->unsignedBigInteger('user_id')->nullable();   
+            $table->unsignedBigInteger('director_id')->nullable();            
+            $table->unsignedBigInteger('secretario_id')->nullable();
 
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
-            $table->foreign('id_carrera')->references('id')->on('carreras')->onDelete('cascade')->onUpdate('cascade');                       
-            
+            $table->string('nombre_division');
+            $table->string('clave');
+
+            //$table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('director_id')->references('id')->on('maestros')->onDelete('cascade')->onUpdate('cascade');                       
+            $table->foreign('secretario_id')->references('id')->on('maestros')->onDelete('cascade')->onUpdate('cascade');                                   
         });
     }
 

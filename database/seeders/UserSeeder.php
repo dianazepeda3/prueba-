@@ -51,7 +51,7 @@ class UserSeeder extends Seeder
             'correo_institucional' => 'kallie@alumnos.udg.mx',
             'correo_part' => 'kallie@gmail.com',
             
-            'id_carrera' => 5, //INCO
+            'id_carrera' => 18, //INCO
             'id_plan_estudios' => 2,
             'id_articulo' => 3,
             'id_opcion_titulacion' => 7,
@@ -93,7 +93,7 @@ class UserSeeder extends Seeder
             'correo_institucional' => 'saharai@alumnos.udg.mx',
             'correo_part' => 'saharai@gmail.com',
             
-            'id_carrera' => 3, //INFO
+            'id_carrera' => 17, //INFO
             'id_plan_estudios' => 2,
             'id_articulo' => 2,
             'id_opcion_titulacion' => 5,
@@ -135,7 +135,7 @@ class UserSeeder extends Seeder
             'correo_institucional' => 'macarena@alumnos.udg.mx',
             'correo_part' => 'macarena@gmail.com',
             
-            'id_carrera' => 5, //INCO
+            'id_carrera' => 18, //INCO
             'id_plan_estudios' => 2,
             'id_articulo' => 1,
             'id_opcion_titulacion' => 2,
@@ -177,7 +177,7 @@ class UserSeeder extends Seeder
             'correo_institucional' => 'louis28@alumnos.udg.mx',
             'correo_part' => 'louis28@gmail.com',
             
-            'id_carrera' => 5, //INCO
+            'id_carrera' => 18, //INCO
             'id_plan_estudios' => 2,
             'id_articulo' => 5,
             'id_opcion_titulacion' => 16,
@@ -219,7 +219,7 @@ class UserSeeder extends Seeder
             'correo_institucional' => 'abraham@alumnos.udg.mx',
             'correo_part' => 'abraham@gmail.com',
             
-            'id_carrera' => 6, //IGFO
+            'id_carrera' => 11, //IGFO
             'id_plan_estudios' => 2,
             'id_articulo' => 5,
             'id_opcion_titulacion' => 14,
@@ -261,7 +261,7 @@ class UserSeeder extends Seeder
             'correo_institucional' => 'elisabet@alumnos.udg.mx',
             'correo_part' => 'elisabet@gmail.com',
             
-            'id_carrera' => 6, //IGFO
+            'id_carrera' => 11, //IGFO
             'id_plan_estudios' => 2,
             'id_articulo' => 3,
             'id_opcion_titulacion' => 8,
@@ -303,7 +303,7 @@ class UserSeeder extends Seeder
             'correo_institucional' => 'taylor@alumnos.udg.mx',
             'correo_part' => 'taylor@gmail.com',
             
-            'id_carrera' => 1, //INBI
+            'id_carrera' => 13, //INBI
             'id_plan_estudios' => 2,
             'id_articulo' => 1,
             'id_opcion_titulacion' => 1,
@@ -345,7 +345,7 @@ class UserSeeder extends Seeder
             'correo_institucional' => 'soledad@alumnos.udg.mx',
             'correo_part' => 'soledad@gmail.com',
             
-            'id_carrera' => 7, //INBI
+            'id_carrera' => 1, //LQFB
             'id_plan_estudios' => 2,
             'id_articulo' => 4,
             'id_opcion_titulacion' => 11,
@@ -387,7 +387,7 @@ class UserSeeder extends Seeder
             'correo_institucional' => 'rosalia@alumnos.udg.mx',
             'correo_part' => 'rosalia@gmail.com',
             
-            'id_carrera' => 5, //INCO
+            'id_carrera' => 7, //INDU
             'id_plan_estudios' => 2,
             'id_articulo' => 2,
             'id_opcion_titulacion' => 4,
@@ -429,7 +429,7 @@ class UserSeeder extends Seeder
             'correo_institucional' => 'ruby@alumnos.udg.mx',
             'correo_part' => 'ruby@gmail.com',
             
-            'id_carrera' => 5, //INCO
+            'id_carrera' => 3, //LQUI
             'id_plan_estudios' => 2,
             'id_articulo' => 5,
             'id_opcion_titulacion' => 14,
