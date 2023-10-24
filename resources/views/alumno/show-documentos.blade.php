@@ -20,7 +20,7 @@
         }
     </style>   
     <div class="intro-y flex flex-col sm:flex-row items-center mt-8">
-        <h2 class="flex items-center text-lg font-medium mr-auto">
+        <h2 class="flex items-center text-lg font-medium mr-auto color-claro">
             DOCUMENTACIÓN
         </h2>
         <!--<div class="w-full sm:w-auto flex mt-4 sm:mt-0">
@@ -46,20 +46,20 @@
         <div class="intro-y col-span-12 lg:col-span-12">  
              {{-- Mensaje Alerta --}}
             @if (session('info'))
-                <div class="alert alert-danger-soft show flex items-center mb-2">
+                <div class="alert alerta-error show flex items-center mb-2">
                     <i data-lucide="alert-octagon" class="w-6 h-6 mr-2"></i>
                     {{ session('info') }}
                 </div>
             @endif
             {{-- Mensaje Exito --}}                 
             @if (session('success'))
-                <div class="alert alert-success-soft show flex items-center mb-2">
+                <div class="alert alerta-exito show flex items-center mb-2">
                     {{ session('success') }}
                 </div>
             @endif 
             @if ($errors->any())
                 {{-- Mostrar error --}}
-                <div class="alert alert-danger-soft show flex items-center mb-2">
+                <div class="alert alerta-error show flex items-center mb-2">
                     <i data-lucide="alert-octagon" class="w-6 h-6 mr-2"></i>
                     <ul>
                         @foreach ($errors->all() as $error)
@@ -373,7 +373,7 @@
                     <form class="form" method="POST" action="{{ route('upload-documento') }}" enctype="multipart/form-data">
                         @csrf                           
                         <div class="form-inline">                                                   
-                            <div class="mx-2 w-96">
+                            <div class="mx-2 ">
                                 <label>Nombre del archivo requerido:</label>  
                                 <!-- Estado - 2da Etapa -->
                                 @if($tramite->estado >= 6 && $tramite->estado < 10 && $tramite->estado != 8)
@@ -542,7 +542,7 @@
                                     </select>
                                 @endif
                             </div>
-                            <div class="mx-2 w-96">
+                            <div class="mx-2 w-96 espacio-form">
                                 <label for="documento" class="form-label">
                                     <span class="font-bold">
                                         Seleccione un archivo a cargar
@@ -552,7 +552,7 @@
                                     <input type="file" name="documento" id="documento" >
                                 </div>
                             </div>
-                            <div class="mx-2 w-20">
+                            <div class="mx-2 w-20 espacio-form">
                                 <button type="submit" class="btn btn-primary">                                    
                                     <svg class="mx-2 subir" xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><style>.subir{fill:#ffffff}</style><path d="M288 109.3V352c0 17.7-14.3 32-32 32s-32-14.3-32-32V109.3l-73.4 73.4c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3l128-128c12.5-12.5 32.8-12.5 45.3 0l128 128c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L288 109.3zM64 352H192c0 35.3 28.7 64 64 64s64-28.7 64-64H448c35.3 0 64 28.7 64 64v32c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V416c0-35.3 28.7-64 64-64zM432 456a24 24 0 1 0 0-48 24 24 0 1 0 0 48z"/></svg>
                                     Subir
@@ -739,8 +739,8 @@
                     <!-- Estado - Datos Registrados - Documentos Entregados - Documentos No Aprobados-->   
                     @if ($tramite->estado == 2 || $tramite->estado == 5 || $tramite->estado == 6 || $tramite->estado == 9 || $tramite->estado == 8 || $tramite->estado == 12)
                         <div class="text-center mt-5">
-                            <a class="btn btn-primary" href="javascript:;" data-tw-toggle="modal" data-tw-target="#revisionTramiteModal">                                    
-                                <svg class="svg-inline--fa fa-venus-mars w-6 h-4 text-slate-500 mr-2 blanco" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><style>.blanco{fill:#ffffff}</style><path  d="M64 0C28.7 0 0 28.7 0 64V448c0 35.3 28.7 64 64 64H320c35.3 0 64-28.7 64-64V160H256c-17.7 0-32-14.3-32-32V0H64zM256 0V128H384L256 0zM216 408c0 13.3-10.7 24-24 24s-24-10.7-24-24V305.9l-31 31c-9.4 9.4-24.6 9.4-33.9 0s-9.4-24.6 0-33.9l72-72c9.4-9.4 24.6-9.4 33.9 0l72 72c9.4 9.4 9.4 24.6 0 33.9s-24.6 9.4-33.9 0l-31-31V408z"/></svg>
+                            <a class="btn btn-primary-fuera" href="javascript:;" data-tw-toggle="modal" data-tw-target="#revisionTramiteModal">                                    
+                                <svg class="svg-inline--fa fa-venus-mars w-6 h-4 text-slate-500 mr-2 relleno" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M64 0C28.7 0 0 28.7 0 64V448c0 35.3 28.7 64 64 64H320c35.3 0 64-28.7 64-64V160H256c-17.7 0-32-14.3-32-32V0H64zM256 0V128H384L256 0zM216 408c0 13.3-10.7 24-24 24s-24-10.7-24-24V305.9l-31 31c-9.4 9.4-24.6 9.4-33.9 0s-9.4-24.6 0-33.9l72-72c9.4-9.4 24.6-9.4 33.9 0l72 72c9.4 9.4 9.4 24.6 0 33.9s-24.6 9.4-33.9 0l-31-31V408z"/></svg>
                                 Mandar a revisión
                             </a>
                         </div>
@@ -843,7 +843,7 @@
                         <div class="intro-y col-span-12 lg:col-span-12">  
                             {{-- Mensaje Alerta --}}
                             @if (session('info'))
-                                <div class="alert alert-danger-soft show flex items-center mb-2">
+                                <div class="alert alerta-error show flex items-center mb-2">
                                     <i data-lucide="alert-octagon" class="w-6 h-6 mr-2"></i>
                                     {{ session('info') }}
                                 </div>
@@ -856,7 +856,7 @@
                             @endif 
                             @if ($errors->any())
                                 {{-- Mostrar error --}}
-                                <div class="alert alert-danger-soft show flex items-center mb-2">
+                                <div class="alert alerta-error show flex items-center mb-2">
                                     <i data-lucide="alert-octagon" class="w-6 h-6 mr-2"></i>
                                     <ul>
                                         @foreach ($errors->all() as $error)

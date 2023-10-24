@@ -256,7 +256,7 @@
         <div class="intro-y col-span-12 lg:col-span-12">  
             {{-- Mensaje Alerta --}}
             @if (session('info'))
-                <div class="alert alert-danger-soft show flex items-center mb-2">
+                <div class="alert alerta-error show flex items-center mb-2">
                     <i data-lucide="alert-octagon" class="w-6 h-6 mr-2"></i>
                     {{ session('info') }}
                 </div>
@@ -269,7 +269,7 @@
             @endif 
             @if ($errors->any())
                 {{-- Mostrar error --}}
-                <div class="alert alert-danger-soft show flex items-center mb-2">
+                <div class="alert alerta-error show flex items-center mb-2">
                     <i data-lucide="alert-octagon" class="w-6 h-6 mr-2"></i>
                     <ul>
                         @foreach ($errors->all() as $error)
