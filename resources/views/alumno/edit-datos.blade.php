@@ -69,7 +69,7 @@
                                         @else
                                             value="{{old('codigo')}}"
                                         @endif disabled>  
-                                        <label for="promedio" class="form-label sm:w-20">Promedio</label>
+                                        <label for="promedio" class="form-label sm:w-20 espacio-form">Promedio</label>
                                         <input id="promedio" name="promedio" type="text" class="form-control" placeholder="92.80"
                                         @if(isset($alumno))
                                             value="{{$alumno->promedio}}"
@@ -85,7 +85,7 @@
                                         @else
                                             value="{{old('situacion')}}"
                                         @endif disabled>
-                                        <label for="carrera" class="form-label sm:w-20">Carrera</label>
+                                        <label for="carrera" class="form-label sm:w-20 espacio-form">Carrera</label>
                                         <input id="carrera" name="carrera" type="text" class="form-control" placeholder="2019A..."
                                         @if(isset($alumno->carrera))
                                             value="{{ $alumno->carrera->clave }}"
@@ -101,7 +101,7 @@
                                         @else
                                             value="{{old('ciclo_ingreso')}}"
                                         @endif disabled>
-                                        <label for="ciclo_egreso" class="form-label sm:w-20">Ciclo &nbsp;Egreso</label>
+                                        <label for="ciclo_egreso" class="form-label sm:w-20 espacio-form">Ciclo &nbsp;Egreso</label>
                                         <input id="ciclo_egreso" name="ciclo_egreso" type="text" class="form-control" placeholder="2022B..."
                                         @if(isset($alumno))
                                             value="{{$alumno->ciclo_egreso}}"
@@ -236,7 +236,7 @@
                                             value="{{old('estado_nacimiento')}}"
                                         @endif>
                                     
-                                        <label for="municipio_nacimiento" class="form-label sm:w-20">Ciudad o Municipio</label>
+                                        <label for="municipio_nacimiento" class="form-label sm:w-20 espacio-form">Ciudad o Municipio</label>
                                         <input id="municipio_nacimiento" name="municipio_nacimiento" type="text" class="form-control" placeholder="Guadalajara..." value="Guadalajara"
                                         @if(isset($alumno))
                                             value="{{$alumno->municipio_nacimiento}}"
@@ -254,7 +254,7 @@
                                                 @if(isset($alumno) && $alumno->estado_civil == "Casado") selected @endif>Casado</option>                            
                                         </select>
                                     
-                                        <label for="genero" class="form-label sm:w-20">Género</label>
+                                        <label for="genero" class="form-label sm:w-20 espacio-form">Género</label>
                                         <select id="genero" name="genero" class="form-control" aria-label=".form-select-sm example">
                                             <option value="0" selected>Seleccione el género...</option>                                   
                                             <option value="Mujer"
@@ -271,7 +271,7 @@
                                         @else
                                             value="{{old('telefono_celular')}}"
                                         @endif>
-                                        <label for="telefono_particular" class="form-label sm:w-20">Teléfono Particular</label>
+                                        <label for="telefono_particular" class="form-label sm:w-20 espacio-form">Teléfono Particular</label>
                                         <input id="telefono_particular" name="telefono_particular" type="text" class="form-control" placeholder="3334327654..." value="3334327654"
                                         @if(isset($alumno))
                                             value="{{$alumno->telefono_particular}}"
@@ -292,7 +292,7 @@
                                             value="{{old('domicilio_calle')}}"
                                         @endif>
                                     
-                                        <label for="domicilio_numero" class="form-label sm:w-20">Número</label>
+                                        <label for="domicilio_numero" class="form-label sm:w-20 espacio-form">Número</label>
                                         <input id="domicilio_numero" name="domicilio_numero" type="text" class="form-control" placeholder="13..." value="13"
                                         @if(isset($alumno))
                                             value="{{$alumno->dom_numero}}"
@@ -309,7 +309,7 @@
                                             value="{{old('domicilio_colonia')}}"
                                         @endif>
                                     
-                                        <label for="domicilio_cp" class="form-label sm:w-20">CP</label>
+                                        <label for="domicilio_cp" class="form-label sm:w-20 espacio-form">CP</label>
                                         <input id="domicilio_cp" name="domicilio_cp" type="text" class="form-control" placeholder="12345..." value="12345"
                                         @if(isset($alumno))
                                             value="{{$alumno->dom_CP}}"
@@ -326,7 +326,7 @@
                                             value="{{old('domicilio_estado')}}"
                                         @endif>
                                     
-                                        <label for="domicilio_municipio" class="form-label sm:w-20">Ciudad o Municipio</label>
+                                        <label for="domicilio_municipio" class="form-label sm:w-20 espacio-form">Ciudad o Municipio</label>
                                         <input id="domicilio_municipio" name="domicilio_municipio" type="text" class="form-control" placeholder="Guadalajara..." value="Guadalajara"
                                         @if(isset($alumno))
                                             value="{{$alumno->dom_municipio}}"
@@ -360,7 +360,7 @@
                 </div>
             </div>            
             <div class="sm:pl-5 mt-5">
-                <button class="btn btn-primary" type="submit">Guardar</button>                                               
+                <button class="btn btn-primary-fuera" type="submit">Guardar</button>                                               
                 <!--<a class="btn btn-secondary" href=" ">Cancelar</a>-->
             </div>
         </form>

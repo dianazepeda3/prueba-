@@ -22,20 +22,20 @@
                 <div class="pasos__item box p-2 zoom-in intro-x">
                     <h2 class="pasos__item-numero"> 01</h2>
                     <div>
-                        <h1 class="pasos__item-titulo"><a href="https://practicas.cucei.udg.mx/empresa/convenio">Elige tu modalidad de titulación</a></h1>
+                        <h1 class="pasos__item-titulo"><a href="">Elige tu modalidad de titulación</a></h1>
                         <!--<h3 class="pasos__item-desc">Carga tu CV y tu NSS <a href="/alumno/documentos">-->
                         <!-- <i class="fa-solid fa-upload"></i></a></h3>-->
                     </div>
                 </div>
                 <!-- Contenedor paso 2 -->
-                <div class="pasos__item box p-2 zoom-in intro-x">
+                <div class="pasos__item box p-2 zoom-in intro-x mt-2">
                     <h2 class="pasos__item-numero"> 02</h2>
                     <div>
                         <h1 class="pasos__item-titulo"><a href="{{ route('show-documentos') }}" > Sube tus documentos</a></h1>                        
                     </div>
                 </div>
                 <!-- Contenedor paso 3 -->
-                <div class="pasos__item box p-2 zoom-in intro-x">
+                <div class="pasos__item box p-2 zoom-in intro-x mt-2">
                     <h2 class="pasos__item-numero"> 03</h2>
                     <div>
                         <h1 class="pasos__item-titulo">Recibe respuesta</h1>
@@ -43,14 +43,14 @@
                     </div>
                 </div>
                 <!-- Contenedor paso 4 -->
-                <div class="pasos__item box p-2 zoom-in intro-x">
+                <div class="pasos__item box p-2 zoom-in intro-x mt-2">
                     <h2 class="pasos__item-numero"> 04</h2>
                     <div>
                         <h1 class="pasos__item-titulo"> Donec tincidunt, orci et mattis iaculis</h1>
                     </div>
                 </div>
                 <!-- Contenedor paso 5 -->
-                <div class="pasos__item box p-2 zoom-in intro-x">
+                <div class="pasos__item box p-2 zoom-in intro-x mt-2">
                     <h2 class="pasos__item-numero"> 05</h2>
                     <div>
                         <h1 class="pasos__item-titulo">Ut convallis efficitur mauris ut blandit</h1>

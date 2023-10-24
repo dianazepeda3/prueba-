@@ -72,7 +72,7 @@
                                     value="{{old('codigo')}}"
                                 @endif
                                 @can('alumno') disabled @endcan>
-                                <label for="promedio" class="form-label sm:w-20">Promedio</label>
+                                <label for="promedio" class="form-label sm:w-20 espacio-form">Promedio</label>
                                 <input id="promedio" name="promedio" type="text" class="form-control" placeholder="92.80"
                                 @if(isset($alumno))
                                     value="{{$alumno->promedio}}"
@@ -100,7 +100,7 @@
                                     </select>
                                 @endif
                                 @can('alumno')
-                                    <label for="carrera" class="form-label sm:w-20">Carrera</label>
+                                    <label for="carrera" class="form-label sm:w-20 espacio-form">Carrera</label>
                                     <input id="carrera" name="carrera" type="text" class="form-control" placeholder="2019A..."
                                     @if(isset($alumno))
                                         value="{{ $alumno->carrera->clave }}"
@@ -130,7 +130,7 @@
                                     value="{{old('ciclo_ingreso')}}"
                                 @endif
                                 @can('alumno') disabled @endcan> 
-                                <label for="ciclo_egreso" class="form-label sm:w-20">Ciclo &nbsp;Egreso</label>
+                                <label for="ciclo_egreso" class="form-label sm:w-20 espacio-form">Ciclo &nbsp;Egreso</label>
                                 <input id="ciclo_egreso" name="ciclo_egreso" type="text" class="form-control" placeholder="2022B..."
                                 @if(isset($alumno))
                                     value="{{$alumno->ciclo_egreso}}"

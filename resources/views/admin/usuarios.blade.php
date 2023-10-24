@@ -6,13 +6,13 @@
 
 @section('subcontent')
     <div class="intro-y flex flex-col sm:flex-row items-center mt-8">
-        <h2 class="text-lg font-medium mr-auto">USUARIOS</h2>
+        <h2 class="text-lg font-medium mr-auto color-claro">USUARIOS</h2>
         <div class="w-full sm:w-auto flex flex-wrap gap-y-3 mt-4 sm:mt-0">
             <a class="btn btn-facebook shadow-md mr-2" href="javascript:;" data-tw-toggle="modal" data-tw-target="#modal-division">
                 <svg class="svg-inline--fa fa-venus-mars w-4 h-4 text-slate-500 mr-2 blanco" xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 640 512"><style>.blanco{fill:#ffffff}</style><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M224 256A128 128 0 1 0 224 0a128 128 0 1 0 0 256zm-45.7 48C79.8 304 0 383.8 0 482.3C0 498.7 13.3 512 29.7 512H322.8c-3.1-8.8-3.7-18.4-1.4-27.8l15-60.1c2.8-11.3 8.6-21.5 16.8-29.7l40.3-40.3c-32.1-31-75.7-50.1-123.9-50.1H178.3zm435.5-68.3c-15.6-15.6-40.9-15.6-56.6 0l-29.4 29.4 71 71 29.4-29.4c15.6-15.6 15.6-40.9 0-56.6l-14.4-14.4zM375.9 417c-4.1 4.1-7 9.2-8.4 14.9l-15 60.1c-1.4 5.5 .2 11.2 4.2 15.2s9.7 5.6 15.2 4.2l60.1-15c5.6-1.4 10.8-4.3 14.9-8.4L576.1 358.7l-71-71L375.9 417z"/></svg>
                 <span>Editar Director y Secretario de Division</span>
             </a>
-            <a class="btn btn-primary shadow-md mr-2" href="{{route('usuarios-form')}}">
+            <a class="btn btn-primary-fuera shadow-md mr-2 espacio-form" href="{{route('usuarios-form')}}">
                 <i class="w-4 h-4 mr-2" data-lucide="plus"></i> Agregar Nuevo Usuario
             </a>           
         </div>
@@ -75,11 +75,11 @@
         <table class="table table-report">
             <tbody>
                 <tr>
-                    <th>NOMBRE</th>
-                    <th>EMAIL</th>
-                    <th>FECHA DE CREACIÓN</th>
-                    <th>ROL</th>
-                    <th>ACCIONES</th>
+                    <th class="color-claro">NOMBRE</th>
+                    <th class="color-claro">EMAIL</th>
+                    <th class="color-claro">FECHA DE CREACIÓN</th>
+                    <th class="color-claro">ROL</th>
+                    <th class="color-claro">ACCIONES</th>
                 </tr>
                 @foreach ($usuarios as $usuario)
                     @if ($usuario->is_admin && ($filtrar == 0 || $filtrar == $usuario->admin_type) && ($nombre == "" || stripos($usuario->name, $nombre) !== false))                                                                                                                                                                               

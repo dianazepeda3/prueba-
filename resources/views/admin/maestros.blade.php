@@ -5,7 +5,7 @@
 @endsection
 
 @section('subcontent')
-    <h2 class="intro-y text-lg font-medium mt-10">MAESTROS</h2>
+    <h2 class="intro-y text-lg font-medium mt-10 color-claro">MAESTROS</h2>
     {{-- ERRORES --}}
     <div class="grid grid-cols-12 gap-12 mt-3"> 
         <div class="intro-y col-span-12 lg:col-span-12">  
@@ -37,12 +37,12 @@
     </div>
     <div class="grid grid-cols-12 gap-6 mt-5">
         <div class="intro-y col-span-12 flex flex-wrap sm:flex-nowrap items-center mt-2">
-            <a class="btn btn-primary shadow-md mr-2" href="{{ route('maestros-form') }}">
+            <a class="btn btn-primary-fuera shadow-md mr-2" href="{{ route('maestros-form') }}">
                 <i class="w-4 h-4 mr-2" data-lucide="plus"></i>Agregar Maestro
             </a>             
-            <a class="btn btn-instagram shadow-md mr-2" href="{{ route('maestros-form') }}">
+            <!--<a class="btn btn-instagram shadow-md mr-2" href="{{ route('maestros-form') }}">
                 <i class="w-4 h-4 mr-2" data-lucide="plus"></i>Agregar Maestro
-            </a>          
+            </a>  -->        
             <div class="hidden md:block mx-auto text-slate-500"><!--Mostrando 1 a 10 de 150 entradas--></div>
             <div class="w-full sm:w-auto mt-3 sm:mt-0 sm:ml-auto md:ml-0">
                 <div class="w-56 relative text-slate-500">
@@ -56,11 +56,11 @@
             <table class="table table-report -mt-2">
                 <thead>
                     <tr>                       
-                        <th class="whitespace-nowrap">NOMBRE</th>
-                        <th class="whitespace-nowrap">EMAIL</th>
-                        <th class="whitespace-nowrap">CÓDIGO</th>
-                        <th class="whitespace-nowrap">GRADO</th>
-                        <th class="text-center whitespace-nowrap">ACCIONES</th>
+                        <th class="whitespace-nowrap color-claro">NOMBRE</th>
+                        <th class="whitespace-nowrap color-claro">EMAIL</th>
+                        <th class="whitespace-nowrap color-claro">CÓDIGO</th>
+                        <th class="whitespace-nowrap color-claro">GRADO</th>
+                        <th class="text-center whitespace-nowrap color-claro">ACCIONES</th>
                     </tr>
                 </thead>
                 <tbody>                

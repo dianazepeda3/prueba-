@@ -6,9 +6,9 @@
 
 @section('subcontent')
     <div class="intro-y flex flex-col sm:flex-row items-center mt-8">
-        <h2 class="text-lg font-medium mr-auto">USUARIOS</h2>
+        <h2 class="text-lg font-medium mr-auto color-claro">TRÁMITES</h2>
         <div class="w-full sm:w-auto flex flex-wrap gap-y-3 mt-4 sm:mt-0">
-            <a class="btn btn-primary shadow-md mr-2" href="{{route('crear_tramite')}}">
+            <a class="btn btn-primary-fuera shadow-md mr-2" href="{{route('crear_tramite')}}">
                 <i class="w-4 h-4 mr-2" data-lucide="plus"></i> Crear Trámite
             </a>
         </div>
@@ -78,14 +78,14 @@
         <table class="table table-report -mt-2">
             <thead>
                 <tr>
-                    <th class="whitespace-nowrap">CONSECUTIVO</th>
-                    <th class="whitespace-nowrap">ID</th>
-                    <th class="whitespace-nowrap">NOMBRE</th>
-                    <th class="whitespace-nowrap">CÓDIGO</th>
-                    <th class="whitespace-nowrap">CARRERA</th>
-                    <th class="text-center whitespace-nowrap">ESTADO</th>
-                    <th class="text-center whitespace-nowrap">ERROR</th>
-                    <th class="text-center whitespace-nowrap">ACCIONES</th>
+                    <th class="whitespace-nowrap color-claro">CONSECUTIVO</th>
+                    <th class="whitespace-nowrap color-claro">ID</th>
+                    <th class="whitespace-nowrap color-claro">NOMBRE</th>
+                    <th class="whitespace-nowrap color-claro">CÓDIGO</th>
+                    <th class="whitespace-nowrap color-claro">CARRERA</th>
+                    <th class="text-center whitespace-nowrap color-claro">ESTADO</th>
+                    <th class="text-center whitespace-nowrap color-claro">ERROR</th>
+                    <th class="text-center whitespace-nowrap color-claro">ACCIONES</th>
                 </tr>
             </thead>
             <tbody>

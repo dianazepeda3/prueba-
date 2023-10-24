@@ -97,7 +97,7 @@
                                     @else
                                         value="{{old('nombre_empresa')}}"
                                     @endif>                        
-                                    <label for="puesto" class="form-label sm:w-20">Puesto</label>
+                                    <label for="puesto" class="form-label sm:w-20 espacio-form">Puesto</label>
                                     <input id="puesto" name="puesto" type="text" class="form-control" placeholder="Becario..."
                                     @if(isset($alumno))
                                         value="{{$alumno->puesto}}"
@@ -113,7 +113,7 @@
                                     @else
                                         value="{{old('sueldo_mensual')}}"
                                     @endif>
-                                    <label for="telefono_empresa" class="form-label sm:w-20">Teléfono (empresa)</label>
+                                    <label for="telefono_empresa" class="form-label sm:w-20 espacio-form">Teléfono (empresa)</label>
                                     <input id="telefono_empresa" name="telefono_empresa" type="text" class="form-control" placeholder="1234567890..."
                                     @if(isset($alumno))
                                         value="{{$alumno->tel_empresa}}"
@@ -134,7 +134,7 @@
                                         value="{{old('empresa_calle')}}"
                                     @endif>
                                 
-                                    <label for="empresa_numero" class="form-label sm:w-20">Número</label>
+                                    <label for="empresa_numero" class="form-label sm:w-20 espacio-form">Número</label>
                                     <input id="empresa_numero" name="empresa_numero" type="text" class="form-control" placeholder="13..."
                                     @if(isset($alumno))
                                         value="{{$alumno->empresa_numero}}"
@@ -151,7 +151,7 @@
                                         value="{{old('empresa_colonia')}}"
                                     @endif>
                                 
-                                    <label for="empresa_CP" class="form-label sm:w-20">CP</label>
+                                    <label for="empresa_CP" class="form-label sm:w-20 espacio-form">CP</label>
                                     <input id="empresa_CP" name="empresa_CP" type="text" class="form-control" placeholder="12345..."
                                     @if(isset($alumno))
                                         value="{{$alumno->empresa_CP}}"
@@ -168,7 +168,7 @@
                                         value="{{old('empresa_estado')}}"
                                     @endif>
                                 
-                                    <label for="empresa_municipio" class="form-label sm:w-20">Ciudad o Municipio</label>
+                                    <label for="empresa_municipio" class="form-label sm:w-20 espacio-form">Ciudad o Municipio</label>
                                     <input id="empresa_municipio" name="empresa_municipio" type="text" class="form-control" placeholder="Guadalajara..."
                                     @if(isset($alumno))
                                         value="{{$alumno->empresa_municipio}}"

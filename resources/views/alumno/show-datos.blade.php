@@ -6,7 +6,7 @@
 
 @section('subcontent')      
     <div class="intro-y flex flex-col sm:flex-row items-center mt-8">
-        <h2 class="flex items-center text-lg font-medium mr-auto">
+        <h2 class="flex items-center text-lg font-medium mr-auto color-claro">
             MIS DATOS
         </h2>
         <!--<div class="w-full sm:w-auto flex mt-4 sm:mt-0">
