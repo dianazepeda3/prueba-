@@ -2257,7 +2257,7 @@ class AdminController extends Controller
                 'carrera' =>'required|numeric',
                 'maestro' => 'required',
             ]);  
-            if(Coordinador::where('id_carrera',$request->carrera)->first() != null){
+            if(Coordinador::where('carrera_id',$request->carrera)->first() != null){
                 return redirect()->route('usuarios-form')->with('info', 'Ya existe un usuario de coordinador de esta carrera');
             }   
             if(Coordinador::where('id_maestro',$request->maestro)->first() != null){
