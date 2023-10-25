@@ -54,8 +54,8 @@
                 <label for="nombre" class="form-label">Nombre del Usuario</label>
                 <input id="nombre" name="nombre" type="text" class="form-control mr-5" placeholder="Nombre del alumno.." 
                     @if ($nombre != "") value="{{ $nombre }}" @endif>
-                <label for="fitrar" class="form-label">Rol</label>
-                <select id="filtrar" name="filtrar"  class="form-control tom-select w-72 mr-5" aria-label="Default select example">
+                <label for="fitrar" class="form-label espacio-form">Rol</label>
+                <select id="filtrar" name="filtrar"  class="form-control tom-select campo-rol mr-5" aria-label="Default select example">
                     <option value="0" @if ($filtrar == 0) selected @endif>Todos</option>
                     <option value="1" @if ($filtrar == 1) selected @endif>Administrador</option>
                     <option value="5" @if ($filtrar == 5) selected @endif>División</option>
@@ -63,7 +63,7 @@
                     <option value="3" @if ($filtrar == 3) selected @endif>Biblioteca</option>
                     <option value="4" @if ($filtrar == 4) selected @endif>Control Escolar</option>                    
                 </select>            
-                <button class="btn btn-primary shadow-md" type="submit">
+                <button class="btn btn-primary shadow-md boton-100 espacio-form" type="submit">
                     <i class="w-4 h-4 mr-2" data-lucide="search"></i> Filtrar
                 </button>
             </div>

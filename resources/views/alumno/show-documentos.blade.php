@@ -377,7 +377,7 @@
                                 <label>Nombre del archivo requerido:</label>  
                                 <!-- Estado - 2da Etapa -->
                                 @if($tramite->estado >= 6 && $tramite->estado < 10 && $tramite->estado != 8)
-                                    <select class="form-control " name="nombre">                                                                                                                                            
+                                    <select class="form-control tom-select" name="nombre">                                                                                                                                            
                                         <option value="0" selected>Seleccione el nombre del archivo...</option>                                                                                                                                                                                                                                                                                                                 
                                         @if ($alumnoDocs->alumno->id_opcion_titulacion == 3 || $alumnoDocs->alumno->id_opcion_titulacion == 4)
                                             <!-- Examen Global Teorico Practico / Examen Global Teorico --> 
@@ -444,7 +444,7 @@
                                         @endif  
                                     </select>  
                                 @elseif ($tramite->estado == 8 || $tramite->estado == 12)
-                                    <select class="form-control" name="nombre">                                                                                                                                            
+                                    <select class="form-control tom-select" name="nombre">                                                                                                                                            
                                         <option value="0" selected>Seleccione el nombre del archivo...</option>  
                                         @if (!$alumnoDocs->pago_arancel) 
                                             <option value="Pago de Arancel">Pago de Arancel</option> 
@@ -552,12 +552,16 @@
                                     <input type="file" name="documento" id="documento" >
                                 </div>
                             </div>
-                            <div class="mx-2 w-20 espacio-form">
+                            <!--<div class="mx-2 w-20 espacio-form">
                                 <button type="submit" class="btn btn-primary">                                    
-                                    <svg class="mx-2 subir" xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><style>.subir{fill:#ffffff}</style><path d="M288 109.3V352c0 17.7-14.3 32-32 32s-32-14.3-32-32V109.3l-73.4 73.4c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3l128-128c12.5-12.5 32.8-12.5 45.3 0l128 128c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L288 109.3zM64 352H192c0 35.3 28.7 64 64 64s64-28.7 64-64H448c35.3 0 64 28.7 64 64v32c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V416c0-35.3 28.7-64 64-64zM432 456a24 24 0 1 0 0-48 24 24 0 1 0 0 48z"/></svg>
+                                    <svg class="mx-2 subir" xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512">)<style>.subir{fill:#ffffff}</style><path d="M288 109.3V352c0 17.7-14.3 32-32 32s-32-14.3-32-32V109.3l-73.4 73.4c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3l128-128c12.5-12.5 32.8-12.5 45.3 0l128 128c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L288 109.3zM64 352H192c0 35.3 28.7 64 64 64s64-28.7 64-64H448c35.3 0 64 28.7 64 64v32c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V416c0-35.3 28.7-64 64-64zM432 456a24 24 0 1 0 0-48 24 24 0 1 0 0 48z"/></svg>
                                     Subir
-                                </button>
-                            </div>
+                                </button>                                
+                            </div>-->
+                            <button class="btn btn-primary shadow-md boton-100 espacio-form" type="submit">
+                                <svg class="mx-2 subir" xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512">)<style>.subir{fill:#ffffff}</style><path d="M288 109.3V352c0 17.7-14.3 32-32 32s-32-14.3-32-32V109.3l-73.4 73.4c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3l128-128c12.5-12.5 32.8-12.5 45.3 0l128 128c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L288 109.3zM64 352H192c0 35.3 28.7 64 64 64s64-28.7 64-64H448c35.3 0 64 28.7 64 64v32c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V416c0-35.3 28.7-64 64-64zM432 456a24 24 0 1 0 0-48 24 24 0 1 0 0 48z"/></svg>
+                                <span>Subir</span>
+                            </button>
                         </div>
                     </form>
                 </div>

@@ -75,7 +75,7 @@
                 <li><hr class="dropdown-divider"></li>
                 <li>
                     <a href="{{ route('logout') }}" class="dropdown-item">
-                        <i data-lucide="toggle-right" class="w-4 h-4 mr-2"></i> Cerrar Sesión
+                        <i data-lucide="log-out" class="w-4 h-4 mr-2"></i> Cerrar Sesión
                     </a>
                 </li>
             </ul>
