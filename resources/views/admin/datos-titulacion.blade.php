@@ -48,11 +48,11 @@
                             @method('PATCH') 
                             @csrf                            
                             <div class="modal-body grid grid-cols-12 gap-4 gap-y-3"> 
-                                <div class="col-span-9 sm:col-span-12"> 
+                                <div class="col-span-9 sm:col-span-9"> 
                                     <label for="nombre" class="form-label">Nombre Completo:</label> 
                                     <input id="nombre" type="text" class="form-control" value="{{$alumno->user->name}}" disabled> 
                                 </div> 
-                                <div class="col-span-3 sm:col-span-12"> 
+                                <div class="col-span-3 sm:col-span-3"> 
                                     <label for="codigo" class="form-label">Código:</label> 
                                     <input id="codigo" type="text" class="form-control" value="{{$alumno->user->codigo}}" disabled> 
                                 </div> 
@@ -103,8 +103,8 @@
                                 </div> 
                                 <div class="col-span-12 sm:col-span-4">                                     
                                     <label for="tipo_de_ceremonia" class="form-label">Tipo de Ceremonia: </label>
-                                    <select class="form-control" name="tipo_de_ceremonia" id="tipo_de_ceremonia">
-                                        <option value="">Seleccione una opción</option>
+                                    <select class="tom-select" name="tipo_de_ceremonia" id="tipo_de_ceremonia">
+                                        <option value="0">Seleccione una opción</option>
                                         <option value="INDIVIDUAL" @if(isset($alumno) && $alumno->tipo_de_ceremonia == 'INDIVIDUAL') selected @endif>Individual</option>
                                         <option value="MASIVA" @if(isset($alumno) && $alumno->tipo_de_ceremonia == 'MASIVA') selected @endif>Masiva</option>
                                         <option value="TOMA DE PROTESTA EN ACTO ACADÉMICO" @if(isset($alumno) && $alumno->tipo_de_ceremonia == 'TOMA DE PROTESTA EN ACTO ACADÉMICO') selected @endif>Toma de Protesta en Acto Académico</option>
@@ -117,7 +117,7 @@
                                 </div>                              
                                 <div class="col-span-4 sm:col-span-12"> 
                                     <label for="presidente">Presidente:</label>
-                                    <select id="presidente" name="presidente" data-placeholder="Selecciona el presidente" class="tom-select w-full">
+                                    <select id="presidente" name="presidente" data-placeholder="Selecciona el presidente" class="tom-select w-full mt-2">
                                         <option value="">Seleccione una opción</option>
                                         @foreach($maestros as $presidente)
                                         <option value="{{$presidente->id}}" @if(isset($alumno) && $alumno->id_maestro_presidente == $presidente->id) selected @endif>{{$presidente->nombre}}</option>
@@ -126,7 +126,7 @@
                                 </div> 
                                 <div class="col-span-4 sm:col-span-12"> 
                                     <label for="secretario">Secretario:</label>
-                                    <select id="secretario" name="secretario" data-placeholder="Selecciona el secretario" class="tom-select w-full">
+                                    <select id="secretario" name="secretario" data-placeholder="Selecciona el secretario" class="tom-select w-full mt-2">
                                         <option value="">Seleccione una opción</option>
                                         @foreach($maestros as $secretario)
                                             <option value="{{$secretario->id}}" @if(isset($alumno) && $alumno->id_maestro_secretario == $secretario->id) selected @endif>{{$secretario->nombre}}</option>
@@ -135,7 +135,7 @@
                                 </div> 
                                 <div class="col-span-4 sm:col-span-12"> 
                                     <label for="vocal">Vocal:</label>
-                                    <select id="vocal" name="vocal" data-placeholder="Selecciona el vocal" class="tom-select w-full">
+                                    <select id="vocal" name="vocal" data-placeholder="Selecciona el vocal" class="tom-select w-full  mt-2">
                                         <option value="">Seleccione una opción</option>
                                         @foreach($maestros as $vocal)
                                             <option value="{{$vocal->id}}" @if(isset($alumno) && $alumno->id_maestro_vocal == $vocal->id) selected @endif>{{$vocal->nombre}}</option>
@@ -176,8 +176,8 @@
                                 </div>  
                                 <div class="col-span-12 sm:col-span-6">                                     
                                     <label for="tipo_de_ceremonia_presencial_virtual" class="form-label">Tipo de Ceremonia (Presencial o Virtual):</label>
-                                    <select class="form-control" name="tipo_de_ceremonia_presencial_virtual" id="tipo_de_ceremonia_presencial_virtual">
-                                        <option value="">Seleccione una opción</option>
+                                    <select class="tom-select" name="tipo_de_ceremonia_presencial_virtual" id="tipo_de_ceremonia_presencial_virtual">
+                                        <option value="0">Seleccione una opción</option>
                                         <option value="PRESENCIAL" @if(isset($alumno) && $alumno->tipo_de_ceremonia_presencial_virtual == 'PRESENCIAL') selected @endif>Presencial</option>
                                         <option value="VIRTUAL" @if(isset($alumno) && $alumno->tipo_de_ceremonia_presencial_virtual == 'VIRTUAL') selected @endif>Virtual</option>
                                     </select><br>

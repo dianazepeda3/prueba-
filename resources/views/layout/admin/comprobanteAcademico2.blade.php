@@ -154,7 +154,7 @@
     <img class="firma-digital2" src="{{ storage_path('app/' . $firma->ruta) }}">    
     <div class="pos coordi ">
         <p>
-            {{ $alumno->carrera->nombre_coordinador}}<br>
+            {{ $alumno->carrera->coordinador->user->name }}<br>
             Presidente del comité de titulación en {{ $alumno->carrera->carrera}}
         </p> 
         <p class="letra10 cursiva">JLDBC/Ipbc</p> 

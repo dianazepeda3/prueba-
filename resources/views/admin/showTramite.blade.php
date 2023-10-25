@@ -90,7 +90,7 @@
                     </div>-->
                 @endif
                 <!-- Boton de Validar Documentos -->                
-                @if($aprobados && $tramite->estado == 3 || $aprobados && $tramite->estado == 7 || $aprobados && $tramite->estado == 10)
+                @if((($aprobados && $tramite->estado == 3 || $aprobados && $tramite->estado == 7) && $user->admin_type == 2) || ($aprobados && $tramite->estado == 10 && $user->admin_type == 5))
                     <!--Estado - Documentos Entregados -->
                     <div class="btn-group mr-2">
                         <a href="{{route('validar-documentos',$tramite)}}"  class="btn btn-primary btn-icon-split" id="aprobar" >
@@ -98,7 +98,7 @@
                             <span class="text">Validar Documentos</span>
                         </a>
                     </div>
-                @elseif(($revisados && $tramite->estado == 3 || $revisados && $tramite->estado == 7 || $revisados && $tramite->estado == 10))
+                @elseif((($revisados && $tramite->estado == 3 || $revisados && $tramite->estado == 7) && $user->admin_type == 2) || ($revisados && $tramite->estado == 10 && $user->admin_type == 5))
                     <!--Estado - Documentos Entregados -->
                     <div class="btn-group mr-2">
                         <a href="{{route('revisar-documentos',$tramite)}}"  class="btn btn-primary btn-icon-split" id="aprobar" >
@@ -108,31 +108,33 @@
                     </div>
                 @elseif($tramite->estado == 4)
                     <!-- Boton de Generar Dictamen -->
-                    @if($alumnoDocs->dictamen == 0)
-                        <div class="btn-group mr-2">                        
-                            <a href="javascript:;" data-tw-toggle="modal" data-tw-target="#modal-dictamen" class="btn btn-primary" id="citatorio" >
-                                <svg class="svg-inline--fa fa-venus-mars w-4 h-4 text-slate-500 mr-2 blanco" xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 384 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><style>.blanco{fill:#ffffff}</style><path d="M64 0C28.7 0 0 28.7 0 64V448c0 35.3 28.7 64 64 64H320c35.3 0 64-28.7 64-64V160H256c-17.7 0-32-14.3-32-32V0H64zM256 0V128H384L256 0zM112 256H272c8.8 0 16 7.2 16 16s-7.2 16-16 16H112c-8.8 0-16-7.2-16-16s7.2-16 16-16zm0 64H272c8.8 0 16 7.2 16 16s-7.2 16-16 16H112c-8.8 0-16-7.2-16-16s7.2-16 16-16zm0 64H272c8.8 0 16 7.2 16 16s-7.2 16-16 16H112c-8.8 0-16-7.2-16-16s7.2-16 16-16z"/></svg>
-                                <span class="text">Generar Dictamen</span>
-                            </a>                        
-                        </div>
-                    @endif
-                    @if($alumnoDocs->comprobante_academica == 0 && $alumnoDocs->dictamen == 1)
-                        <div class="btn-group mr-2">                        
-                            <a href="{{route('generar_comprobante_academico',$tramite)}}"  class="btn btn-primary" id="citatorio" >
-                                <svg class="svg-inline--fa fa-venus-mars w-4 h-4 text-slate-500 mr-2 blanco" xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 384 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><style>.blanco{fill:#ffffff}</style><path d="M64 0C28.7 0 0 28.7 0 64V448c0 35.3 28.7 64 64 64H320c35.3 0 64-28.7 64-64V160H256c-17.7 0-32-14.3-32-32V0H64zM256 0V128H384L256 0zM112 256H272c8.8 0 16 7.2 16 16s-7.2 16-16 16H112c-8.8 0-16-7.2-16-16s7.2-16 16-16zm0 64H272c8.8 0 16 7.2 16 16s-7.2 16-16 16H112c-8.8 0-16-7.2-16-16s7.2-16 16-16zm0 64H272c8.8 0 16 7.2 16 16s-7.2 16-16 16H112c-8.8 0-16-7.2-16-16s7.2-16 16-16z"/></svg>
-                                <span class="text">Generar Comprobante Academico</span>
-                            </a>                        
-                        </div>
-                    @endif
-                    <!-- Boton de Pasar a 2da etapa -->                
-                    @if($alumnoDocs->dictamen == 1 && $alumnoDocs->comprobante_academica == 1)
-                        <div class="btn-group mr-2">
-                            <a href="{{route('pasar_etapa2',$tramite)}}"  class="btn btn-primary btn-icon-split" id="aprobar" >
-                                <svg class="svg-inline--fa fa-venus-mars w-4 h-4 text-slate-500 mr-2 blanco" xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><style>.blanco{fill:#ffffff}</style><path d="M52.5 440.6c-9.5 7.9-22.8 9.7-34.1 4.4S0 428.4 0 416V96C0 83.6 7.2 72.3 18.4 67s24.5-3.6 34.1 4.4L224 214.3V256v41.7L52.5 440.6zM256 352V256 128 96c0-12.4 7.2-23.7 18.4-29s24.5-3.6 34.1 4.4l192 160c7.3 6.1 11.5 15.1 11.5 24.6s-4.2 18.5-11.5 24.6l-192 160c-9.5 7.9-22.8 9.7-34.1 4.4s-18.4-16.6-18.4-29V352z"/></svg>
-                                <span class="text">Pasar a 2da Etapa</span>
-                            </a>
-                        </div>
-                    @endif  
+                    @can('admin-coordinador')                                            
+                        @if($alumnoDocs->dictamen == 0)
+                            <div class="btn-group mr-2">                        
+                                <a href="javascript:;" data-tw-toggle="modal" data-tw-target="#modal-dictamen" class="btn btn-primary" id="citatorio" >
+                                    <svg class="svg-inline--fa fa-venus-mars w-4 h-4 text-slate-500 mr-2 blanco" xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 384 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><style>.blanco{fill:#ffffff}</style><path d="M64 0C28.7 0 0 28.7 0 64V448c0 35.3 28.7 64 64 64H320c35.3 0 64-28.7 64-64V160H256c-17.7 0-32-14.3-32-32V0H64zM256 0V128H384L256 0zM112 256H272c8.8 0 16 7.2 16 16s-7.2 16-16 16H112c-8.8 0-16-7.2-16-16s7.2-16 16-16zm0 64H272c8.8 0 16 7.2 16 16s-7.2 16-16 16H112c-8.8 0-16-7.2-16-16s7.2-16 16-16zm0 64H272c8.8 0 16 7.2 16 16s-7.2 16-16 16H112c-8.8 0-16-7.2-16-16s7.2-16 16-16z"/></svg>
+                                    <span class="text">Generar Dictamen</span>
+                                </a>                        
+                            </div>
+                        @endif
+                        @if($alumnoDocs->comprobante_academica == 0 && $alumnoDocs->dictamen == 1)
+                            <div class="btn-group mr-2">                        
+                                <a href="{{route('generar_comprobante_academico',$tramite)}}"  class="btn btn-primary" id="citatorio" >
+                                    <svg class="svg-inline--fa fa-venus-mars w-4 h-4 text-slate-500 mr-2 blanco" xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 384 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><style>.blanco{fill:#ffffff}</style><path d="M64 0C28.7 0 0 28.7 0 64V448c0 35.3 28.7 64 64 64H320c35.3 0 64-28.7 64-64V160H256c-17.7 0-32-14.3-32-32V0H64zM256 0V128H384L256 0zM112 256H272c8.8 0 16 7.2 16 16s-7.2 16-16 16H112c-8.8 0-16-7.2-16-16s7.2-16 16-16zm0 64H272c8.8 0 16 7.2 16 16s-7.2 16-16 16H112c-8.8 0-16-7.2-16-16s7.2-16 16-16zm0 64H272c8.8 0 16 7.2 16 16s-7.2 16-16 16H112c-8.8 0-16-7.2-16-16s7.2-16 16-16z"/></svg>
+                                    <span class="text">Generar Comprobante Academico</span>
+                                </a>                        
+                            </div>
+                        @endif
+                        <!-- Boton de Pasar a 2da etapa -->                
+                        @if($alumnoDocs->dictamen == 1 && $alumnoDocs->comprobante_academica == 1)
+                            <div class="btn-group mr-2">
+                                <a href="{{route('pasar_etapa2',$tramite)}}"  class="btn btn-primary btn-icon-split" id="aprobar" >
+                                    <svg class="svg-inline--fa fa-venus-mars w-4 h-4 text-slate-500 mr-2 blanco" xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><style>.blanco{fill:#ffffff}</style><path d="M52.5 440.6c-9.5 7.9-22.8 9.7-34.1 4.4S0 428.4 0 416V96C0 83.6 7.2 72.3 18.4 67s24.5-3.6 34.1 4.4L224 214.3V256v41.7L52.5 440.6zM256 352V256 128 96c0-12.4 7.2-23.7 18.4-29s24.5-3.6 34.1 4.4l192 160c7.3 6.1 11.5 15.1 11.5 24.6s-4.2 18.5-11.5 24.6l-192 160c-9.5 7.9-22.8 9.7-34.1 4.4s-18.4-16.6-18.4-29V352z"/></svg>
+                                    <span class="text">Pasar a 2da Etapa</span>
+                                </a>
+                            </div>
+                        @endif 
+                    @endcan 
                 <!-- Estado - Documentos Validados 2da Etapa-->                            
                 @elseif ($tramite->estado == 11)
                     <!--can('admin')                                                    -->
@@ -519,8 +521,8 @@
                                                                 <svg class="svg-inline--fa fa-venus-mars w-6 h-4 text-slate-500 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path fill="rgb(var(--color-danger)" d="M135.2 17.7C140.6 6.8 151.7 0 163.8 0H284.2c12.1 0 23.2 6.8 28.6 17.7L320 32h96c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 96 0 81.7 0 64S14.3 32 32 32h96l7.2-14.3zM32 128H416V448c0 35.3-28.7 64-64 64H96c-35.3 0-64-28.7-64-64V128zm96 64c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16z"/></svg>                                                         
                                                             </a>
                                                         @endcan                                                        
-                                                        <!-- Documentos Entregados -->
-                                                        @if($tramite->estado == 3 || $tramite->estado == 7 || $tramite->estado == 10)
+                                                        <!-- Documentos Entregados -->                                                        
+                                                        @if((($tramite->estado == 3 || $tramite->estado == 7) && $user->admin_type == 2)|| ($tramite->estado == 10) && $user->admin_type == 5)
                                                             @if($documento->aprobado != 1 && $documento->aprobado != 5 && $documento->aprobado != 8)
                                                                 <!--Boton de aprobar-->
                                                                 <a class="flex items-center whitespace-nowrap justify-center tooltip" title="Aprobar" href="{{ route('aprobar-documento', $documento) }}">
@@ -573,7 +575,7 @@
                                                                         @method('PATCH')
                                                                         <div class="modal-body grid grid-cols-12 gap-4 gap-y-3"> 
                                                                             <div class="col-span-12 sm:col-span-12"> 
-                                                                                <label for="modal-form-1" class="form-label">Agregue un comentario / observación del documento no aprobado.</label> 
+                                                                                <label for="comentario" class="form-label">Agregue un comentario / observación del documento no aprobado.</label> 
                                                                                 <textarea id="comentario" name="comentario" class="form-control" name="comment" placeholder="Comentarios..."></textarea>                                                    
                                                                             </div>                     
                                                                         </div> 

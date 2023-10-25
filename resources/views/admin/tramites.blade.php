@@ -91,8 +91,9 @@
             <tbody>
                 <!--foreach ($tramites as $tramite) -->
                     @foreach ($alumnos as $alumno)
-                        @if (/*$tramite->alumno_id == $alumno->id &&*/ (!isset($user->coordinador) 
-                            || $alumno->id_carrera == $user->coordinador->id_carrera) && ($filtrar == 0 || $filtrar == $alumno->tramite->estado) && ($nombre == "" || stripos($alumno->user->name, $nombre) !== false))                                                                                                                                    
+                        @if ((!isset($user->coordinador) || $alumno->id_carrera == $user->coordinador->carrera_id) &&
+                            (!isset($division) || $alumno->carrera->division_id == $division->id ) &&
+                            ($filtrar == 0 || $filtrar == $alumno->tramite->estado) && ($nombre == "" || stripos($alumno->user->name, $nombre) !== false))                                                                                                                                    
                             @if ($alumno->alumno_docs->solicitud_constancia_no_adeudo_biblioteca && $user->admin_type == 3 || $alumno->alumno_docs->solicitud_constancia_no_adeudo_universidad && $user->admin_type == 4 || ($user->admin_type != 3 && $user->admin_type != 4))
                                 <tr class="intro-x">                                
                                     <td>

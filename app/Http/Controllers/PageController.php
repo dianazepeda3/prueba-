@@ -30,6 +30,9 @@ class PageController extends Controller
 
     public function inicioAlumno(){
         $user = Auth::user();
+        if($user->alumno->tramite->estado == 1){
+            return redirect()->back()->with('info','Primero registra tus datos');
+        }
         return view('alumno/index', compact('user'));
     }
 

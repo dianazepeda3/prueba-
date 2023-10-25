@@ -85,7 +85,7 @@
     <img class="firma-digital-dictamen2" src="{{ storage_path('app/' . $firma->ruta) }}"><br>  
     <div class="pos presidente">
         <p>
-            {{ $alumno->carrera->nombre_coordinador}}<br>
+            {{ $alumno->carrera->coordinador->user->name }}<br>
             Presidente del comité de titulación en {{ $alumno->carrera->carrera}}
         </p>  
         <p class="letra10 cursiva">JLDBC/Ipcb</p> 

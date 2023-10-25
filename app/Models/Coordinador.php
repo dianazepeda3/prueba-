@@ -13,7 +13,7 @@ class Coordinador extends Model
 
     protected $fillable = [
         'admin_id',
-        'id_carrera',
+        'carrera_id',
     ];
 
     public function user(){
@@ -21,6 +21,6 @@ class Coordinador extends Model
     }
 
     public function carrera(){
-        return $this->belongsTo(Carrera::class, 'id_carrera', 'id');
+        return $this->belongsTo(Carrera::class, 'carrera_id', 'id');
     }
 }

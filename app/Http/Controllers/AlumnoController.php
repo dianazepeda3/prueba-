@@ -65,14 +65,20 @@ class AlumnoController extends Controller
     {        
         $user = Auth::user();
         $alumno = $user->alumno;
+        if($alumno->tramite->estado == 1){
+            return redirect()->back()->with('info','Primero registra tus datos');
+        }
         return view('alumno.show-datos', compact('user','alumno'));
     }
 
     public function showDocumentos()
     {        
         $user = Auth::user();
-        $alumno = $user->alumno;
+        $alumno = $user->alumno;        
         $tramite = $alumno->tramite;
+        if($tramite->estado == 1){
+            return redirect()->back()->with('info','Primero registra tus datos');
+        }
         $documentos = Documento::where('tramite_id', $tramite->id)->get();
         $alumnoDocs = $alumno->alumno_docs;
         
@@ -371,29 +377,8 @@ class AlumnoController extends Controller
                             $alumno->user_id = $usuario->id;
                             $alumno->situacion = $cod["situacion"];
 
-                            switch($carrera){
-                                case "INBI":
-                                    $alumno->id_carrera = 1;
-                                    break;
-                                case "INNI":
-                                    $alumno->id_carrera = 2;
-                                    break;
-                                case "INFO":
-                                    $alumno->id_carrera = 3;
-                                    break;
-                                case "INCE":
-                                    $alumno->id_carrera = 4;
-                                    break;
-                                case "INCO":
-                                    $alumno->id_carrera = 5;
-                                    break;
-                                case "IGFO":
-                                    $alumno->id_carrera = 6;
-                                    break;
-                                case "INRO":
-                                    $alumno->id_carrera = 7;
-                                    break;
-                            }
+                            $carreraDB = Carrera::where('clave',$carrera)->first();
+                            $alumno->id_carrera = $carreraDB->id;                            
 
                             $alumno->save();          
                             

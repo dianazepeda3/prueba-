@@ -55,7 +55,13 @@ class AdminController extends Controller
         $alumnos = Alumno::all();
         $filtrar = 0;
         $nombre = "";
-        return view('admin/tramites', compact('user','tramites','alumnos','filtrar','nombre'));
+        $division=null;
+        if(isset($user->maestro) && $user->maestro->is_director_division)
+            $division = Division::where('director_id',$user->maestro->id)->first();
+        else if(isset($user->maestro) && $user->maestro->is_secretario_division)
+            $division = Division::where('secretario_id',$user->maestro->id)->first();
+        
+        return view('admin/tramites', compact('user','tramites','alumnos','filtrar','nombre','division'));
     }
 
     public function filtrar_tramites(Request $request) {
@@ -64,7 +70,12 @@ class AdminController extends Controller
         $alumnos = Alumno::all();
         $filtrar = $request->filtrar;
         $nombre = $request->nombre;
-        return view('admin/tramites', compact('user','tramites','alumnos','filtrar','nombre'));
+        $division=null;
+        if(isset($user->maestro) && $user->maestro->is_director_division)
+            $division = Division::where('director_id',$user->maestro->id)->first();
+        else if(isset($user->maestro) && $user->maestro->is_secretario_division)
+            $division = Division::where('secretario_id',$user->maestro->id)->first();        
+        return view('admin/tramites', compact('user','tramites','alumnos','filtrar','nombre','division'));
     }
 
     public function verTramite(Alumno $alumno){
@@ -663,8 +674,10 @@ class AdminController extends Controller
         } catch (\Exception $e) {
             return redirect()->route('showTramite', $alumno)->with('info', 'Documentos validados correctamente. No se pudo enviar el correo.');
         }
-
-        return redirect()->route('showTramite', $alumno)->with('success', 'Alumno en 2da etapa');
+        if($alumno->id_articulo == 1)
+            return redirect()->route('showTramite', $alumno)->with('success', 'Alumno en 3ra etapa');
+        else
+            return redirect()->route('showTramite', $alumno)->with('success', 'Alumno en 2da etapa');
     }
 
     //Funcion para devolver la vista de editar Datos Titulacion
@@ -1125,7 +1138,21 @@ class AdminController extends Controller
             $secretario = $this->retornarMaestroGrado($alumno->id_maestro_secretario);//Secretario
             $vocal = $this->retornarMaestroGrado($alumno->id_maestro_vocal);//Vocal
             $lugar = $alumno->lugar_de_ceremonia;
-
+            
+            $division = Division::where('id',$alumno->carrera->division_id)->first();            
+            $director_division = Maestro::where('id',$division->director_id)->first();
+            $secretario_division = Maestro::where('id',$division->secretario_id)->first();
+            if($director_division->genero == 'H')
+                $dir = "Director de la ";
+            else
+                $dir = "Directora de la ";  
+            if($secretario_division->genero == 'H')
+                $secre = "Secretario de la ";
+            else
+                $secre = "Secretaria de la ";              
+            $director_division = $this->retornarMaestroGrado($director_division->id);//Presidente
+            $secretario_division = $this->retornarMaestroGrado($secretario_division->id);//Secretario 
+            
             $carrera_id = Carrera::where('id', $alumno->id_carrera)->first();
             $carrera = mb_strtoupper($carrera_id->carrera) ; //Titulo de la carrera
         }catch(\Exception $e){      
@@ -1149,8 +1176,11 @@ class AdminController extends Controller
         $titulo_trabajo = mb_strtoupper($alumno->titulo_del_trabajo); //Titulo del trabajo
 
         $sustentante = $pasante; //Sustentante
-        $secretario_division = $this->retornarMaestroGrado($alumno->id_secretario_division);//Vocal
-        $director_division = $this->retornarMaestroGrado($alumno->id_director_division);//Vocal
+        //$secre_division = $this->retornarMaestroGrado($alumno->id_secretario_division);//Vocal
+        //$dir_division = $this->retornarMaestroGrado($alumno->id_director_division);//Vocal
+        
+        $secre_division = $secre . $division->nombre_division;//Vocal
+        $dir_division = $dir . $division->nombre_division;//Vocal       
 
         $formatterES = new NumberFormatter("es", NumberFormatter::SPELLOUT);
 
@@ -1249,6 +1279,8 @@ class AdminController extends Controller
             $template->setValue('lugar', $lugar);
             $template->setValue('presidente', $presidente);
             $template->setValue('secretario', $secretario);
+            $template->setValue('dir_division', $dir_division);
+            $template->setValue('secre_division', $secre_division);
             $template->setValue('vocal', $vocal);
             $template->setValue('carrera', $carrera);
             $template->setValue('pasante', $pasante);
@@ -1316,6 +1348,20 @@ class AdminController extends Controller
         $vocal = $this->retornarMaestroGrado($alumno->id_maestro_vocal);//Vocal
         $secretario_division = $this->retornarMaestroGrado($alumno->id_secretario_division);//Vocal
         $director_division = $this->retornarMaestroGrado($alumno->id_director_division);//Vocal
+        $division = Division::where('id',$alumno->carrera->division_id)->first();            
+        $director_division = Maestro::where('id',$division->director_id)->first();
+        $secretario_division = Maestro::where('id',$division->secretario_id)->first();
+        if($director_division->genero == 'H')
+            $dir = "Director de la ";
+        else
+            $dir = "Directora de la ";  
+        if($secretario_division->genero == 'H')
+            $secre = "Secretario de la ";
+        else
+            $secre = "Secretaria de la "; 
+
+        $secre_division = mb_strtoupper(($secre . $division->nombre_division),'UTF-8');//secretario
+        $dir_division = mb_strtoupper(($dir . $division->nombre_division),'UTF-8');//director
 
         try{
             $template = new \PhpOffice\PhpWord\TemplateProcessor('Formato_Protesta_Nueva.docx');
@@ -1327,6 +1373,10 @@ class AdminController extends Controller
             $template->setValue('presidente', $presidente);
             $template->setValue('secretario', $secretario);
             $template->setValue('vocal', $vocal);
+            $template->setValue('presidente', $presidente);
+            $template->setValue('secretario', $secretario);
+            $template->setValue('dir_division', $dir_division);
+            $template->setValue('secre_division', $secre_division);
             $template->setValue('director_division', $director_division);
             $template->setValue('secretario_division', $secretario_division);
 

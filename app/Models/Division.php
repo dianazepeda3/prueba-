@@ -22,6 +22,11 @@ class Division extends Model
 
     public function user(){
         return $this->belongsTo(User::class);
+
+    }
+
+    public function carreras(){
+        return $this->hasMany(Alumno::class, 'division_id', 'id');
     }
 
 }

@@ -135,7 +135,7 @@
                                     @if (isset($usuario))                        
                                         <option value="0" selected>Seleccione la carrera...</option>                        
                                         @foreach ($carreras as $carrera)
-                                            @if (isset($coordinador) && $carrera->id == $coordinador->id_carrera)
+                                            @if (isset($coordinador) && $carrera->id == $coordinador->carrera_id)
                                                 <option value="{{$carrera->id}}" selected>{{$carrera->carrera}}</option>
                                             @else
                                                 <option value="{{$carrera->id}}">{{$carrera->carrera}}</option>

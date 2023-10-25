@@ -246,16 +246,17 @@
                                     </div>
                                     <div class="form-inline mt-5">
                                         <label for="estado_civil" class="form-label sm:w-20">Estado Civil</label>
-                                        <select id="estado_civil" name="estado_civil" class="form-control" aria-label=".form-select-sm example">
+                                        <select id="estado_civil" name="estado_civil" class="form-control tom-select" aria-label=".form-select-sm example">
                                             <option value="0" selected>Seleccione el estado civil...</option>                                   
                                             <option value="Soltero"
                                                 @if(isset($alumno) && $alumno->estado_civil == "Soltero") selected @endif>Soltero</option>                              
                                             <option value="Casado"
                                                 @if(isset($alumno) && $alumno->estado_civil == "Casado") selected @endif>Casado</option>                            
                                         </select>
-                                    
+                                    </div>
+                                    <div class="form-inline mt-5">
                                         <label for="genero" class="form-label sm:w-20 espacio-form">Género</label>
-                                        <select id="genero" name="genero" class="form-control" aria-label=".form-select-sm example">
+                                        <select id="genero" name="genero" class="form-control tom-select" aria-label=".form-select-sm example">
                                             <option value="0" selected>Seleccione el género...</option>                                   
                                             <option value="Mujer"
                                                 @if(isset($alumno) && $alumno->genero == "Mujer") selected @endif>Femenino</option>                              
