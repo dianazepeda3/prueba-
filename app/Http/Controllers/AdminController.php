@@ -2280,7 +2280,7 @@ class AdminController extends Controller
         if($request->tipo == 2){
             $coordinador = new Coordinador();        
             $coordinador->id_maestro = $request->maestro;
-            $coordinador->id_carrera = $request->carrera;            
+            $coordinador->carrera_id = $request->carrera;            
             $carrera = Carrera::where('id', $request->carrera)->first();                          
             $coordi = Maestro::where('id', $request->maestro)->first();
             $user = User::where('id',$coordi->user_id)->first();
@@ -2362,14 +2362,14 @@ class AdminController extends Controller
                 'is_teacher' => true,
                 'admin_type' => 0,                
             ]); 
-            if(Coordinador::where('id_carrera',$request->carrera)->first() != null){
+            if(Coordinador::where('carrera_id',$request->carrera)->first() != null){
                 return redirect()->back()->with('info', 'Ya existe un usuario de coordinador de esta carrera');
             }   
             if(Coordinador::where('id_maestro',$request->maestro)->first() != null){
                 return redirect()->back()->with('info', 'Ya existe un usuario de coordinador con este maestro');
             }
             if(isset($user->coordinador))
-            Carrera::where('id',$user->coordinador->id_carrera)->update(['coordinador_id' => null]);                       
+            Carrera::where('id',$user->coordinador->carrera_id)->update(['coordinador_id' => null]);                       
             $carrera = Carrera::where('id', $request->carrera)->first();                          
             $coordi = Maestro::where('id', $request->maestro)->first();                       
             $coordinador = $user->coordinador;
@@ -2377,7 +2377,7 @@ class AdminController extends Controller
                 $coordinador = new Coordinador();
             }
                      
-            $coordinador->id_carrera = $request->carrera;
+            $coordinador->carrera_id = $request->carrera;
             $coordinador->id_maestro = $request->maestro;          
             $user = User::where('id',$coordi->user_id)->first();
             User::where('id',$user->id)->update([
@@ -2391,7 +2391,7 @@ class AdminController extends Controller
             Carrera::where('id',$carrera->id)->update(['coordinador_id' => $coordinador->id]);
         }else{  
             $coordinador = $user->coordinador;
-            Carrera::where('id',$user->coordinador->id_carrera)->update(['coordinador_id' => null]);                                   
+            Carrera::where('id',$user->coordinador->carrera_id)->update(['coordinador_id' => null]);                                   
             if(isset($coordinador)){
                 $coordinador->delete();
             }  
@@ -2416,7 +2416,7 @@ class AdminController extends Controller
         }
 
         if($usuario->admin_type == 2){                                               
-            Carrera::where('id',$usuario->coordinador->id_carrera )->update(['coordinador_id' => null]);
+            Carrera::where('id',$usuario->coordinador->carrera_id )->update(['coordinador_id' => null]);
             $coordi = Maestro::where('id', $usuario->coordinador->id_maestro)->first();
             $user = User::where('id',$coordi->user_id)->first();
             User::where('id',$coordi->user_id)->update([
