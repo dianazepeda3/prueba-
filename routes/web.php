@@ -54,8 +54,8 @@ Route::middleware('is_admin')->group(function() {
         Route::delete('usuarios/{usuario}', 'deleteUsuario')->name('eliminar_usuario');   
         Route::post('usuarios/fitrar', 'filtrar_usuarios')->name('filtrar_usuarios');     
         
-        Route::get('/maestros/{id}', 'getMaestros');
-        Route::post('/maestros/edit-director-secretario','edit_director_secretario')->name('editar_director_secretario');        
+        Route::get('maestros/{id}', 'getMaestros');
+        Route::post('maestros/edit-director-secretario','edit_director_secretario')->name('editar_director_secretario');        
         
         //Manual
         Route::get('manual-usuario/tramites',function(User $user){ return view('manual-admin.tramites',compact('user'));})->name('manual_usuario_tramites');
@@ -74,7 +74,8 @@ Route::middleware('is_administrativo')->group(function() {
         //Tramite
         Route::get('tramites', 'tramites')->name('tramites');
         Route::get('tramites/{alumno}', 'verTramite')->name('showTramite'); 
-        Route::post('tramites/fitrar', 'filtrar_tramites')->name('filtrar_tramites');        
+        Route::post('tramites/fitrar', 'filtrar_tramites')->name('filtrar_tramites');   
+        Route::get('tramites/{alumno}/finalizar', 'finalizar_tramite')->name('finalizar_tramite');         
         
         Route::get('tramites/documentos/revisar/{tramite}','revisarDocumento')->name('revisar-documentos');
         Route::get('tramites/documentos/validar/{tramite}','validarDocumento')->name('validar-documentos');        
@@ -107,6 +108,7 @@ Route::middleware('is_coordi')->group(function() {
         Route::get('tramites/documentos/acta-titulacion/{alumno}', 'generarDocumentoActaTitulacion')->name('descargar_acta_titulacion');
         Route::post('tramites/documentos/subir-acta-firmada/{alumno}','subirActaFirmada')->name('subir_acta_firmada');
         Route::get('tramites/documentos/protesta/{alumno}','generarDocumentoProtesta')->name('descargar_protesta');
+        Route::post('tramites/documentos/subir-protesta-firmada/{alumno}','subirProtestaFirmada')->name('subir_protesta_firmada');
         Route::get('tramites/documentos/acta-circunstanciada/{alumno}','generarDocumentoActaCircunstanciada')->name('descargar_actacirunstanciada');
         
         //Datos Titulación
@@ -119,8 +121,8 @@ Route::middleware('is_coordi')->group(function() {
         Route::get('firma/ver-firma/{firma}','visualizarFirma')->name('ver-firma');       
 
         //Maestros
-        Route::get('maestros', 'maestros')->name('maestros');
-        Route::get('maestros/create', 'maestros_form')->name('maestros-form');  
+        Route::get('maestros', 'maestros')->name('maestros');        
+        Route::get('maestro/create', 'maestros_form')->name('maestro_form'); 
         Route::get('maestros/create/{maestro}', 'maestros_edit')->name('maestros-edit'); 
         Route::patch('maestros/update/{maestro}', 'updateMaestro')->name('maestros_update');
         Route::post('maestros/store', 'storeMaestro')->name('maestros_store');

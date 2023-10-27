@@ -19,7 +19,7 @@
     <!-- BEGIN: Search -->
     <div class="intro-x relative ml-auto sm:mx-auto">
         <div class="search hidden sm:block">
-            <input type="text" class="search__input form-control" placeholder="Buscar... ">
+            <input type="text" id="buscar" class="search__input form-control" placeholder="Buscar... ">
             <i data-lucide="search" class="search__icon"></i>
         </div>
         <a class="notification sm:hidden" href="">
@@ -46,7 +46,12 @@
             <div class="hidden md:block ml-3">
                 <div class="max-w-[7rem] truncate font-medium">{{ $user->name }}</div>
                 <div class="text-xs text-slate-400">
-                    @can('alumno') Alumno @endcan 
+                    @can('alumno') Alumno 
+                    @elsecan('coordinador') Coordinador 
+                    @elsecan('division') Division 
+                    @elsecan('control-escolar') Control Escolar
+                    @elsecan('biblioteca') Biblioteca
+                    @elsecan('admin') Admin @endcan
                 </div>
             </div>
         </div>

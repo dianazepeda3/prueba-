@@ -65,6 +65,9 @@ class CreateAlumnosdocsTable extends Migration
             $table->boolean('autorizacion_impresion')->default(0);
 
             $table->boolean('pago_arancel')->default(0);
+             //Acta y Protesta
+            $table->boolean('acta_firmada')->default(0); //No firmada= 0, firmada = 1 Esto hace falta para vincular el alumno con los maestros
+            $table->boolean('protesta_firmada')->default(0);
             
             //Datos FK
             $table->foreign('alumno_id')->references('id')->on('alumnos')->onDelete('cascade')->onUpdate('cascade');

@@ -139,7 +139,7 @@
                                 </li>
                             @endif
                         @endforeach
-                    @elsecan('coordinador')
+                    @elsecan('admin-division-coordinador')
                         @foreach ($main_menu_coordi as $menuKey => $menu)
                             @if (is_string($menu))
                                 <li class="mb-4 side-nav__devider">{{ $menu }}</li>

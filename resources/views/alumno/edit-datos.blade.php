@@ -177,8 +177,8 @@
                                     </div> 
                                     <div id="nombre_del_trabajo" @if(isset($alumno) && ($alumno->id_opcion_titulacion != 7 || $alumno->id_opcion_titulacion != 11 || $$id_opcion_titulacion != 13 || $$id_opcion_titulacion != 14 || $$id_opcion_titulacion != 15 || $$id_opcion_titulacion != 16 )) hidden @elseif(isset($alumno)!=true) hidden @endif >         
                                         <div class="form-inline mt-5">
-                                            <label for="nombre_del_trabajo" class="form-label sm:w-20">Título del Trabajo:</label>
-                                            <input id="nombre_del_trabajo" name="nombre_del_trabajo" type="text" class="form-control" placeholder="Nombre del trabajo..."
+                                            <label for="nombre_trabajo" class="form-label sm:w-20">Título del Trabajo:</label>
+                                            <input id="nombre_trabajo" name="nombre_del_trabajo" type="text" class="form-control" placeholder="Nombre del trabajo..."
                                             @if(isset($alumno->user->nombre_del_trabajo))
                                                 value="{{$alumno->user->nombre_del_trabajo}}"
                                             @else
@@ -187,16 +187,16 @@
                                         </div>     
                                         <div id="ganador_de_proyecto" @if(isset($alumno) && $alumno->id_opcion_titulacion != 13) hidden @elseif(isset($alumno)!=true) hidden @endif>                                             
                                             <div class="form-inline mt-5">
-                                            <label class="form-label sm:w-20">¿Ganador de proyecto?</label>
+                                            <div class="form-label sm:w-20">¿Ganador de proyecto?</div>
                                             <div class="form-check mr-2 mt-2 sm:mt-0"> 
-                                                <input id="ganador_proyecto" class="form-check-input" type="radio" name="ganador_proyecto" value="NO"
+                                                <input id="ganador_proyecto_no" class="form-check-input" type="radio" name="ganador_proyecto" value="NO"
                                                 @if (!$alumno->ganador_proyecto_modular) checked @endif> 
-                                                <label class="form-check-label" for="ganador_proyecto">NO</label> 
+                                                <label class="form-check-label" for="ganador_proyecto_no">NO</label> 
                                             </div>
                                             <div class="form-check mr-2 "> 
-                                                <input id="ganador_proyecto" class="form-check-input" type="radio" name="ganador_proyecto" value="SI" 
+                                                <input id="ganador_proyecto_si" class="form-check-input" type="radio" name="ganador_proyecto" value="SI" 
                                                 @if ($alumno->ganador_proyecto_modular) checked @endif> 
-                                                <label class="form-check-label" for="ganador_proyecto">SI</label> 
+                                                <label class="form-check-label" for="ganador_proyecto_si">SI</label> 
                                             </div>                                            
                                             </div>
                                         </div>  
@@ -223,9 +223,8 @@
                                         min="1920-01-01"
                                         max="2018-12-31">  
                                     </div>  
-                                    <div class="form-inline mt-3">
-                                        <label class="form-label sm:w-20"></label>
-                                        <label class="form-label sm:w-64"><b>Lugar de Nacimiento</b></label>
+                                    <div class="form-inline mt-3">                                        
+                                        <div class="form-label sm:w-64"><b>Lugar de Nacimiento</b></div>
                                     </div>
                                     <div class="form-inline mt-2">                           
                                         <label for="estado_nacimiento" class="form-label sm:w-20">Estado</label>
@@ -248,10 +247,10 @@
                                         <label for="estado_civil" class="form-label sm:w-20">Estado Civil</label>
                                         <select id="estado_civil" name="estado_civil" class="form-control tom-select" aria-label=".form-select-sm example">
                                             <option value="0" selected>Seleccione el estado civil...</option>                                   
-                                            <option value="Soltero"
-                                                @if(isset($alumno) && $alumno->estado_civil == "Soltero") selected @endif>Soltero</option>                              
-                                            <option value="Casado"
-                                                @if(isset($alumno) && $alumno->estado_civil == "Casado") selected @endif>Casado</option>                            
+                                            <option value="Soltero/a"
+                                                @if(isset($alumno) && $alumno->estado_civil == "Soltero/a") selected @endif>Soltero/a</option>                              
+                                            <option value="Casado/a"
+                                                @if(isset($alumno) && $alumno->estado_civil == "Casado/a") selected @endif>Casado/a</option>                            
                                         </select>
                                     </div>
                                     <div class="form-inline mt-5">
@@ -281,8 +280,7 @@
                                         @endif>
                                     </div>
                                     <div class="form-inline mt-5">
-                                        <label class="form-label sm:w-20"></label>
-                                        <label class="form-label sm:w-64"><b>Domicilio</b></label>
+                                        <div class="form-label sm:w-64"><b>Domicilio</b></div>
                                     </div>
                                     <div class="form-inline mt-2">                           
                                         <label for="domicilio_calle" class="form-label sm:w-20">Calle</label>

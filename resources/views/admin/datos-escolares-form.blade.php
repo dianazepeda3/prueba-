@@ -217,8 +217,8 @@
                             </div> 
                             <div id="nombre_del_trabajo" @if(isset($alumno) && ($alumno->id_opcion_titulacion != 7 && $alumno->id_opcion_titulacion != 11 && $alumno->id_opcion_titulacion != 13 && $alumno->id_opcion_titulacion != 14 && $alumno->id_opcion_titulacion != 15 && $alumno->id_opcion_titulacion != 16 )) hidden @elseif(isset($alumno)!=true) hidden @endif >         
                                 <div class="form-inline mt-5">
-                                    <label for="nombre_del_trabajo" class="form-label sm:w-20">Título del Trabajo:</label>
-                                    <input id="nombre_del_trabajo" name="nombre_del_trabajo" type="text" class="form-control" placeholder="Nombre del trabajo..."
+                                    <label for="nombre_trabajo" class="form-label sm:w-20">Título del Trabajo:</label>
+                                    <input id="nombre_trabajo" name="nombre_del_trabajo" type="text" class="form-control" placeholder="Nombre del trabajo..."
                                     @if(isset($alumno))
                                         value="{{$alumno->titulo_del_trabajo}}"
                                     @else
@@ -227,16 +227,16 @@
                                 </div>     
                                 <div id="ganador_de_proyecto" @if(isset($alumno) && $alumno->id_opcion_titulacion != 13) hidden @elseif(isset($alumno)!=true) hidden @endif>                                             
                                     <div class="form-inline mt-5">
-                                    <label class="form-label sm:w-20">¿Ganador de proyecto?</label>
+                                    <div class="form-label sm:w-20">¿Ganador de proyecto?</div>
                                     <div class="form-check mr-2 "> 
-                                        <input id="ganador_proyecto" class="form-check-input" type="radio" name="ganador_proyecto" value="SI" 
+                                        <input id="ganador_proyecto1" class="form-check-input" type="radio" name="ganador_proyecto" value="SI" 
                                         @if (isset($alumno) && $alumno->ganador_proyecto_modular) checked @endif> 
-                                        <label class="form-check-label" for="ganador_proyecto">SI</label> 
+                                        <label class="form-check-label" for="ganador_proyecto1">SI</label> 
                                     </div>
                                     <div class="form-check mr-2 mt-2 sm:mt-0"> 
-                                        <input id="ganador_proyecto" class="form-check-input" type="radio" name="ganador_proyecto" value="NO"
+                                        <input id="ganador_proyecto2" class="form-check-input" type="radio" name="ganador_proyecto" value="NO"
                                         @if (isset($alumno) && !$alumno->ganador_proyecto_modular) checked @endif> 
-                                        <label class="form-check-label" for="ganador_proyecto">NO</label> 
+                                        <label class="form-check-label" for="ganador_proyecto2">NO</label> 
                                     </div>
                                     </div>
                                 </div>  

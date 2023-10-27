@@ -8,9 +8,11 @@
     <div class="intro-y flex flex-col sm:flex-row items-center mt-8">
         <h2 class="text-lg font-medium mr-auto color-claro">TRÁMITES</h2>
         <div class="w-full sm:w-auto flex flex-wrap gap-y-3 mt-4 sm:mt-0">
-            <a class="btn btn-primary-fuera shadow-md mr-2" href="{{route('crear_tramite')}}">
-                <i class="w-4 h-4 mr-2" data-lucide="plus"></i> Crear Trámite
-            </a>
+            @cannot('biblioteca-ce')                            
+                <a class="btn btn-primary-fuera shadow-md mr-2" href="{{route('crear_tramite')}}">
+                    <i class="w-4 h-4 mr-2" data-lucide="plus"></i> Crear Trámite
+                </a>
+            @endcannot
         </div>
     </div>    
      {{-- ERRORES --}}
@@ -50,7 +52,7 @@
                 <label for="nombre" class="form-label">Nombre del Alumno</label>
                 <input id="nombre" name="nombre" type="text" class="form-control mr-5" placeholder="Nombre del alumno.." 
                     @if ($nombre != "") value="{{ $nombre }}" @endif>
-                <label for="fitrar" class="form-label espacio-form">Estado</label>
+                <label for="filtrar" class="form-label espacio-form">Estado</label>
                 <select id="filtrar" name="filtrar"  class="form-control tom-select campo-rol mr-5" aria-label="Default select example">
                     <option value="0" @if ($filtrar == 0) selected @endif>Todos</option>
                     <option value="1" @if ($filtrar == 1) selected @endif>Datos No Registrados</option>
@@ -146,8 +148,10 @@
                                                 @break 
                                             @case(13)
                                                 <div class="text-center w-40 px-3 py-1 alert-warning-soft border border-primary/10 rounded-full mr-2 mb-2">Datos de Titulación Generados</div>                                                                                                                                                                                                                                                                                                                       
-                                                @break                                                                                                                          
-                                            @default                                                            
+                                                @break  
+                                            @case(14)
+                                                <div class="text-center text-white w-40 px-3 py-1 alert-success border border-primary/10 rounded-full mr-2 mb-2">Trámite Finalizado</div>                                                                                                                                                                                                                                                                                                                       
+                                                @break                                                                                                                                                                                                                                 
                                         @endswitch  
                                     </td>
                                     <td>
@@ -247,7 +251,7 @@
                 </li>
             </ul>
         </nav>
-        <select class="w-20 form-select box mt-3 sm:mt-0">
+        <select id="pagination" class="w-20 form-select box mt-3 sm:mt-0">
             <option>10</option>
             <option>25</option>
             <option>35</option>

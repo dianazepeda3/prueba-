@@ -53,6 +53,14 @@ class AuthServiceProvider extends ServiceProvider
             return false;
         });
 
+        Gate::define('admin-division-coordinador', function(){
+            $user = Auth::user();
+            if($user->is_admin == 1)
+            return $user->admin_type == 1 || $user->admin_type == 2 || $user->admin_type == 5;
+
+            return false;
+        });
+
         Gate::define('coordinador', function(){
             $user = Auth::user();
             return $user->admin_type == 2;

@@ -37,16 +37,16 @@
     </div>
     <div class="grid grid-cols-12 gap-6 mt-5">
         <div class="intro-y col-span-12 flex flex-wrap sm:flex-nowrap items-center mt-2">
-            <a class="btn btn-primary-fuera shadow-md mr-2" href="{{ route('maestros-form') }}">
+            <a class="btn btn-primary-fuera shadow-md mr-2" href="{{ route('maestro_form') }}">
                 <i class="w-4 h-4 mr-2" data-lucide="plus"></i>Agregar Maestro
             </a>             
-            <!--<a class="btn btn-instagram shadow-md mr-2" href="{{ route('maestros-form') }}">
+            <!--<a class="btn btn-instagram shadow-md mr-2" href="">
                 <i class="w-4 h-4 mr-2" data-lucide="plus"></i>Agregar Maestro
             </a>  -->        
             <div class="hidden md:block mx-auto text-slate-500"><!--Mostrando 1 a 10 de 150 entradas--></div>
             <div class="w-full sm:w-auto mt-3 sm:mt-0 sm:ml-auto md:ml-0">
                 <div class="w-56 relative text-slate-500">
-                    <input type="text" class="form-control w-56 box pr-10" placeholder="Buscar...">
+                    <input id="buscar-maestro" type="text" class="form-control w-56 box pr-10" placeholder="Buscar...">
                     <i class="w-4 h-4 absolute my-auto inset-y-0 mr-3 right-0" data-lucide="search"></i>
                 </div>
             </div>
@@ -154,7 +154,7 @@
                     </li>
                 </ul>
             </nav>
-            <select class="w-20 form-select box mt-3 sm:mt-0">
+            <select id="pagination" class="w-20 form-select box mt-3 sm:mt-0">
                 <option>10</option>
                 <option>25</option>
                 <option>35</option>

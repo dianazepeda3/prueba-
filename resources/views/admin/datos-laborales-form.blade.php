@@ -51,16 +51,16 @@
                             <div class="form-inline">
                                 <div class="mt-2"> 
                                     <div class="flex flex-col sm:flex-row mt-2">
-                                        <label class="form-label sm:w-20">¿Trabaja?</label>
+                                        <div class="form-label sm:w-20">¿Trabaja?</div>
                                         <div class="form-check mr-2 mt-2 sm:mt-0"> 
-                                            <input id="trabaja" class="form-check-input" type="radio" name="trabaja" onclick="ocultarPreg()" value="NO"
+                                            <input id="trabaja_no" class="form-check-input" type="radio" name="trabaja" onclick="ocultarPreg()" value="NO"
                                             @if ($alumno->trabaja == 0) checked @endif> 
-                                            <label class="form-check-label" for="trabaja">NO</label> 
+                                            <label class="form-check-label" for="trabaja_no">NO</label> 
                                         </div>
                                         <div class="form-check mr-2 "> 
-                                            <input id="trabaja" class="form-check-input" type="radio" name="trabaja" onclick="mostrarPreg()" value="SI"
+                                            <input id="trabaja_si" class="form-check-input" type="radio" name="trabaja" onclick="mostrarPreg()" value="SI"
                                             @if ($alumno->trabaja == 1) checked @endif> 
-                                            <label class="form-check-label" for="trabaja">SI</label> 
+                                            <label class="form-check-label" for="trabaja_si">SI</label> 
                                         </div>                                    
                                     </div>
                                 </div>
@@ -68,16 +68,16 @@
                             <div id="si-trabaja" class="form-inline">
                                 <div class="mt-2"> 
                                     <div class="flex flex-col sm:flex-row mt-2">
-                                        <label class="form-label sm:w-20">¿Realiza actividad laboral afin a su carrera?</label>                                    
+                                        <div class="form-label sm:w-20">¿Realiza actividad laboral afin a su carrera?</div>
                                         <div class="form-check mr-2 mt-2 sm:mt-0"> 
-                                            <input id="afin" class="form-check-input" type="radio" name="afin" onclick="ocultarInfo()" value="NO"
+                                            <input id="afin_no" class="form-check-input" type="radio" name="afin" onclick="ocultarInfo()" value="NO"
                                             @if ($alumno->afin == 0) checked @endif> 
-                                            <label class="form-check-label" for="afin">NO</label> 
+                                            <label class="form-check-label" for="afin_no">NO</label> 
                                         </div>
                                         <div class="form-check mr-2 ">                                         
-                                            <input id="afin" class="form-check-input" type="radio" name="afin" onclick="mostrarInfo()" value="SI"
+                                            <input id="afin_si" class="form-check-input" type="radio" name="afin" onclick="mostrarInfo()" value="SI"
                                             @if ($alumno->afin == 1) checked @endif> 
-                                            <label class="form-check-label" for="afin">SI</label> 
+                                            <label class="form-check-label" for="afin_si">SI</label> 
                                         </div>
                                     </div>
                                 </div>
@@ -122,8 +122,7 @@
                                     @endif>
                                 </div>                                                
                                 <div class="form-inline mt-5">
-                                    <label class="form-label sm:w-20"></label>
-                                    <label class="form-label sm:w-64"><b>Domicilio</b></label>
+                                    <div class="form-label sm:w-64"><b>Domicilio</b></div>
                                 </div>
                                 <div class="form-inline mt-2">                           
                                     <label for="empresa_calle" class="form-label sm:w-20">Calle</label>

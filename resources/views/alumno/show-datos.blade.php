@@ -188,7 +188,7 @@
         <!-- END: Product Detail Side Menu -->        
     </div>
     <script>
-        document.getElementById("btnDocsEntregados").addEventListener("click", function () {
+        /*document.getElementById("btnDocsEntregados").addEventListener("click", function () {
             document.getElementById("docs-entregados").style.display = "table";
             document.getElementById("docs-generados").style.display = "none";
         });
@@ -196,7 +196,7 @@
         document.getElementById("btnDocsGenerados").addEventListener("click", function () {
             document.getElementById("docs-entregados").style.display = "none";
             document.getElementById("docs-generados").style.display = "table";
-        });
+        });*/
     </script>
     
 @endsection

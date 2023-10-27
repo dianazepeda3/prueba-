@@ -97,10 +97,7 @@ class CreateAlumnosTable extends Migration
             $table->string('tipo_de_ceremonia_presencial_virtual')->nullable()->default(null);
             //Si es virtual seleccionar la liga. Si es presencial seleccionar el lugar
             $table->string('lugar_de_ceremonia')->nullable()->default(null);
-
-            //Protesta
-            $table->boolean('acta_firmada')->default(0); //No firmada= 0, firmada = 1 Esto hace falta para vincular el alumno con los maestros
-
+           
             //Sinodales
             $table->string('nombre_presidente')->nullable()->default(null);
             $table->unsignedBigInteger('id_maestro_presidente')->nullable()->default(null);
@@ -111,11 +108,11 @@ class CreateAlumnosTable extends Migration
             $table->string('nombre_vocal')->nullable()->default(null);
             $table->unsignedBigInteger('id_maestro_vocal')->nullable()->default(null);
 
-            $table->string('nombre_director_division')->nullable()->default(null);
-            $table->unsignedBigInteger('id_director_division')->nullable()->default(null);
+            //$table->string('nombre_director_division')->nullable()->default(null);
+            //$table->unsignedBigInteger('id_director_division')->nullable()->default(null);
 
-            $table->string('nombre_secretario_division')->nullable()->default(null);
-            $table->unsignedBigInteger('id_secretario_division')->nullable()->default(null);
+            //$table->string('nombre_secretario_division')->nullable()->default(null);
+            //$table->unsignedBigInteger('id_secretario_division')->nullable()->default(null);
 
 
             //Datos FK

@@ -86,7 +86,7 @@ class Menu
                     ],
                     'maestros-form' => [
                         'icon' => 'user-plus',
-                        'route_name' => 'maestros-form',
+                        'route_name' => 'maestro_form',
                         'params' => [
                             // Additional parameters
                         ],
@@ -189,9 +189,17 @@ class Menu
                         ],
                         'title' => 'Ver Maestros'
                     ],
-                    'maestros-form' => [
+                    'maestros-agregar' => [
                         'icon' => 'user-plus',
-                        'route_name' => 'maestros-form',
+                        'route_name' => 'maestro_form',
+                        'params' => [
+                            // Additional parameters
+                        ],
+                        'title' => 'Agregar Maestro'
+                    ],
+                    'maestros-agregar2' => [
+                        'icon' => 'user-plus',
+                        'route_name' => 'maestro_form2',
                         'params' => [
                             // Additional parameters
                         ],
@@ -258,7 +266,7 @@ class Menu
                     ],
                     'maestros-form' => [
                         'icon' => 'user-plus',
-                        'route_name' => 'maestros-form',
+                        'route_name' => 'maestro_form',
                         'params' => [
                             // Additional parameters
                         ],

@@ -73,7 +73,7 @@
                             <form method="POST" action="{{ route('guardar-firma') }}">
                                 @csrf
                                 <div class="col-md-12">
-                                <label class="" for="">Ingrese la firma que desea guardar:</label> <br/><br>
+                                Ingrese la firma que desea guardar: <br/><br>
                                 <div id="sig" ></div> <br/>                                     
                                 </div>  <br/>
                                 <button class="btn btn-success" type="submit">Guardar</button>

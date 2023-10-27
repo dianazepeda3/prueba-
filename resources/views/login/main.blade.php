@@ -70,9 +70,9 @@
                     <div class="mt-5" id="docs-entregados">
                         <form method="POST" action={{ route('log.siiau') }}>
                             @csrf
-                            <input id="codigo" name="codigo" type="text" class="form-control py-3 px-4 block" placeholder="Código SIIAU">
+                            <input id="codigo1" name="codigo" type="text" class="form-control py-3 px-4 block" placeholder="Código SIIAU">
                             <div id="error-codigo" class="login__input-error text-danger mt-2"></div>
-                            <input id="password" name="password" type="password" class="form-control py-3 px-4 block mt-4" placeholder="Nip">
+                            <input id="password1" name="password" type="password" class="form-control py-3 px-4 block mt-4" placeholder="Nip">
                             <div id="error-password" class="login__input-error text-danger mt-2"></div>
                             
                             @if ($errors->any())
@@ -87,7 +87,7 @@
                             @endif
 
                             <div class="mt-5 xl:mt-8 text-center xl:text-left">
-                                <button id="btn-login" class="btn btn-primary w-full xl:mr-3" type="submit" onclick="submitForm()">                                 
+                                <button id="btn-login1" class="btn btn-primary w-full xl:mr-3" type="submit" onclick="submitForm1()">                                 
                                     Iniciar Sesión
                                 </button>                        
                             </div>
@@ -96,9 +96,9 @@
                     <div class="mt-5" id="docs-generados" style="display: none">
                         <form method="POST" action={{ route('log.admin') }}>
                             @csrf
-                            <input id="codigo" name="codigo" type="text" class="form-control py-3 px-4 block" placeholder="Correo Electrónico">
+                            <input id="codigo2" name="codigo" type="text" class="form-control py-3 px-4 block" placeholder="Correo Electrónico">
                             <div id="error-codigo" class="login__input-error text-danger mt-2"></div>
-                            <input id="password" name="password" type="password" class="form-control py-3 px-4 block mt-4" placeholder="Contraseña">
+                            <input id="password2" name="password" type="password" class="form-control py-3 px-4 block mt-4" placeholder="Contraseña">
                             <div id="error-password" class="login__input-error text-danger mt-2"></div>
                             
                             @if ($errors->any())
@@ -113,7 +113,7 @@
                             @endif
 
                             <div class="mt-5 xl:mt-8 text-center xl:text-left">
-                                <button id="btn-login" class="btn btn-primary w-full xl:mr-3" type="submit" onclick="submitForm()">                                 
+                                <button id="btn-login2" class="btn btn-primary w-full xl:mr-3" type="submit" onclick="submitForm2()">                                 
                                     Iniciar Sesión
                                 </button>                        
                             </div>
@@ -125,12 +125,21 @@
     </div>
 
     <script>
-        function submitForm() {
+        function submitForm1() {
             // Cambiar contenido del botón
             //$('#btn-login').html('<i data-loading-icon="oval" data-color="white" class="w-5 h-5 mx-auto"></i> Comprobando tus datos...');
-            $('#btn-login').html('<span class="spinner-border spinner-border-sm mr-2"></span> Comprobando tus datos...');
+            $('#btn-login1').html('<span class="spinner-border spinner-border-sm mr-2"></span> Comprobando tus datos...');
             // Deshabilitar el botón
-            $('#btn-login').prop('disabled', true);
+            $('#btn-login1').prop('disabled', true);            
+    
+            // Enviar el formulario
+            $('#login-form').submit();
+        }
+        function submitForm2() {
+            // Cambiar contenido del botón
+            $('#btn-login2').html('<span class="spinner-border spinner-border-sm mr-2"></span> Comprobando tus datos...');
+            // Deshabilitar el botón
+            $('#btn-login2').prop('disabled', true);
     
             // Enviar el formulario
             $('#login-form').submit();

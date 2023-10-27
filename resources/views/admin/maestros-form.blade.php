@@ -4,8 +4,7 @@
     <title>Maestros - Titulación CUCEI</title>
 @endsection
 
-@section('subcontent')
-    
+@section('subcontent')    
     <div class="grid grid-cols-12 gap-6 mt-5">        
         <div class="intro-y col-span-12 lg:col-span-2"></div>
         <div class="intro-y col-span-12 lg:col-span-8">                        
@@ -63,7 +62,7 @@
                         </div>                        
                         <div class="form-inline mt-5">
                             <label for="email" class="form-label sm:w-20">Correo</label>
-                            <input id="email" name="email" type="text" class="form-control" placeholder="correo@ejemplo.com..."
+                            <input id="email" name="email" type="text" class="form-control" autocomplete="off" placeholder="correo@ejemplo.com..."
                                 @if(isset($maestro))
                                     value="{{$maestro->email}}"
                                 @else

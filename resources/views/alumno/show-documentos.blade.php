@@ -86,30 +86,30 @@
                     <div class="form-inline">                                         
                         <input id="checkbox-switch-1" class="form-check-input" type="checkbox" 
                         @if ($alumnoDocs->formato_a) checked  @endif > 
-                        <label class="form-label sm:w-40">(Obligatorio)</label><label class="form-label sm:w-20"></label>
-                        <label class="form-label sm:w-60">Formato A. (descargarlo y firmarlo)</label>                     
+                        <div class="form-label sm:w-40">(Obligatorio)</div><div class="form-label sm:w-20"></div>
+                        <div class="form-label sm:w-60">Formato A. (descargarlo y firmarlo)</div>                     
                         <a class="btn btn-secondary" href="{{ route('descargar-formato01') }}">Descargar Formato A</a>                                                                    
                     </div>        
                     <!-- Kardex -->        
                     <div class="form-inline mt-5">                                         
                         <input id="checkbox-switch-2" class="form-check-input" type="checkbox" 
                         @if ($alumnoDocs->kardex) checked  @endif > 
-                        <label class="form-label sm:w-40">(Obligatorio)</label><label class="form-label sm:w-20"></label>
-                        <label class="form-label sm:w-60">Kárdex de Estudiante</label>                                                                 
+                        <div class="form-label sm:w-40">(Obligatorio)</div><div class="form-label sm:w-20"></div>
+                        <div class="form-label sm:w-60">Kárdex de Estudiante</div>                                                                 
                     </div>   
                     <!-- Certificado de Ingles -->
                     <div class="form-inline mt-5">                                         
                         <input id="checkbox-switch-3" class="form-check-input" type="checkbox" 
                         @if ($alumnoDocs->certificado) checked  @endif > 
-                        <label class="form-label sm:w-40">(Obligatorio)</label><label class="form-label sm:w-20"></label>
-                        <label class="form-label sm:w-60">Certificado de Inglés</label>                                                                                       
+                        <div class="form-label sm:w-40">(Obligatorio)</div><div class="form-label sm:w-20"></div>
+                        <div class="form-label sm:w-60">Certificado de Inglés</div>                                                                                       
                     </div>   
                     <!-- Prorroga --> 
                     <div class="form-inline mt-5">                                         
                         <input id="checkbox-switch-4" class="form-check-input" type="checkbox" 
                         @if ($alumnoDocs->carta) checked  @endif > 
-                        <label class="form-label sm:w-40">(Opcional)</label><label class="form-label sm:w-20"></label>
-                        <label class="form-label sm:w-60">Solicitud de Prórroga</label>                                                                                        
+                        <div class="form-label sm:w-40">(Opcional)</div><div class="form-label sm:w-20"></div>
+                        <div class="form-label sm:w-60">Solicitud de Prórroga</div>                                                                                        
                     </div>   
                     <!-- EXAMEN GLOBAL TEORICO PRACTICO / EXAMEN GLOBAL TEORICO -->
                     @if ($id_opcion_titulacion == 3 || $id_opcion_titulacion == 4)
@@ -117,8 +117,8 @@
                         <div class="form-inline mt-5">                                         
                             <input id="checkbox-switch-5" class="form-check-input" type="checkbox" 
                             @if ($alumnoDocs->carta) checked  @endif > 
-                            <label class="form-label sm:w-40">(Obligatorio)</label><label class="form-label sm:w-20"></label>
-                            <label class="form-label sm:w-60">Carta dirigida al Comité de Titulación</label>                                                                                       
+                            <div class="form-label sm:w-40">(Obligatorio)</div><div class="form-label sm:w-20"></div>
+                            <div class="form-label sm:w-60">Carta dirigida al Comité de Titulación</div>                                                                                       
                         </div>
                     <!-- CENEVAL -->    
                     @elseif ($id_opcion_titulacion == 5)
@@ -126,15 +126,15 @@
                         <div class="form-inline mt-5">                                         
                             <input id="checkbox-switch-6" class="form-check-input" type="checkbox" 
                             @if ($alumnoDocs->testimonio_desempeno) checked  @endif > 
-                            <label class="form-label sm:w-40">(Obligatorio)</label><label class="form-label sm:w-20"></label>
-                            <label class="form-label sm:w-60">Testimonio de Desempeño</label>                                                                                       
+                            <div class="form-label sm:w-40">(Obligatorio)</div><div class="form-label sm:w-20"></div>
+                            <div class="form-label sm:w-60">Testimonio de Desempeño</div>                                                                                       
                         </div>
                         <!-- Reporte Individual de Resultados -->
                         <div class="form-inline mt-5">                                         
                             <input id="checkbox-switch-7" class="form-check-input" type="checkbox" 
                             @if ($alumnoDocs->reporte_individual_resultados) checked  @endif > 
-                            <label class="form-label sm:w-40">(Obligatorio)</label><label class="form-label sm:w-20"></label>
-                            <label class="form-label sm:w-60">Reporte Individual de Resultados</label>                                                                                       
+                            <div class="form-label sm:w-40">(Obligatorio)</div><div class="form-label sm:w-20"></div>
+                            <div class="form-label sm:w-60">Reporte Individual de Resultados</div>                                                                                       
                         </div>
                     <!-- Examen de Capacitación -->
                     @elseif ($id_opcion_titulacion == 6)
@@ -142,15 +142,15 @@
                         <div class="form-inline mt-5">                                         
                             <input id="checkbox-switch-8" class="form-check-input" type="checkbox" 
                             @if ($alumnoDocs->formato_c) checked  @endif > 
-                            <label class="form-label sm:w-40">(Obligatorio)</label><label class="form-label sm:w-20"></label>
-                            <label class="form-label sm:w-60">Formato C</label>                                                                                       
+                            <div class="form-label sm:w-40">(Obligatorio)</div><div class="form-label sm:w-20"></div>
+                            <div class="form-label sm:w-60">Formato C</div>                                                                                       
                         </div>
                         <!-- Certificados / Constancias -->
                         <div class="form-inline mt-5">                                         
                             <input id="checkbox-switch-9" class="form-check-input" type="checkbox" 
                             @if ($alumnoDocs->certificado_constancias) checked  @endif > 
-                            <label class="form-label sm:w-40">(Obligatorio)</label><label class="form-label sm:w-20"></label>
-                            <label class="form-label sm:w-60">Certificados / Constancias</label>                                                                                       
+                            <div class="form-label sm:w-40">(Obligatorio)</div><div class="form-label sm:w-20"></div>
+                            <div class="form-label sm:w-60">Certificados / Constancias</div>                                                                                       
                         </div>
                     <!-- Guias Comentadas o ilustradas -->                                                                           
                     @elseif ($id_opcion_titulacion == 7 || $id_opcion_titulacion == 8)
@@ -158,22 +158,22 @@
                         <div class="form-inline mt-5">                                         
                             <input id="checkbox-switch-10" class="form-check-input" type="checkbox" 
                             @if ($alumnoDocs->formato_d) checked  @endif > 
-                            <label class="form-label sm:w-40">(Obligatorio)</label><label class="form-label sm:w-20"></label>
-                            <label class="form-label sm:w-60">Formato D</label>                                                                                       
+                            <div class="form-label sm:w-40">(Obligatorio)</div><div class="form-label sm:w-20"></div>
+                            <div class="form-label sm:w-60">Formato D</div>                                                                                       
                         </div>
                         <!-- Certificados / Constancias -->
                         <div class="form-inline mt-5">                                         
                             <input id="checkbox-switch-11" class="form-check-input" type="checkbox" 
                             @if ($alumnoDocs->protocolo) checked  @endif > 
-                            <label class="form-label sm:w-40">(Obligatorio)</label><label class="form-label sm:w-20"></label>
-                            <label class="form-label sm:w-60">Protocolo</label>                                                                                       
+                            <div class="form-label sm:w-40">(Obligatorio)</div><div class="form-label sm:w-20"></div>
+                            <div class="form-label sm:w-60">Protocolo</div>                                                                                       
                         </div>
                         <!-- Contenido de la asignatura -->
                         <div class="form-inline mt-5">                                         
                             <input id="checkbox-switch-12" class="form-check-input" type="checkbox" 
                             @if ($alumnoDocs->contenido_asignatura) checked  @endif > 
-                            <label class="form-label sm:w-40">(Obligatorio)</label><label class="form-label sm:w-20"></label>
-                            <label class="form-label sm:w-60">Contenido de la asignatura</label>                                                                                       
+                            <div class="form-label sm:w-40">(Obligatorio)</div><div class="form-label sm:w-20"></div>
+                            <div class="form-label sm:w-60">Contenido de la asignatura</div>                                                                                       
                         </div>
                     <!-- Cursos o créditos de maestría o doctorado --> 
                     @elseif ($id_opcion_titulacion == 9)
@@ -181,15 +181,15 @@
                         <div class="form-inline mt-5">                                         
                             <input id="checkbox-switch-13" class="form-check-input" type="checkbox" 
                             @if ($alumnoDocs->constancia_calificaciones) checked  @endif > 
-                            <label class="form-label sm:w-40">(Obligatorio)</label><label class="form-label sm:w-20"></label>
-                            <label class="form-label sm:w-60">Constancia de Calificaciones</label>                                                                                       
+                            <div class="form-label sm:w-40">(Obligatorio)</div><div class="form-label sm:w-20"></div>
+                            <div class="form-label sm:w-60">Constancia de Calificaciones</div>                                                                                       
                         </div>
                         <!-- Folleto -->
                         <div class="form-inline mt-5">                                         
                             <input id="checkbox-switch-14" class="form-check-input" type="checkbox" 
                             @if ($alumnoDocs->folleto) checked  @endif > 
-                            <label class="form-label sm:w-40">(Obligatorio)</label><label class="form-label sm:w-20"></label>
-                            <label class="form-label sm:w-60">Folleto</label>                                                                                       
+                            <div class="form-label sm:w-40">(Obligatorio)</div><div class="form-label sm:w-20"></div>
+                            <div class="form-label sm:w-60">Folleto</div>                                                                                       
                         </div>
                     <!-- Seminario de Investigación --> 
                     @elseif ($id_opcion_titulacion == 11) 
@@ -197,22 +197,22 @@
                         <div class="form-inline mt-5">                                         
                             <input id="checkbox-switch-15" class="form-check-input" type="checkbox" 
                             @if ($alumnoDocs->evidencia) checked  @endif > 
-                            <label class="form-label sm:w-40">(Obligatorio)</label><label class="form-label sm:w-20"></label>
-                            <label class="form-label sm:w-60">Evidencia del ISSN o ISBN</label>                                                                                       
+                            <div class="form-label sm:w-40">(Obligatorio)</div><div class="form-label sm:w-20"></div>
+                            <div class="form-label sm:w-60">Evidencia del ISSN o ISBN</div>                                                                                       
                         </div>
                         <!-- Declaratoria -->
                         <div class="form-inline mt-5">                                         
                             <input id="checkbox-switch-16" class="form-check-input" type="checkbox" 
                             @if ($alumnoDocs->declaratoria) checked  @endif > 
-                            <label class="form-label sm:w-40">(Obligatorio)</label><label class="form-label sm:w-20"></label>
-                            <label class="form-label sm:w-60">Declaratoria</label>                                                                                       
+                            <div class="form-label sm:w-40">(Obligatorio)</div><div class="form-label sm:w-20"></div>
+                            <div class="form-label sm:w-60">Declaratoria</div>                                                                                       
                         </div>
                         <!-- Publicación -->
                         <div class="form-inline mt-5">                                         
                             <input id="checkbox-switch-17" class="form-check-input" type="checkbox" 
                             @if ($alumnoDocs->publicacion) checked  @endif > 
-                            <label class="form-label sm:w-40">(Obligatorio)</label><label class="form-label sm:w-20"></label>
-                            <label class="form-label sm:w-60">Publicación</label>                                                                                       
+                            <div class="form-label sm:w-40">(Obligatorio)</div><div class="form-label sm:w-20"></div>
+                            <div class="form-label sm:w-60">Publicación</div>                                                                                       
                         </div>
                     <!-- Seminario de Titulación --> 
                     @elseif ($id_opcion_titulacion == 12)
@@ -220,29 +220,29 @@
                         <div class="form-inline mt-5">                                         
                             <input id="checkbox-switch-18" class="form-check-input" type="checkbox" 
                             @if ($alumnoDocs->evidencia) checked  @endif > 
-                            <label class="form-label sm:w-40">(Obligatorio)</label><label class="form-label sm:w-20"></label>
-                            <label class="form-label sm:w-60">Evidencia</label>                                                                                       
+                            <div class="form-label sm:w-40">(Obligatorio)</div><div class="form-label sm:w-20"></div>
+                            <div class="form-label sm:w-60">Evidencia</div>                                                                                       
                         </div>
                         <!-- Reporte Escrito -->
                         <div class="form-inline mt-5">                                         
                             <input id="checkbox-switch-19" class="form-check-input" type="checkbox" 
                             @if ($alumnoDocs->reporte_escrito) checked  @endif > 
-                            <label class="form-label sm:w-40">(Obligatorio)</label><label class="form-label sm:w-20"></label>
-                            <label class="form-label sm:w-60">Reporte Escrito</label>                                                                                       
+                            <div class="form-label sm:w-40">(Obligatorio)</div><div class="form-label sm:w-20"></div>
+                            <div class="form-label sm:w-60">Reporte Escrito</div>                                                                                       
                         </div>
                         <!-- Reseña del Trabajo -->
                         <div class="form-inline mt-5">                                         
                             <input id="checkbox-switch-20" class="form-check-input" type="checkbox" 
                             @if ($alumnoDocs->resena_trabajo) checked  @endif > 
-                            <label class="form-label sm:w-40">(Obligatorio)</label><label class="form-label sm:w-20"></label>
-                            <label class="form-label sm:w-60">Reseña del Trabajo</label>                                                                                       
+                            <div class="form-label sm:w-40">(Obligatorio)</div><div class="form-label sm:w-20"></div>
+                            <div class="form-label sm:w-60">Reseña del Trabajo</div>                                                                                       
                         </div>
                         <!-- Curriculum vitae Académico -->
                         <div class="form-inline mt-5">                                         
                             <input id="checkbox-switch-21" class="form-check-input" type="checkbox" 
                             @if ($alumnoDocs->curriculum_academico) checked  @endif > 
-                            <label class="form-label sm:w-40">(Obligatorio)</label><label class="form-label sm:w-20"></label>
-                            <label class="form-label sm:w-60">Curriculum vitae Académico</label>                                                                                       
+                            <div class="form-label sm:w-40">(Obligatorio)</div><div class="form-label sm:w-20"></div>
+                            <div class="form-label sm:w-60">Curriculum vitae Académico</div>                                                                                       
                         </div>
                     <!--Diseño o rediseño / Tesis / Informe de practicas -->  
                     @elseif ($id_opcion_titulacion == 13 || $id_opcion_titulacion == 14 || $id_opcion_titulacion == 16)  
@@ -250,16 +250,16 @@
                         <div class="form-inline mt-5">                                         
                             <input id="checkbox-switch-22" class="form-check-input" type="checkbox" 
                             @if ($alumnoDocs->protocolo) checked  @endif > 
-                            <label class="form-label sm:w-40">(Obligatorio)</label><label class="form-label sm:w-20"></label>
-                            <label class="form-label sm:w-60">Protocolo</label>                                                                                       
+                            <div class="form-label sm:w-40">(Obligatorio)</div><div class="form-label sm:w-20"></div>
+                            <div class="form-label sm:w-60">Protocolo</div>                                                                                       
                         </div>
                         <!-- Constancia de ganador por proyecto modular -->
                         @if ($id_opcion_titulacion == 13 && $tramite->alumno->ganador_proyecto_modular)
                             <div class="form-inline mt-5">                                         
                                 <input id="checkbox-switch-23" class="form-check-input" type="checkbox" 
                                 @if ($alumnoDocs->constancia_ganador_pm) checked  @endif > 
-                                <label class="form-label sm:w-40">(Obligatorio)</label><label class="form-label sm:w-20"></label>
-                                <label class="form-label sm:w-60">Constancia de ganador por proyecto modular</label>                                                                                       
+                                <div class="form-label sm:w-40">(Obligatorio)</div><div class="form-label sm:w-20"></div>
+                                <div class="form-label sm:w-60">Constancia de ganador por proyecto modular</div>                                                                                       
                             </div>
                         @endif                       
                     @endif
@@ -284,16 +284,16 @@
                             <div class="form-inline">                                         
                                 <input id="checkbox-switch-24" class="form-check-input" type="checkbox" 
                                 @if ($alumnoDocs->autorizacion_impresion) checked  @endif > 
-                                <label class="form-label sm:w-40">(Obligatorio)</label><label class="form-label sm:w-20"></label>
-                                <label class="form-label sm:w-60">Autorización de Impresión</label>                                                                    
+                                <div class="form-label sm:w-40">(Obligatorio)</div><div class="form-label sm:w-20"></div>
+                                <div class="form-label sm:w-60">Autorización de Impresión</div>                                                                    
                             </div>  
                             @if ($id_opcion_titulacion != 12) 
                                 <!-- Autorizacion de Impresion -->             
                                 <div class="form-inline mt-5">                                         
                                     <input id="checkbox-switch-25" class="form-check-input" type="checkbox" 
                                     @if ($alumnoDocs->documento_trabajo) checked  @endif > 
-                                    <label class="form-label sm:w-40">(Obligatorio)</label><label class="form-label sm:w-20"></label>
-                                    <label class="form-label sm:w-60">Documento Final del Trabajo</label>                                                                    
+                                    <div class="form-label sm:w-40">(Obligatorio)</div><div class="form-label sm:w-20"></div>
+                                    <div class="form-label sm:w-60">Documento Final del Trabajo</div>                                                                    
                                 </div>  
                             @endif
                         @else
@@ -301,8 +301,8 @@
                             <div class="form-inline mt-5">                                         
                                 <input id="checkbox-switch-26" class="form-check-input" type="checkbox" 
                                 @if ($alumnoDocs->certificados_ceneval) checked @endif > 
-                                <label class="form-label sm:w-40">(Obligatorio)</label><label class="form-label sm:w-20"></label>
-                                <label class="form-label sm:w-60">Certificados CENEVAL</label>                                                                 
+                                <div class="form-label sm:w-40">(Obligatorio)</div><div class="form-label sm:w-20"></div>
+                                <div class="form-label sm:w-60">Certificados CENEVAL</div>                                                                 
                             </div>   
                         @endif                   
                     </div>
@@ -325,15 +325,15 @@
                     <div class="form-inline">                                         
                         <input id="checkbox-switch-27" class="form-check-input" type="checkbox" 
                         @if ($alumnoDocs->pago_arancel) checked  @endif > 
-                        <label class="form-label sm:w-40">(Obligatorio)</label><label class="form-label sm:w-20"></label>
-                        <label class="form-label sm:w-60 text-justify">Comprobante de Pago de Arancel de la Ceremonia de Titulación</label>                                                                    
+                        <div class="form-label sm:w-40">(Obligatorio)</div><div class="form-label sm:w-20"></div>
+                        <div class="form-label sm:w-60 text-justify">Comprobante de Pago de Arancel de la Ceremonia de Titulación</div>
                     </div>                                         
                     <!-- Constancia de No Adeudo a la Universidad -->     
                     <div class="form-inline mt-5">                                         
                         <input id="checkbox-switch-28" class="form-check-input" type="checkbox" 
                         @if ($alumnoDocs->constancia_no_adeudo_universidad) checked  @endif > 
-                        <label class="form-label sm:w-40">(Obligatorio)</label><label class="form-label sm:w-20"></label>
-                        <label class="form-label sm:w-60">Constancia de No Adeudo a la Universidad</label>
+                        <div class="form-label sm:w-40">(Obligatorio)</div><div class="form-label sm:w-20"></div>
+                        <div class="form-label sm:w-60">Constancia de No Adeudo a la Universidad</div>
                         @if ($alumnoDocs->solicitud_constancia_no_adeudo_universidad && !$alumnoDocs->constancia_no_adeudo_universidad)                                                
                             <b>SOLICITADA</b>
                         @elseif (!$alumnoDocs->constancia_no_adeudo_universidad)                                           
@@ -344,8 +344,8 @@
                     <div class="form-inline mt-5">                                         
                         <input id="checkbox-switch-29" class="form-check-input" type="checkbox" 
                         @if ($alumnoDocs->constancia_no_adeudo_biblioteca) checked  @endif > 
-                        <label class="form-label sm:w-40">(Obligatorio)</label><label class="form-label sm:w-20"></label>
-                        <label class="form-label sm:w-60">Constancia de No Adeudo a la Biblioteca</label>          
+                        <div class="form-label sm:w-40">(Obligatorio)</div><div class="form-label sm:w-20"></div>
+                        <div class="form-label sm:w-60">Constancia de No Adeudo a la Biblioteca</div>          
                         @if ($alumnoDocs->solicitud_constancia_no_adeudo_biblioteca && !$alumnoDocs->constancia_no_adeudo_biblioteca)                                                
                             <b>SOLICITADA</b>
                         @elseif (!$alumnoDocs->constancia_no_adeudo_biblioteca)                                  
@@ -357,8 +357,8 @@
                         <div class="form-inline mt-5">                                         
                             <input id="checkbox-switch-30" class="form-check-input" type="checkbox" 
                             @if ($alumnoDocs->autorizacion_publicacion) checked  @endif > 
-                            <label class="form-label sm:w-40">(Obligatorio)</label><label class="form-label sm:w-20"></label>
-                            <label class="form-label sm:w-60">Autorización para Publicación</label>                                           
+                            <div class="form-label sm:w-40">(Obligatorio)</div><div class="form-label sm:w-20"></div>
+                            <div class="form-label sm:w-60">Autorización para Publicación</div>                                           
                             <a class="btn btn-secondary" href="javascript:;" data-tw-toggle="modal" data-tw-target="#modal-dictamen">Generar Autorización</a>                                                                    
                         </div>    
                     @endif                          
@@ -374,7 +374,7 @@
                         @csrf                           
                         <div class="form-inline">                                                   
                             <div class="mx-2 ">
-                                <label>Nombre del archivo requerido:</label>  
+                                Nombre del archivo requerido: 
                                 <!-- Estado - 2da Etapa -->
                                 @if($tramite->estado >= 6 && $tramite->estado < 10 && $tramite->estado != 8)
                                     <select class="form-control" name="nombre">                                                                                                                                            
@@ -819,7 +819,7 @@
                 <!-- BEGIN: Modal Body --> 
                 <div class="modal-body grid grid-cols-12 gap-4 gap-y-3"> 
                     <div class="col-span-12 sm:col-span-12"> 
-                        <label class="form-label">Si esta @if ($alumno->genero == "Mujer") segura @else seguro @endif que sus documentos estan correctos presione el botón "Confirmar".</label> 
+                        <div class="form-label">Si esta @if ($alumno->genero == "Mujer")segura @else seguro @endif que sus documentos estan correctos presione el botón "Confirmar".</div> 
                     </div>                     
                 </div> 
                 <!-- END: Modal Body --> 
@@ -932,7 +932,7 @@
                         </div> 
                         <div class="col-span-6 sm:col-span-12"> 
                             <label for="email" class="form-label">Email:</label> 
-                            <input id="email" name="email" type="text" class="form-control" 
+                            <input id="email" name="email" type="text" class="form-control" autocomplete="off" value="correo@alumnos.udg.mx" 
                             @if(isset($alumno))
                                 value="{{$alumno->correo_institucional}}"
                             @else
@@ -941,7 +941,7 @@
                         </div>                         
                         <div class="col-span-6 sm:col-span-12">                                                                                                                              
                             
-                            <label class="mt-2 mr-5">Firme la carta de autorización:</label>
+                            <div class="mt-2 mr-5">Firme la carta de autorización:</div>
                             <button id="clear" class="btn btn-danger">Borrar Firma</button>                                
                             <div id="sig" class="mt-3"></div>                                                                  
                             <!--<button class="btn btn-success" type="submit">Guardar</button>-->                            

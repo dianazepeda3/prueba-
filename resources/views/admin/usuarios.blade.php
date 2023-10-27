@@ -54,7 +54,7 @@
                 <label for="nombre" class="form-label">Nombre del Usuario</label>
                 <input id="nombre" name="nombre" type="text" class="form-control mr-5" placeholder="Nombre del alumno.." 
                     @if ($nombre != "") value="{{ $nombre }}" @endif>
-                <label for="fitrar" class="form-label espacio-form">Rol</label>
+                <label for="filtrar" class="form-label espacio-form">Rol</label>
                 <select id="filtrar" name="filtrar"  class="form-control tom-select campo-rol mr-5" aria-label="Default select example">
                     <option value="0" @if ($filtrar == 0) selected @endif>Todos</option>
                     <option value="1" @if ($filtrar == 1) selected @endif>Administrador</option>
@@ -344,7 +344,7 @@
                 </li>
             </ul>
         </nav>
-        <select class="w-20 form-select box mt-3 sm:mt-0">
+        <select id="pagination" class="w-20 form-select box mt-3 sm:mt-0">
             <option>10</option>
             <option>25</option>
             <option>35</option>

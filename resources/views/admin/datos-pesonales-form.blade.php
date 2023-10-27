@@ -60,8 +60,7 @@
                                 max="2018-12-31">  
                             </div>                             
                             <div class="form-inline mt-3">
-                                <label class="form-label sm:w-20"></label>
-                                <label class="form-label sm:w-64"><b>Lugar de Nacimiento</b></label>
+                                <div class="form-label sm:w-64"><b>Lugar de Nacimiento</b></div>
                             </div>
                             <div class="form-inline mt-2">                           
                                 <label for="estado_nacimiento" class="form-label sm:w-20">Estado</label>
@@ -83,10 +82,10 @@
                                 <label for="estado_civil" class="form-label sm:w-20">Estado Civil</label>
                                 <select id="estado_civil" name="estado_civil" class="form-control" aria-label=".form-select-sm example">
                                     <option value="0" selected>Seleccione el estado civil...</option>                                   
-                                    <option value="Soltero"
-                                        @if(isset($alumno) && $alumno->estado_civil == "Soltero") selected @endif>Soltero</option>                              
-                                    <option value="Casado"
-                                        @if(isset($alumno) && $alumno->estado_civil == "Casado") selected @endif>Casado</option>                            
+                                    <option value="Soltero/a"
+                                        @if(isset($alumno) && $alumno->estado_civil == "Soltero/a") selected @endif>Soltero/a</option>                              
+                                    <option value="Casado/a"
+                                        @if(isset($alumno) && $alumno->estado_civil == "Casado/a") selected @endif>Casado/a</option>                            
                                 </select>
                             
                                 <label for="genero" class="form-label sm:w-20 espacio-form">Género</label>
@@ -115,8 +114,7 @@
                                 @endif>
                             </div>
                             <div class="form-inline mt-5">
-                                <label class="form-label sm:w-20"></label>
-                                <label class="form-label sm:w-64"><b>Domicilio</b></label>
+                                <div class="form-label sm:w-64"><b>Domicilio</b></div>
                             </div>
                             <div class="form-inline mt-2">                           
                                 <label for="domicilio_calle" class="form-label sm:w-20">Calle</label>

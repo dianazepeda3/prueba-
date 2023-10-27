@@ -4,73 +4,10 @@
     <title>Usuarios - Titulación CUCEI</title>
 @endsection
 
-@section('subcontent')
-    
+@section('subcontent')    
     <div class="grid grid-cols-12 gap-6 mt-5">        
         <div class="intro-y col-span-12 lg:col-span-3"></div>
-        <div class="intro-y col-span-12 lg:col-span-6">             
-            <!-- BEGIN: Vertical Form 
-            <div class="intro-y box">
-                <div class="flex flex-col sm:flex-row items-center p-5 border-b border-slate-200/60 dark:border-darkmode-400">
-                    <h2 class="font-medium text-base mr-auto">Datos del Usuario</h2>                    
-                </div>
-                <div id="vertical-form" class="p-5">
-                    <div class="preview">                        
-                        <div>
-                            <label for="nombre" class="form-label">Nombre Completo</label>
-                            <input id="nombre" name="nombre" type="text" class="form-control" placeholder="Nombre de usuario ..."
-                            @if(isset($usuario))
-                                value="{{$usuario->name}}"
-                            @else
-                                value="{{old('nombre')}}"
-                            @endif
-                            required>
-                        </div>
-                        <div class="mt-3">
-                            <label for="codigo" class="form-label">Código</label>
-                            <input id="codigo" name="codigo" type="text" class="form-control" placeholder="Código ..."
-                            @if(isset($usuario))
-                                value="{{$usuario->codigo}}"
-                            @else
-                                value="{{old('codigo')}}"
-                            @endif
-                            required>
-                        </div>
-                        <div class="form-check mt-5">
-                            <input id="vertical-form-3" class="form-check-input" type="checkbox" value="">
-                            <label class="form-check-label" for="vertical-form-3">Remember me</label>
-                        </div>
-                        <button class="btn btn-primary mt-5">Login</button>
-                    </div>
-                    <div class="source-code hidden">
-                        <button data-target="#copy-vertical-form" class="copy-code btn py-1 px-2 btn-outline-secondary">
-                            <i data-lucide="file" class="w-4 h-4 mr-2"></i> Copy example code
-                        </button>
-                        <div class="overflow-y-auto mt-3 rounded-md">
-                            <pre id="copy-vertical-form" class="source-preview">
-                                <code class="html">
-                                    {{ str_replace('>', 'HTMLCloseTag', str_replace('<', 'HTMLOpenTag', '
-                                        <div>
-                                            <label for="vertical-form-1" class="form-label">Email</label>
-                                            <input id="vertical-form-1" type="text" class="form-control" placeholder="example@gmail.com">
-                                        </div>
-                                        <div class="mt-3">
-                                            <label for="vertical-form-2" class="form-label">Password</label>
-                                            <input id="vertical-form-2" type="text" class="form-control" placeholder="secret">
-                                        </div>
-                                        <div class="form-check mt-5">
-                                            <input id="vertical-form-3" class="form-check-input" type="checkbox" value="">
-                                            <label class="form-check-label" for="vertical-form-3">Remember me</label>
-                                        </div>
-                                        <button class="btn btn-primary mt-5">Login</button>
-                                    ')) }}
-                                </code>
-                            </pre>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- END: Vertical Form -->
+        <div class="intro-y col-span-12 lg:col-span-6">                         
             {{-- ERRORES --}}
             <div class="grid grid-cols-12 gap-12 mt-3"> 
                 <div class="intro-y col-span-12 lg:col-span-12">  

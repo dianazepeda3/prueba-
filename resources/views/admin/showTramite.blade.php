@@ -71,24 +71,26 @@
         @endcan-->
         <!--can('admin-coordinador')                  -->            
             <div class="form-inline">
-                <!-- Boton de Finalizar Trámite -->                    
-                @if($tramite->estado == 15)
-                    <div class="btn-group mr-2">
-                        <a href="#"  class="btn btn-success btn-icon-split" id="aprobarButton" data-toggle="modal" data-target="#aprobarTramiteModal">
-                            <span class="icon"><i class="fas fa-check"></i></span>
-                            <span class="text">Finalizar Tramite</span>
-                        </a>
-                    </div>
-                @endif
-                <!-- Boton de Consultar Kardex -->                
-                @if($tramite->estado == 2)
-                    <!--<div class="btn-group mr-2">
-                        <a href=" "  class="btn btn-primary btn-icon-split" id="aprobar" >
-                            <span class="icon"><i class="fas fa-file-alt"></i></span>
-                            <span class="text">Consultar Kárdex</span>
-                        </a>
-                    </div>-->
-                @endif
+                @can('admin-division')
+                    <!-- Boton de Finalizar Trámite -->                    
+                    @if($tramite->estado == 13 && $alumnoDocs->protesta_firmada && $alumnoDocs->acta_firmada)
+                        <div class="btn-group mr-2">
+                            <a  href="javascript:;" data-tw-toggle="modal" data-tw-target="#finalizarTramiteModal"  class="btn btn-success btn-icon-split text-white" id="aprobarButton" data-toggle="modal" data-target="#aprobarTramiteModal">
+                                <svg class="svg-inline--fa fa-venus-mars w-4 h-4 text-slate-500 mr-2 blanco" xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512"><style>.blanco{fill:#ffffff}</style><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM369 209L241 337c-9.4 9.4-24.6 9.4-33.9 0l-64-64c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l47 47L335 175c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9z"/></svg>
+                                <span class="text">Finalizar Tramite</span>
+                            </a>
+                        </div>
+                    @endif
+                    <!-- Boton de Consultar Kardex -->                
+                    @if($tramite->estado == 2)
+                        <!--<div class="btn-group mr-2">
+                            <a href=" "  class="btn btn-primary btn-icon-split" id="aprobar" >
+                                <span class="icon"><i class="fas fa-file-alt"></i></span>
+                                <span class="text">Consultar Kárdex</span>
+                            </a>
+                        </div>-->
+                    @endif
+                @endcan
                 <!-- Boton de Validar Documentos -->                
                 @if((($aprobados && $tramite->estado == 3 || $aprobados && $tramite->estado == 7) && $user->admin_type == 2) || ($aprobados && $tramite->estado == 10 && $user->admin_type == 5))
                     <!--Estado - Documentos Entregados -->
@@ -130,13 +132,13 @@
                             <div class="btn-group mr-2">
                                 <a href="{{route('pasar_etapa2',$tramite)}}"  class="btn btn-primary btn-icon-split" id="aprobar" >
                                     <svg class="svg-inline--fa fa-venus-mars w-4 h-4 text-slate-500 mr-2 blanco" xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><style>.blanco{fill:#ffffff}</style><path d="M52.5 440.6c-9.5 7.9-22.8 9.7-34.1 4.4S0 428.4 0 416V96C0 83.6 7.2 72.3 18.4 67s24.5-3.6 34.1 4.4L224 214.3V256v41.7L52.5 440.6zM256 352V256 128 96c0-12.4 7.2-23.7 18.4-29s24.5-3.6 34.1 4.4l192 160c7.3 6.1 11.5 15.1 11.5 24.6s-4.2 18.5-11.5 24.6l-192 160c-9.5 7.9-22.8 9.7-34.1 4.4s-18.4-16.6-18.4-29V352z"/></svg>
-                                    <span class="text">Pasar a 2da Etapa</span>
+                                    <span class="text">Pasar a Siguiente Etapa</span>
                                 </a>
                             </div>
                         @endif 
                     @endcan 
                 <!-- Estado - Documentos Validados 2da Etapa-->                            
-                @elseif ($tramite->estado == 11)
+                @elseif ($tramite->estado == 11 )
                     <!--can('admin')                                                    -->
                         <!-- Boton de Generar Citatorio -->
                         <div class="btn-group mr-2">
@@ -191,7 +193,7 @@
                 <!-- Boton de Notificar -->
                 @else
                     <div class="btn-group mr-2" id="notificarErrorButton" href="#" data-toggle="modal" data-target="#notificarErrorTramite">                    
-                        <a href="#" class="btn btn-dark btn-icon-split">
+                        <a href="#" class="btn btn-danger btn-icon-split">
                             <svg class="svg-inline--fa fa-venus-mars w-4 h-4 text-slate-500 mr-2 blanco" xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><style>.blanco{fill:#ffffff}</style><path d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM216 336h24V272H216c-13.3 0-24-10.7-24-24s10.7-24 24-24h48c13.3 0 24 10.7 24 24v88h8c13.3 0 24 10.7 24 24s-10.7 24-24 24H216c-13.3 0-24-10.7-24-24s10.7-24 24-24zm40-208a32 32 0 1 1 0 64 32 32 0 1 1 0-64z"/></svg>
                             <span class="text">Notificar Error</span>
                         </a>
@@ -200,7 +202,7 @@
             </div> 
         </div>       
             <!-- Estado - Datos Titulación -->    
-            @if(isset($alumno) && ($tramite->estado >= 13))      
+            @if(isset($alumno) && ($tramite->estado == 13))      
                 <div class="intro-y flex flex-col sm:flex-row items-center mt-3">
                     <!-- Boton de Editar Datos de Titulación  -->
                     <div class="mr-2">
@@ -232,17 +234,6 @@
                             <span class="text">Descargar Protesta</span>
                         </a>
                     </div>
-                    @if ($alumno->acta_firmada == 0)  
-                        <!-- Boton de Subir Acta firmada -->
-                        <div class="mr-2">
-                            <a href="javascript:;" data-tw-toggle="modal" data-tw-target="#subirActaFirmadaModal-dictamen" class="btn btn-primary btn-icon-split" id="acta_titulacion">
-                                <svg class="svg-inline--fa fa-venus-mars w-4 h-4 text-slate-500 mr-2 blanco" xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 384 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><style>.blanco{fill:#ffffff}</style><path d="M64 0C28.7 0 0 28.7 0 64V448c0 35.3 28.7 64 64 64H320c35.3 0 64-28.7 64-64V160H256c-17.7 0-32-14.3-32-32V0H64zM256 0V128H384L256 0zM216 408c0 13.3-10.7 24-24 24s-24-10.7-24-24V305.9l-31 31c-9.4 9.4-24.6 9.4-33.9 0s-9.4-24.6 0-33.9l72-72c9.4-9.4 24.6-9.4 33.9 0l72 72c9.4 9.4 9.4 24.6 0 33.9s-24.6 9.4-33.9 0l-31-31V408z"/></svg>
-                                <span class="text">Subir Acta de Titulación Firmada</span>
-                            </a>
-                        </div>
-                    @endif
-                </div>
-                <div class="intro-y flex flex-col sm:flex-row items-center mt-3">                   
                     <!-- Boton de Descargar Acta circunstanciada -->
                     <div class="mr-2">
                         <a href="{{ route('descargar_actacirunstanciada',$alumno) }}"  class="btn btn-dark btn-icon-split" id="acta_titulacion">
@@ -250,6 +241,26 @@
                             <span class="text">Descargar Acta Circunstanciada</span>
                         </a>
                     </div>                     
+                </div>
+                <div class="intro-y flex flex-col sm:flex-row items-center mt-3">                   
+                    @if (!$alumnoDocs->acta_firmada)  
+                        <!-- Boton de Subir Acta firmada -->
+                        <div class="mr-2">
+                            <a href="javascript:;" data-tw-toggle="modal" data-tw-target="#subirActaFirmadaModal" class="btn btn-primary btn-icon-split" id="acta_titulacion">
+                                <svg class="svg-inline--fa fa-venus-mars w-4 h-4 text-slate-500 mr-2 blanco" xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 384 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><style>.blanco{fill:#ffffff}</style><path d="M64 0C28.7 0 0 28.7 0 64V448c0 35.3 28.7 64 64 64H320c35.3 0 64-28.7 64-64V160H256c-17.7 0-32-14.3-32-32V0H64zM256 0V128H384L256 0zM216 408c0 13.3-10.7 24-24 24s-24-10.7-24-24V305.9l-31 31c-9.4 9.4-24.6 9.4-33.9 0s-9.4-24.6 0-33.9l72-72c9.4-9.4 24.6-9.4 33.9 0l72 72c9.4 9.4 9.4 24.6 0 33.9s-24.6 9.4-33.9 0l-31-31V408z"/></svg>
+                                <span class="text">Subir Acta de Titulación Firmada</span>
+                            </a>
+                        </div>
+                    @endif    
+                    @if (!$alumnoDocs->protesta_firmada)  
+                        <!-- Boton de Subir Protesta firmada -->
+                        <div class="mr-2">
+                            <a href="javascript:;" data-tw-toggle="modal" data-tw-target="#subirProtestaFirmadaModal" class="btn btn-dark btn-icon-split" id="acta_titulacion">
+                                <svg class="svg-inline--fa fa-venus-mars w-4 h-4 text-slate-500 mr-2 blanco" xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 384 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><style>.blanco{fill:#ffffff}</style><path d="M64 0C28.7 0 0 28.7 0 64V448c0 35.3 28.7 64 64 64H320c35.3 0 64-28.7 64-64V160H256c-17.7 0-32-14.3-32-32V0H64zM256 0V128H384L256 0zM216 408c0 13.3-10.7 24-24 24s-24-10.7-24-24V305.9l-31 31c-9.4 9.4-24.6 9.4-33.9 0s-9.4-24.6 0-33.9l72-72c9.4-9.4 24.6-9.4 33.9 0l72 72c9.4 9.4 9.4 24.6 0 33.9s-24.6 9.4-33.9 0l-31-31V408z"/></svg>
+                                <span class="text">Subir Protesta Firmada</span>
+                            </a>
+                        </div>
+                    @endif          
                 </div>
             @endif 
         <!--endcan        -->
@@ -576,7 +587,7 @@
                                                                         <div class="modal-body grid grid-cols-12 gap-4 gap-y-3"> 
                                                                             <div class="col-span-12 sm:col-span-12"> 
                                                                                 <label for="comentario" class="form-label">Agregue un comentario / observación del documento no aprobado.</label> 
-                                                                                <textarea id="comentario" name="comentario" class="form-control" name="comment" placeholder="Comentarios..."></textarea>                                                    
+                                                                                <textarea id="comentario" name="comentario" class="form-control" placeholder="Comentarios..."></textarea>                                                    
                                                                             </div>                     
                                                                         </div> 
                                                                         <!-- END: Modal Body -->                                                                         
@@ -720,7 +731,7 @@
                                 </li>
                             </ul>
                         </nav>
-                        <select class="w-20 form-select box mt-3 sm:mt-0">
+                        <select id="pagination" class="w-20 form-select box mt-3 sm:mt-0">
                             <option>10</option>
                             <option>25</option>
                             <option>35</option>
@@ -772,16 +783,16 @@
                         <!-- BEGIN: Modal Body --> 
                         <div class="modal-body grid grid-cols-12 gap-4 gap-y-3"> 
                             <div class="col-span-12 sm:col-span-12"> 
-                                <label for="nombre" class="form-label">Nombre Completo:</label> 
-                                <input id="nombre" type="text" class="form-control" value="{{$alumno->user->name}}" disabled> 
+                                <label for="nombre1" class="form-label">Nombre Completo:</label> 
+                                <input id="nombre1" type="text" class="form-control" value="{{$alumno->user->name}}" disabled> 
                             </div> 
                             <div class="col-span-12 sm:col-span-4"> 
-                                <label for="codigo" class="form-label">Código:</label> 
-                                <input id="codigo" type="text" class="form-control" value="{{$alumno->user->codigo}}" disabled> 
+                                <label for="codigo1" class="form-label">Código:</label> 
+                                <input id="codigo1" type="text" class="form-control" value="{{$alumno->user->codigo}}" disabled> 
                             </div> 
                             <div class="col-span-12 sm:col-span-4"> 
-                                <label for="numero_de_consecutivo" class="form-label">N° de Consecutivo:</label> 
-                                <input id="numero_de_consecutivo" name="numero_de_consecutivo" type="text" class="form-control" 
+                                <label for="numero_de_consecutivo_dictamen" class="form-label">N° de Consecutivo:</label> 
+                                <input id="numero_de_consecutivo_dictamen" name="numero_de_consecutivo" type="text" class="form-control" 
                                 @if(isset($alumno))
                                     value="{{$alumno->numero_de_consecutivo}}"
                                 @else
@@ -790,17 +801,17 @@
                             </div> 
                             <div class="col-span-12 sm:col-span-4"> 
                                 <label for="anio_graduacion" class="form-label">Año de Graduación:</label> 
-                                <input id="anio_graduacion" name="anio_graduacion" type="text" class="form-control" 
+                                <input id="anio_graduacion" name="año_de_graduacion" type="text" class="form-control" 
                                 @if(isset($alumno))
                                     value="{{$alumno->anio_graduacion}}"
                                 @else
-                                    value="{{old('anio_graduacion')}}"
+                                    value="{{old('año_de_graduacion')}}"
                                 @endif> 
                             </div> 
                             <div class="col-span-12 sm:col-span-12"> 
                                 <label for="presidente">Presidente:</label>
                                 <select id="presidente" name="presidente" data-placeholder="Selecciona el presidente" class="tom-select w-full">
-                                    <option value="0">Seleccione una opción</option>
+                                    <option value="0" selected>Seleccione una opción</option>
                                     @foreach($maestros as $presidente)
                                         <option value="{{$presidente->id}}" @if(isset($alumno) && $alumno->id_maestro_presidente == $presidente->id) selected @endif>{{$presidente->nombre}}</option>
                                     @endforeach
@@ -847,16 +858,16 @@
                         <!-- BEGIN: Modal Body --> 
                         <div class="modal-body grid grid-cols-12 gap-4 gap-y-3"> 
                             <div class="col-span-12 sm:col-span-12"> 
-                                <label for="nombre" class="form-label">Nombre Completo:</label> 
-                                <input id="nombre" type="text" class="form-control" value="{{$alumno->user->name}}" disabled> 
+                                <label for="nombre2" class="form-label">Nombre Completo:</label> 
+                                <input id="nombre2" type="text" class="form-control" value="{{$alumno->user->name}}" disabled> 
                             </div> 
                             <div class="col-span-12 sm:col-span-6"> 
-                                <label for="codigo" class="form-label">Código:</label> 
-                                <input id="codigo" type="text" class="form-control" value="{{$alumno->user->codigo}}" disabled> 
+                                <label for="codigo2" class="form-label">Código:</label> 
+                                <input id="codigo2" type="text" class="form-control" value="{{$alumno->user->codigo}}" disabled> 
                             </div> 
                             <div class="col-span-12 sm:col-span-6"> 
-                                <label for="numero_de_consecutivo" class="form-label">N° de Consecutivo:</label> 
-                                <input id="numero_de_consecutivo" name="numero_de_consecutivo" type="text" class="form-control" value="{{old('numero_de_consecutivo')}}"> 
+                                <label for="numero_de_consecutivo_carta" class="form-label">N° de Consecutivo:</label> 
+                                <input id="numero_de_consecutivo_carta" name="numero_de_consecutivo" type="text" class="form-control" value="{{old('numero_de_consecutivo')}}"> 
                             </div>                                                       
                         </div> <!-- END: Modal Body --> 
                         <!-- BEGIN: Modal Footer --> 
@@ -881,16 +892,16 @@
                         <!-- BEGIN: Modal Body --> 
                         <div class="modal-body grid grid-cols-12 gap-4 gap-y-3"> 
                             <div class="col-span-12 sm:col-span-12"> 
-                                <label for="nombre" class="form-label">Nombre Completo:</label> 
-                                <input id="nombre" type="text" class="form-control" value="{{$alumno->user->name}}" disabled> 
+                                <label for="nombre3" class="form-label">Nombre Completo:</label> 
+                                <input id="nombre3" type="text" class="form-control" value="{{$alumno->user->name}}" disabled> 
                             </div> 
                             <div class="col-span-12 sm:col-span-6"> 
-                                <label for="codigo" class="form-label">Código:</label> 
-                                <input id="codigo" type="text" class="form-control" value="{{$alumno->user->codigo}}" disabled> 
+                                <label for="codigo3" class="form-label">Código:</label> 
+                                <input id="codigo3" type="text" class="form-control" value="{{$alumno->user->codigo}}" disabled> 
                             </div> 
                             <div class="col-span-12 sm:col-span-6"> 
-                                <label for="numero_de_consecutivo" class="form-label">N° de Consecutivo:</label> 
-                                <input id="numero_de_consecutivo" name="numero_de_consecutivo" type="text" class="form-control" value="{{old('numero_de_consecutivo')}}"> 
+                                <label for="numero_de_consecutivo_carta_ce" class="form-label">N° de Consecutivo:</label> 
+                                <input id="numero_de_consecutivo_carta_ce" name="numero_de_consecutivo" type="text" class="form-control" value="{{old('numero_de_consecutivo')}}"> 
                             </div>                                                       
                         </div> <!-- END: Modal Body --> 
                         <!-- BEGIN: Modal Footer --> 
@@ -903,7 +914,7 @@
             </div> 
         </div> <!-- END: Modal Content -->
         <!--Modal para subir el Acta de titulación ya firmada-->
-        <div id="subirActaFirmadaModal-dictamen" class="modal" tabindex="-1" aria-hidden="true"> 
+        <div id="subirActaFirmadaModal" class="modal" tabindex="-1" aria-hidden="true"> 
             <div class="modal-dialog"> 
                 <div class="modal-content"> 
                     <!-- BEGIN: Modal Header --> 
@@ -915,11 +926,11 @@
                         @csrf  
                         <div class="modal-body grid grid-cols-12 gap-4 gap-y-3"> 
                             <div class="col-span-12 sm:col-span-12"> 
-                                <label for="nombre" class="form-label">Tenga en cuenta que al subir esta acta se le notificará a los sinodales asociados a este documento</label>                                 
+                                <div for="nombre" class="form-label">Tenga en cuenta que al subir esta acta se le notificará a los sinodales asociados a este documento</div>
                             </div>                                                      
                             <div class="">                                                   
                                 <div class="mx-2 w-96 font-bold">
-                                    <label>Acta Firmada:</label>                                
+                                    Acta Firmada:
                                 </div>
                                 <div class="mx-2 w-96">
                                     <label for="acta_firmada" class="form-label">
@@ -941,7 +952,75 @@
                     </form>                       
                 </div> 
             </div> 
-        </div> <!-- END: Modal Content -->         
+        </div> <!-- END: Modal Content -->  
+        <!--Modal para subir el Acta de titulación ya firmada-->
+        <div id="subirProtestaFirmadaModal" class="modal" tabindex="-1" aria-hidden="true"> 
+            <div class="modal-dialog"> 
+                <div class="modal-content"> 
+                    <!-- BEGIN: Modal Header --> 
+                    <div class="modal-header"> 
+                        <h2 class="font-medium text-base mr-auto">Subir Protesta Firmada</h2>                        
+                    </div> <!-- END: Modal Header -->                                             
+                    <!-- BEGIN: Modal Body --> 
+                    <form class="form" method="POST" action="{{ route('subir_protesta_firmada',$alumno) }}" enctype="multipart/form-data">
+                        @csrf  
+                        <div class="modal-body grid grid-cols-12 gap-4 gap-y-3"> 
+                            <div class="col-span-12 sm:col-span-12"> 
+                                <div class="form-label">Tenga en cuenta que al subir esta protesta se le notificará a los sinodales asociados a este documento</div>
+                            </div>                                                      
+                            <div class="">                                                   
+                                <div class="mx-2 w-96 font-bold">
+                                    Protesta:
+                                </div>
+                                <div class="mx-2 w-96">
+                                    <label for="protesta_firmada" class="form-label">
+                                        <span class="">
+                                            Seleccione un archivo a cargar
+                                        </span>
+                                    </label>
+                                    <div class="form-control">
+                                        <input type="file" name="protesta_firmada" id="protesta_firmada" >
+                                    </div>
+                                </div>                                  
+                            </div>                                                        
+                        </div> <!-- END: Modal Body --> 
+                        <!-- BEGIN: Modal Footer --> 
+                        <div class="modal-footer"> 
+                            <button type="button" data-tw-dismiss="modal" class="btn btn-outline-secondary w-20 mr-1">Cancelar</button> 
+                            <button type="submit" class="btn btn-primary w-20">Confirmar</button> 
+                        </div> <!-- END: Modal Footer --> 
+                    </form>                       
+                </div> 
+            </div> 
+        </div> <!-- END: Modal Content -->  
+        <!-- BEGIN: Modal Finalizar Trámite --> 
+        <div id="finalizarTramiteModal" class="modal" tabindex="-1" aria-hidden="true"> 
+            <div class="modal-dialog"> 
+                <div class="modal-content"> 
+                    <!-- BEGIN: Modal Header --> 
+                    <div class="modal-header"> 
+                        <h2 class="font-medium text-base mr-auto"> @if(isset($user->maestro) && $user->maestro->name) ¿Segura @else ¿Seguro @endif que quiere finalizar el trámite?</h2>                   
+                        <div class="dropdown sm:hidden"> 
+                            <a class="dropdown-toggle w-5 h-5 block" href="javascript:;" aria-expanded="false" data-tw-toggle="dropdown"> 
+                                <i data-lucide="more-horizontal" class="w-5 h-5 text-slate-500"></i> 
+                            </a>                         
+                        </div> 
+                    </div> <!-- END: Modal Header --> 
+                    <!-- BEGIN: Modal Body --> 
+                    <div class="modal-body grid grid-cols-12 gap-4 gap-y-3"> 
+                        <div class="col-span-12 sm:col-span-12"> 
+                            <label for="boton-confirmar" class="form-label">Si esta @if(isset($user->maestro) && $user->maestro->name) segura @else seguro @endif que desea finalizar el trámite del alumno <b>{{$alumno->user->name}}</b> presione el botón "Confirmar".</label> 
+                        </div>                     
+                    </div> 
+                    <!-- END: Modal Body --> 
+                    <!-- BEGIN: Modal Footer --> 
+                    <div class="modal-footer"> 
+                        <button id="boton-confirmar" type="button" data-tw-dismiss="modal" class="btn btn-outline-secondary w-20 mr-1">Cancelar</button> 
+                        <a  class="btn btn-primary w-20" href="{{ route('finalizar_tramite',$alumno) }}">Confirmar</a> 
+                    </div> <!-- END: Modal Footer --> 
+                </div> 
+            </div> 
+        </div> <!-- END: Modal Finalizar Trámite -->        
     </div>
     <script>
         document.getElementById("btnDocsEntregados").addEventListener("click", function () {

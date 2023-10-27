@@ -419,7 +419,22 @@ class AdminController extends Controller
         return redirect()->route('showTramite', $alumno)->with('success', 'Documentos validados correctamente.');
     }
 
-    public function generate_dictamen(Request $request, Tramite $tramite){                   
+    public function generate_dictamen(Request $request, Tramite $tramite){  
+        //validar       
+        $request->validate([
+            'numero_de_consecutivo' => 'required|numeric|min:0',
+            'año_de_graduacion' => 'required|numeric',
+            'presidente' => 'required',
+            'secretario' => 'required',
+            'vocal' => 'required',
+        ]);    
+        if($request->presidente == 0)
+            return redirect()->back()->with('info','Selecciona el presidente');  
+        else if($request->secretario == 0)
+            return redirect()->back()->with('info','Selecciona el secretario');  
+        else if($request->vocal == 0)
+            return redirect()->back()->with('info','Selecciona el vocal');       
+
         //alumno       
         $alumno =  $tramite->alumno;        
         $modalidad = $alumno->id_opcion_titulacion;
@@ -454,7 +469,6 @@ class AdminController extends Controller
             }catch(Exception $e){
                 return redirect()->route('admin.dashboard')->with('info', 'No se encontraron los maestros para el comite de titulacion');
             }
-
         }else{
             if($request->presidente !=null){
                 //buscar presidente
@@ -486,16 +500,16 @@ class AdminController extends Controller
                
         //$alumno->fecha_limite = $request->fecha_limite;
         $alumno->numero_de_consecutivo = $request->numero_de_consecutivo;
-        $alumno->anio_graduacion = $request->anio_graduacion;
+        $alumno->anio_graduacion = $request->año_de_graduacion;
         $alumno->consecutivo = $alumno->numero_de_consecutivo . "/" . $alumno->anio_graduacion;
         $alumno->titulo_del_trabajo = $request->titulo_del_trabajo;        
 
-        $alumno->id_director_division = $director_division->id;        
+        /*$alumno->id_director_division = $director_division->id;        
         $alumno->nombre_director_division = $director_division->nombre;
         
         $alumno->id_secretario_division = $secretario_division->id;
         
-        $alumno->nombre_secretario_division = $secretario_division->nombre;        
+        $alumno->nombre_secretario_division = $secretario_division->nombre;  */      
 
         $alumno->save();                  
 
@@ -774,12 +788,12 @@ class AdminController extends Controller
         $alumno->tipo_de_ceremonia_presencial_virtual = $request->tipo_de_ceremonia_presencial_virtual;
         $alumno->lugar_de_ceremonia = $request->lugar_de_ceremonia;
 
-        $alumno->id_director_division = $director_division->id;        
+        /*$alumno->id_director_division = $director_division->id;        
         $alumno->nombre_director_division = $director_division->nombre;
         
         $alumno->id_secretario_division = $secretario_division->id;
         
-        $alumno->nombre_secretario_division = $secretario_division->nombre;
+        $alumno->nombre_secretario_division = $secretario_division->nombre;*/
 
         if($alumno->id_opcion_titulacion == 6){
             $alumno->calificacion_examen_capacitacion = $request->calificacion_examen_capacitacion;
@@ -896,7 +910,9 @@ class AdminController extends Controller
             }elseif($documento->nombre_documento == "Constancia de No Adeudo Universidad"){
                 AlumnoDocs::where('alumno_id', $documento->id_alumno)->update(['constancia_no_adeudo_universidad' => 0]);
             }elseif($documento->nombre_documento == "Acta de Titulacion Firmada"){
-                Alumno::where('id', '=', $documento->id_alumno)->update(['acta_firmada' => 0]);
+                AlumnoDocs::where('alumno_id', '=', $documento->id_alumno)->update(['acta_firmada' => 0]);
+            }elseif($documento->nombre_documento == "Protesta Firmada"){
+                AlumnoDocs::where('alumno_id', '=', $documento->id_alumno)->update(['protesta_firmada' => 0]);
             }
             Storage::delete($documento->ruta);
             $documento->delete();
@@ -1013,7 +1029,7 @@ class AdminController extends Controller
             $content = $pdf->download()->getOriginalContent();
             Storage::put($ruta,$content);
     
-            return redirect()->back()->with('success', 'Carta de No Adeudo creado');
+            return redirect()->back()->with('success', 'Carta de No Adeudo creada');
         } catch (\PhpOffice\PhpWord\Exception\Exception $e) {
             return redirect()->route('showTramite',$alumno)->with('info', 'Ha ocurrido un error al generar el documento');
         }
@@ -1377,8 +1393,8 @@ class AdminController extends Controller
             $template->setValue('secretario', $secretario);
             $template->setValue('dir_division', $dir_division);
             $template->setValue('secre_division', $secre_division);
-            $template->setValue('director_division', $director_division);
-            $template->setValue('secretario_division', $secretario_division);
+            $template->setValue('director_division', mb_strtoupper($director_division->nombre,'UTF-8'));
+            $template->setValue('secretario_division', mb_strtoupper($secretario_division->nombre,'UTF-8'));
 
             $tempFile = tempnam(sys_get_temp_dir(), 'PHPWord');
             $template->saveAs($tempFile);
@@ -1907,7 +1923,6 @@ class AdminController extends Controller
      //Funcion para subir acta firmada
     public function subirActaFirmada(Request $request, Alumno $alumno)
     {
-
         $max_size = (int) ini_get('upload_max_filesize') * 10240;
         //user_id
         //alumno
@@ -1922,7 +1937,7 @@ class AdminController extends Controller
         ]);
 
          //Actualizar el estado del alumno
-        Alumno::where('id', '=', $id_alumno)->update(['acta_firmada' => 1]);
+        AlumnoDocs::where('alumno_id', '=', $id_alumno)->update(['acta_firmada' => 1]);
         $tramite = Tramite::where('alumno_id', '=', $id_alumno)->first();
         $id_tramite = $tramite->id;
 
@@ -1950,6 +1965,52 @@ class AdminController extends Controller
         return redirect()->route('showTramite', $alumno)->with('success','Documento de Acta de Titulación Firmada subido correctamente');
 
     }
+
+     //Funcion para subir acta firmada
+     public function subirProtestaFirmada(Request $request, Alumno $alumno)
+     {
+         $max_size = (int) ini_get('upload_max_filesize') * 10240;
+         //user_id
+         //alumno
+         $id_alumno = $alumno->id;
+         $nombre = (string)$alumno->user_id;
+         $nombre_alumno = (string)$alumno->user->codigo;
+         $nombre_ruta =  $nombre . "_" . $nombre_alumno;
+ 
+         //VALIDACION DE ARCHIVOS
+         $request->validate([
+             'protesta_firmada' => 'required|file|max:'.$max_size
+         ]);
+ 
+          //Actualizar el estado del alumno
+         AlumnoDocs::where('alumno_id', '=', $id_alumno)->update(['protesta_firmada' => 1]);
+         $tramite = Tramite::where('alumno_id', '=', $id_alumno)->first();
+         $id_tramite = $tramite->id;
+ 
+         try {
+             //GUARDAR DOCUMENTO
+             if ($request->hasFile('protesta_firmada') && $request->file('protesta_firmada')->isValid()) {
+ 
+                 $ruta = $request->protesta_firmada->store('alumnos/' . $nombre_ruta . '/documentos');
+                 $documento = new Documento();
+                 $documento->ruta = $ruta;
+                 $documento->nombre_original = $request->protesta_firmada->getClientOriginalName();
+                 $documento->mime = $request->protesta_firmada->getClientMimeType();
+                 $documento->user_id = $alumno->user_id;
+                 $documento->id_alumno = $id_alumno;
+                 $documento->tramite_id = $id_tramite;
+                 $documento->nombre_documento = 'Protesta Firmada';
+                 $documento->aprobado = 4;
+ 
+                 $documento->save();     
+             }
+         } catch (\Exception $e) {
+              return redirect()->back()->with('error', 'Error al subir el archivo');
+         }
+ 
+         return redirect()->route('showTramite', $alumno)->with('success','Documento de Protesta Firmada subido correctamente');
+ 
+     }
 
      //Generar Acta Circunstanciada
      public function generarDocumentoActaCircunstanciada(Alumno $alumno)
@@ -2125,6 +2186,11 @@ class AdminController extends Controller
         $user = Auth::user();
 
         return view('admin.datos-escolares-form', compact('user','carreras','plan_estudios', 'articulos', 'opciones_titulacion'));
+    }
+
+    public function finalizar_tramite(Alumno $alumno){
+        Tramite::where('alumno_id',$alumno->id)->update(['estado' => 14]);        
+        return redirect()->route('showTramite',$alumno)->with('success','Trámite Finalizado');
     }
 
     public function setDatosInfo(Request $request){               
@@ -2390,9 +2456,10 @@ class AdminController extends Controller
             $coordinador->save();
             Carrera::where('id',$carrera->id)->update(['coordinador_id' => $coordinador->id]);
         }else{  
-            $coordinador = $user->coordinador;
-            Carrera::where('id',$user->coordinador->carrera_id)->update(['coordinador_id' => null]);                                   
             if(isset($coordinador)){
+                $coordinador = $user->coordinador;
+                Carrera::where('id',$user->coordinador->carrera_id)->update(['coordinador_id' => null]);                                   
+            
                 $coordinador->delete();
             }  
             $user->name = $request->nombre;
@@ -2488,6 +2555,7 @@ class AdminController extends Controller
     }
     
     public function maestros_form() {
+        
         $user = Auth::user();
         return view('admin/maestros-form',compact('user'));
     }
