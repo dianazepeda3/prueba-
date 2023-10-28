@@ -199,7 +199,7 @@ class Menu
                     ],
                     'maestros-agregar2' => [
                         'icon' => 'user-plus',
-                        'route_name' => 'maestro_form2',
+                        'route_name' => 'maestro_form',
                         'params' => [
                             // Additional parameters
                         ],

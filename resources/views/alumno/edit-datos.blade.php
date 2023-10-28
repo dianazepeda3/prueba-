@@ -254,7 +254,7 @@
                                         </select>
                                     </div>
                                     <div class="form-inline mt-5">
-                                        <label for="genero" class="form-label sm:w-20 espacio-form">Género</label>
+                                        <label for="genero" class="form-label sm:w-20">Género</label>
                                         <select id="genero" name="genero" class="form-control tom-select" aria-label=".form-select-sm example">
                                             <option value="0" selected>Seleccione el género...</option>                                   
                                             <option value="Mujer"
