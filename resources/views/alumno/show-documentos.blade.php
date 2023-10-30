@@ -359,7 +359,9 @@
                             @if ($alumnoDocs->autorizacion_publicacion) checked  @endif > 
                             <div class="form-label sm:w-40">(Obligatorio)</div><div class="form-label sm:w-20"></div>
                             <div class="form-label sm:w-60">Autorización para Publicación</div>                                           
-                            <a class="btn btn-secondary" href="javascript:;" data-tw-toggle="modal" data-tw-target="#modal-dictamen">Generar Autorización</a>                                                                    
+                            @if (!$alumnoDocs->autorizacion_publicacion)
+                                <a class="btn btn-secondary" href="javascript:;" data-tw-toggle="modal" data-tw-target="#modal-dictamen">Generar Autorización</a>                                                                    
+                            @endif
                         </div>    
                     @endif                          
                 </div>
@@ -833,7 +835,7 @@
     </div> <!-- END: Modal Mandar a Revisión -->  
     <!-- BEGIN: Modal Content --> 
     <div id="modal-dictamen" class="modal" tabindex="-1" aria-hidden="true"> 
-        <div class="modal-dialog modal-xl"> 
+        <div class="modal-dialog modal-lg"> 
             <div class="modal-content"> 
                 <!-- BEGIN: Modal Header --> 
                 <div class="modal-header"> 
@@ -841,9 +843,9 @@
                 </div> <!-- END: Modal Header -->                 
                 <form method="POST" action="{{route('autorizacionTesis',$alumno)}}">
                     @csrf
-                    <!-- BEGIN: Modal Body --> 
+                    <!-- BEGIN: Modal Body  -->
                     <div class="modal-body grid grid-cols-12 gap-4 gap-y-3"> 
-                        {{-- ERRORES --}}                
+                        <!--{{-- ERRORES --}}                
                         <div class="intro-y col-span-12 lg:col-span-12">  
                             {{-- Mensaje Alerta --}}
                             @if (session('info'))
@@ -869,12 +871,12 @@
                                     </ul>
                                 </div>   
                             @endif 
-                        </div> 
-                        <div class="col-span-3 sm:col-span-12"> 
+                        </div> -->
+                        <div class="col-span-12 sm:col-span-6"> 
                             <label for="tipo_documento" class="form-label">Tipo de Documento: </label> 
                             <input id="tipo_documento" type="text" class="form-control" value={{ $alumno->opcion_titulacion->opcion }} disabled> 
                         </div>
-                        <div class="col-span-3 sm:col-span-12"> 
+                        <div class="col-span-12 sm:col-span-6"> 
                             <label for="fecha_titulacion" class="form-label">Fecha de Titulación: </label> 
                             <input id="fecha_titulacion" type="date" class="form-control" 
                             @if(isset($alumno))
@@ -921,7 +923,7 @@
                                 value="{{old('direccion')}}"
                             @endif disabled> 
                         </div> 
-                        <div class="col-span-6 sm:col-span-12"> 
+                        <div class="col-span-12 sm:col-span-6"> 
                             <label for="telefono" class="form-label">Teléfono:</label> 
                             <input id="telefono" name="telefono" type="text" class="form-control" 
                             @if(isset($alumno))
@@ -930,7 +932,7 @@
                                 value="{{old('telefono')}}"
                             @endif disabled>
                         </div> 
-                        <div class="col-span-6 sm:col-span-12"> 
+                        <div class="col-span-12 sm:col-span-6"> 
                             <label for="email" class="form-label">Email:</label> 
                             <input id="email" name="email" type="text" class="form-control" autocomplete="off" value="correo@alumnos.udg.mx" 
                             @if(isset($alumno))
@@ -938,14 +940,13 @@
                             @else
                                 value="{{old('email')}}"
                             @endif disabled> 
-                        </div>                         
-                        <div class="col-span-6 sm:col-span-12">                                                                                                                              
-                            
-                            <div class="mt-2 mr-5">Firme la carta de autorización:</div>
-                            <button id="clear" class="btn btn-danger">Borrar Firma</button>                                
+                        </div><div class="col-span-12 sm:col-span-3"></div>
+                        <div class="col-span-12 sm:col-span-6">                                                                                                                                                          
+                            <div class="mt-2 mr-5">Firme la carta de autorización:</div>                                                          
                             <div id="sig" class="mt-3"></div>                                                                  
                             <!--<button class="btn btn-success" type="submit">Guardar</button>-->                            
-                            <textarea id="signature64" name="firma" style="display: none"></textarea>                         
+                            <textarea id="signature64" name="firma" style="display: none"></textarea>  
+                            <button id="clear" class="btn btn-danger">Borrar Firma</button>                         
                         </div>
                         <div class="col-span-6 sm:col-span-12 mt-5 mr-3">
                             <input type="checkbox" class="" id="autorizo" name="autorizo">

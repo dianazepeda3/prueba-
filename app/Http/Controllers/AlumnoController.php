@@ -871,10 +871,15 @@ class AlumnoController extends Controller
     public function solicitarCarta(AlumnoDocs $alumnoDocs){
         /*$tramite->estado = 9;
         $tramite->save();*/
-        $alumnoDocs->solicitud_constancia_no_adeudo_biblioteca = 1;
-        $alumnoDocs->save();
+        $alumno = $alumnoDocs->alumno;
+        if($alumno->id_articulo == 5 && $alumnoDocs->autorizacion_publicacion){
+            $alumnoDocs->solicitud_constancia_no_adeudo_biblioteca = 1;        
+            $alumnoDocs->save();        
 
-        return redirect()->back()->with('success', 'Carta de No Adeudo solicitada a Biblioteca');         
+            return redirect()->back()->with('success', 'Carta de No Adeudo solicitada a Biblioteca');
+        }
+        
+        return redirect()->back()->with('info','Primero debes generar la carta de Autorización para Publicación');         
     }
 
     public function solicitarCartaCE(AlumnoDocs $alumnoDocs){
@@ -935,7 +940,7 @@ class AlumnoController extends Controller
             $carrera .= ' EN COMUNICACIONES Y ELECTRÓNICA';
         }
 
-        if($carrera_id->id == 5){
+        if($carrera_id->id == 18){
             $carrera .= ' EN COMPUTACIÓN';
         }
 
