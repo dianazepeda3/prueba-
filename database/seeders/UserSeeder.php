@@ -403,7 +403,7 @@ class UserSeeder extends Seeder
             'alumno_id' => 9,
         ]);
 
-        // Alumno 9
+        // Alumno 10
         DB::table('users')->insert([
             'name' => 'Ruby Rose',
             'codigo' => '216865767',
@@ -443,6 +443,314 @@ class UserSeeder extends Seeder
         ]);
         DB::table('alumno_docs')->insert([
             'alumno_id' => 10,
+        ]);
+
+        // Alumno 11
+        DB::table('users')->insert([
+            'name' => 'ALUMNO 11',
+            'codigo' => '216667011',
+            'password' => bcrypt('Universidad2023*'),            
+            'created_at' => $date,
+            'updated_at' => $date,          
+        ]);
+        DB::table('alumnos')->insert([
+            'user_id' => 12,    
+            'fecha_nacimiento' => '1999-11-03',
+            'genero' => 'Mujer',
+            'estado_civil' => 'Soltero',
+            'telefono_celular' => '3312483666',
+            'telefono_particular' => '3134870987',
+            'estado_nacimiento' => 'Jalisco', 
+            'municipio_nacimiento' => 'Guadalajara',
+            'dom_calle' => 'Nombre Calle',  
+            'dom_numero' => 12,
+            'dom_colonia' => 'Nombre Colonia',  
+            'dom_CP' => '45893',   
+            'dom_municipio' => 'Guadalajara',  
+            'dom_estado' => 'Jalisco',  
+            'correo_institucional' => 'alumno11@alumnos.udg.mx',
+            'correo_part' => 'alumno11@gmail.com',
+            'fecha_titulacion' => '2023-10-28',
+            'fecha_egreso' => '2023-06-12',
+            
+            'id_carrera' => 18, //INCO
+            'id_plan_estudios' => 2,
+            'id_articulo' => 5,
+            'id_opcion_titulacion' => 14,
+            'promedio' => 88,
+            'ciclo_ingreso' => '2017B',
+            'ciclo_egreso' => '2023A',
+        ]);
+        DB::table('tramites')->insert([
+            'estado'=> 14,
+            'alumno_id'=> 11,
+        ]);
+        DB::table('alumno_docs')->insert([
+            'alumno_id' => 11,
+        ]);
+
+        // Alumno 12
+        DB::table('users')->insert([
+            'name' => 'ALUMNO 12',
+            'codigo' => '216667012',
+            'password' => bcrypt('Universidad2023*'),            
+            'created_at' => $date,
+            'updated_at' => $date,          
+        ]);
+        DB::table('alumnos')->insert([
+            'user_id' => 13,    
+            'fecha_nacimiento' => '2000-04-14',
+            'genero' => 'Hombre',
+            'estado_civil' => 'Soltero',
+            'telefono_celular' => '3312483666',
+            'telefono_particular' => '3134870987',
+            'estado_nacimiento' => 'Jalisco', 
+            'municipio_nacimiento' => 'Guadalajara',
+            'dom_calle' => 'Nombre Calle',  
+            'dom_numero' => 12,
+            'dom_colonia' => 'Nombre Colonia',  
+            'dom_CP' => '45893',   
+            'dom_municipio' => 'Guadalajara',  
+            'dom_estado' => 'Jalisco',  
+            'correo_institucional' => 'alumno12@alumnos.udg.mx',
+            'correo_part' => 'alumno12@gmail.com',
+            'fecha_titulacion' => '2023-10-28',
+            'fecha_egreso' => '2023-01-19',
+            
+            'id_carrera' => 18, //INCO
+            'id_plan_estudios' => 2,
+            'id_articulo' => 5,
+            'id_opcion_titulacion' => 14,
+            'promedio' => 88,
+            'ciclo_ingreso' => '2017B',
+            'ciclo_egreso' => '2023A',
+        ]);
+        DB::table('tramites')->insert([
+            'estado'=> 14,
+            'alumno_id'=> 12,
+        ]);
+        DB::table('alumno_docs')->insert([
+            'alumno_id' => 12,
+        ]);
+
+         // Alumno 13
+         DB::table('users')->insert([
+            'name' => 'ALUMNO 13',
+            'codigo' => '216667013',
+            'password' => bcrypt('Universidad2023*'),            
+            'created_at' => $date,
+            'updated_at' => $date,          
+        ]);
+        DB::table('alumnos')->insert([
+            'user_id' => 14,    
+            'fecha_nacimiento' => '2000-04-14',
+            'genero' => 'Hombre',
+            'estado_civil' => 'Soltero',
+            'telefono_celular' => '3312483666',
+            'telefono_particular' => '3134870987',
+            'estado_nacimiento' => 'Jalisco', 
+            'municipio_nacimiento' => 'Guadalajara',
+            'dom_calle' => 'Nombre Calle',  
+            'dom_numero' => 12,
+            'dom_colonia' => 'Nombre Colonia',  
+            'dom_CP' => '45893',   
+            'dom_municipio' => 'Guadalajara',  
+            'dom_estado' => 'Jalisco',  
+            'correo_institucional' => 'alumno13@alumnos.udg.mx',
+            'correo_part' => 'alumno13@gmail.com',
+            'fecha_titulacion' => '2023-10-28',
+            'fecha_egreso' => '2023-01-19',
+            
+            'id_carrera' => 1, //LQFB
+            'id_plan_estudios' => 2,
+            'id_articulo' => 5,
+            'id_opcion_titulacion' => 14,
+            'promedio' => 88,
+            'ciclo_ingreso' => '2017B',
+            'ciclo_egreso' => '2023A',
+        ]);
+        DB::table('tramites')->insert([
+            'estado'=> 14,
+            'alumno_id'=> 13,
+        ]);
+        DB::table('alumno_docs')->insert([
+            'alumno_id' => 13,
+        ]);
+
+         // Alumno 14
+         DB::table('users')->insert([
+            'name' => 'ALUMNO 14',
+            'codigo' => '216667014',
+            'password' => bcrypt('Universidad2023*'),            
+            'created_at' => $date,
+            'updated_at' => $date,          
+        ]);
+        DB::table('alumnos')->insert([
+            'user_id' => 15,    
+            'fecha_nacimiento' => '2000-04-14',
+            'genero' => 'Hombre',
+            'estado_civil' => 'Soltero',
+            'telefono_celular' => '3312483666',
+            'telefono_particular' => '3134870987',
+            'estado_nacimiento' => 'Jalisco', 
+            'municipio_nacimiento' => 'Guadalajara',
+            'dom_calle' => 'Nombre Calle',  
+            'dom_numero' => 12,
+            'dom_colonia' => 'Nombre Colonia',  
+            'dom_CP' => '45893',   
+            'dom_municipio' => 'Guadalajara',  
+            'dom_estado' => 'Jalisco',  
+            'correo_institucional' => 'alumno14@alumnos.udg.mx',
+            'correo_part' => 'alumno14@gmail.com',
+            'fecha_titulacion' => '2023-08-28',
+            'fecha_egreso' => '2023-01-19',
+            
+            'id_carrera' => 18, //INCO
+            'id_plan_estudios' => 2,
+            'id_articulo' => 5,
+            'id_opcion_titulacion' => 14,
+            'promedio' => 88,
+            'ciclo_ingreso' => '2017B',
+            'ciclo_egreso' => '2023A',
+        ]);
+        DB::table('tramites')->insert([
+            'estado'=> 14,
+            'alumno_id'=> 14,
+        ]);
+        DB::table('alumno_docs')->insert([
+            'alumno_id' => 14,
+        ]);
+
+        // Alumno 15
+        DB::table('users')->insert([
+            'name' => 'ALUMNO 15',
+            'codigo' => '216667015',
+            'password' => bcrypt('Universidad2023*'),            
+            'created_at' => $date,
+            'updated_at' => $date,          
+        ]);
+        DB::table('alumnos')->insert([
+            'user_id' => 16,    
+            'fecha_nacimiento' => '2000-04-14',
+            'genero' => 'Hombre',
+            'estado_civil' => 'Soltero',
+            'telefono_celular' => '3312483666',
+            'telefono_particular' => '3134870987',
+            'estado_nacimiento' => 'Jalisco', 
+            'municipio_nacimiento' => 'Guadalajara',
+            'dom_calle' => 'Nombre Calle',  
+            'dom_numero' => 12,
+            'dom_colonia' => 'Nombre Colonia',  
+            'dom_CP' => '45893',   
+            'dom_municipio' => 'Guadalajara',  
+            'dom_estado' => 'Jalisco',  
+            'correo_institucional' => 'alumno15@alumnos.udg.mx',
+            'correo_part' => 'alumno15@gmail.com',
+            'fecha_titulacion' => '2022-02-22',
+            'fecha_egreso' => '2023-01-19',
+            
+            'id_carrera' => 6, //INDU
+            'id_plan_estudios' => 2,
+            'id_articulo' => 5,
+            'id_opcion_titulacion' => 14,
+            'promedio' => 88,
+            'ciclo_ingreso' => '2017B',
+            'ciclo_egreso' => '2023A',
+        ]);
+        DB::table('tramites')->insert([
+            'estado'=> 14,
+            'alumno_id'=> 15,
+        ]);
+        DB::table('alumno_docs')->insert([
+            'alumno_id' => 15,
+        ]);
+
+         // Alumno 16
+         DB::table('users')->insert([
+            'name' => 'ALUMNO 16',
+            'codigo' => '216667016',
+            'password' => bcrypt('Universidad2023*'),            
+            'created_at' => $date,
+            'updated_at' => $date,          
+        ]);
+        DB::table('alumnos')->insert([
+            'user_id' => 17,    
+            'fecha_nacimiento' => '2000-04-14',
+            'genero' => 'Hombre',
+            'estado_civil' => 'Soltero',
+            'telefono_celular' => '3312483666',
+            'telefono_particular' => '3134870987',
+            'estado_nacimiento' => 'Jalisco', 
+            'municipio_nacimiento' => 'Guadalajara',
+            'dom_calle' => 'Nombre Calle',  
+            'dom_numero' => 12,
+            'dom_colonia' => 'Nombre Colonia',  
+            'dom_CP' => '45893',   
+            'dom_municipio' => 'Guadalajara',  
+            'dom_estado' => 'Jalisco',  
+            'correo_institucional' => 'alumno16@alumnos.udg.mx',
+            'correo_part' => 'alumno16@gmail.com',
+            'fecha_titulacion' => '2022-10-28',
+            'fecha_egreso' => '2023-01-19',
+            
+            'id_carrera' => 18, //INCO
+            'id_plan_estudios' => 2,
+            'id_articulo' => 5,
+            'id_opcion_titulacion' => 14,
+            'promedio' => 88,
+            'ciclo_ingreso' => '2017B',
+            'ciclo_egreso' => '2023A',
+        ]);
+        DB::table('tramites')->insert([
+            'estado'=> 14,
+            'alumno_id'=> 16,
+        ]);
+        DB::table('alumno_docs')->insert([
+            'alumno_id' => 16,
+        ]);
+
+         // Alumno 17
+         DB::table('users')->insert([
+            'name' => 'ALUMNO 17',
+            'codigo' => '216667017',
+            'password' => bcrypt('Universidad2023*'),            
+            'created_at' => $date,
+            'updated_at' => $date,          
+        ]);
+        DB::table('alumnos')->insert([
+            'user_id' => 18,    
+            'fecha_nacimiento' => '2000-04-14',
+            'genero' => 'Mujer',
+            'estado_civil' => 'Casado/a',
+            'telefono_celular' => '3312483666',
+            'telefono_particular' => '3134870987',
+            'estado_nacimiento' => 'Jalisco', 
+            'municipio_nacimiento' => 'Guadalajara',
+            'dom_calle' => 'Nombre Calle',  
+            'dom_numero' => 12,
+            'dom_colonia' => 'Nombre Colonia',  
+            'dom_CP' => '45893',   
+            'dom_municipio' => 'Guadalajara',  
+            'dom_estado' => 'Jalisco',  
+            'correo_institucional' => 'alumno17@alumnos.udg.mx',
+            'correo_part' => 'alumno17@gmail.com',
+            'fecha_titulacion' => '2023-08-28',
+            'fecha_egreso' => '2023-01-19',
+            
+            'id_carrera' => 10, //INQU
+            'id_plan_estudios' => 2,
+            'id_articulo' => 5,
+            'id_opcion_titulacion' => 14,
+            'promedio' => 88,
+            'ciclo_ingreso' => '2017B',
+            'ciclo_egreso' => '2023A',
+        ]);
+        DB::table('tramites')->insert([
+            'estado'=> 14,
+            'alumno_id'=> 17,
+        ]);
+        DB::table('alumno_docs')->insert([
+            'alumno_id' => 17,
         ]);
 
         /*DB::table('users')->insert([

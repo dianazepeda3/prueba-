@@ -42,7 +42,8 @@ class DatabaseSeeder extends Seeder
         //Tramite::factory()->count(10)->create();
         
 
-        $this->call(MaestrosSeeder::class);        
+        $this->call(MaestrosSeeder::class);    
+        $this->call(EstadisticasSeeder::class);    
         
         // $this->call(AlumnosSeeder::class);
         // $this->call(TramitesSeeder::class);

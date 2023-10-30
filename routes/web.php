@@ -7,6 +7,7 @@ use App\Http\Controllers\DarkModeController;
 use App\Http\Controllers\ColorSchemeController;
 use App\Http\Controllers\AlumnoController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\EstadisticaController;
 use App\Models\User;
 
 /*
@@ -69,7 +70,7 @@ Route::middleware('is_admin')->group(function() {
 Route::middleware('is_administrativo')->group(function() {
     Route::get('logout', [AuthController::class, 'logout'])->name('logout');
     Route::controller(AdminController::class)->group(function() {
-        Route::get('tramites/documento/{documento}', 'visualizarDocumento')->name('ver-documento-admin');
+        Route::get('tramites/documento/{documento}', 'visualizarDocumento')->name('ver-documento-admin');        
 
         //Tramite
         Route::get('tramites', 'tramites')->name('tramites');
@@ -127,6 +128,14 @@ Route::middleware('is_coordi')->group(function() {
         Route::patch('maestros/update/{maestro}', 'updateMaestro')->name('maestros_update');
         Route::post('maestros/store', 'storeMaestro')->name('maestros_store');
         Route::delete('maestros/{maestro}', 'deleteMaestro')->name('eliminar_maestro');        
+    });
+});
+
+Route::middleware('is_administrativo')->group(function() {
+    Route::controller(EstadisticaController::class)->group(function() {
+        
+        //Estadisticas
+        Route::get('estadisticas','index')->name('estadisticas');
     });
 });
 

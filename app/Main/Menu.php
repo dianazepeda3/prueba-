@@ -144,6 +144,14 @@ class Menu
                             // Additional parameters
                         ],
                         'title' => 'Overview 2'
+                    ],
+                    'estadisticas' => [
+                        'icon' => '',
+                        'route_name' => 'estadisticas',
+                        'params' => [
+                            // Additional parameters
+                        ],
+                        'title' => 'Estadisticas'
                     ]
                 ]
             ],
