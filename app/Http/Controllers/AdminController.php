@@ -423,17 +423,23 @@ class AdminController extends Controller
         //validar       
         $request->validate([
             'numero_de_consecutivo' => 'required|numeric|min:0',
-            'año_de_graduacion' => 'required|numeric',
-            'presidente' => 'required',
-            'secretario' => 'required',
-            'vocal' => 'required',
+            'año_de_graduacion' => 'required|numeric',           
         ]);    
-        if($request->presidente == 0)
-            return redirect()->back()->with('info','Selecciona el presidente');  
-        else if($request->secretario == 0)
-            return redirect()->back()->with('info','Selecciona el secretario');  
-        else if($request->vocal == 0)
-            return redirect()->back()->with('info','Selecciona el vocal');       
+
+        $alumno = $tramite->alumno;
+        if ($alumno->id_articulo == 5 or $alumno->id_opcion_titulacion == 7 or $alumno->id_opcion_titulacion == 11 or $alumno->id_opcion_titulacion == 13 ){
+            $request->validate([            
+                'presidente' => 'required',
+                'secretario' => 'required',
+                'vocal' => 'required',
+            ]); 
+            if($request->presidente == 0)
+                return redirect()->back()->with('info','Selecciona el presidente');  
+            else if($request->secretario == 0)
+                return redirect()->back()->with('info','Selecciona el secretario');  
+            else if($request->vocal == 0)
+                return redirect()->back()->with('info','Selecciona el vocal'); 
+        }                                                                                                         
 
         //alumno       
         $alumno =  $tramite->alumno;        

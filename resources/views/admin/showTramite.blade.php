@@ -814,33 +814,35 @@
                                     value="{{old('año_de_graduacion')}}"
                                 @endif> 
                             </div> 
-                            <div class="col-span-12 sm:col-span-12"> 
-                                <label for="presidente">Presidente:</label>
-                                <select id="presidente" name="presidente" data-placeholder="Selecciona el presidente" class="tom-select w-full">
-                                    <option value="0" selected>Seleccione una opción</option>
-                                    @foreach($maestros as $presidente)
-                                        <option value="{{$presidente->id}}" @if(isset($alumno) && $alumno->id_maestro_presidente == $presidente->id) selected @endif>{{$presidente->nombre}}</option>
-                                    @endforeach
-                                </select> 
-                            </div> 
-                            <div class="col-span-12 sm:col-span-12"> 
-                                <label for="secretario">Secretario:</label>
-                                <select id="secretario" name="secretario" data-placeholder="Selecciona el secretario" class="tom-select w-full">
-                                    <option value="0">Seleccione una opción</option>
-                                    @foreach($maestros as $secretario)
-                                        <option value="{{$secretario->id}}" @if(isset($alumno) && $alumno->id_maestro_secretario == $secretario->id) selected @endif>{{$secretario->nombre}}</option>
-                                    @endforeach
-                                </select> 
-                            </div> 
-                            <div class="col-span-12 sm:col-span-12"> 
-                                <label for="vocal">Vocal:</label>
-                                <select id="vocal" name="vocal" data-placeholder="Selecciona el vocal" class="tom-select w-full">
-                                    <option value="0">Seleccione una opción</option>
-                                    @foreach($maestros as $vocal)
-                                        <option value="{{$vocal->id}}" @if(isset($alumno) && $alumno->id_maestro_vocal == $vocal->id) selected @endif>{{$vocal->nombre}}</option>
-                                    @endforeach
-                                </select> 
-                            </div> 
+                            @if ($alumno->id_articulo == 5 or $alumno->id_opcion_titulacion == 7 or $alumno->id_opcion_titulacion == 11 or $alumno->id_opcion_titulacion == 13 )                                                            
+                                <div class="col-span-12 sm:col-span-12"> 
+                                    <label for="presidente">Presidente:</label>
+                                    <select id="presidente" name="presidente" data-placeholder="Selecciona el presidente" class="tom-select w-full">
+                                        <option value="0" selected>Seleccione una opción</option>
+                                        @foreach($maestros as $presidente)
+                                            <option value="{{$presidente->id}}" @if(isset($alumno) && $alumno->id_maestro_presidente == $presidente->id) selected @endif>{{$presidente->nombre}}</option>
+                                        @endforeach
+                                    </select> 
+                                </div> 
+                                <div class="col-span-12 sm:col-span-12"> 
+                                    <label for="secretario">Secretario:</label>
+                                    <select id="secretario" name="secretario" data-placeholder="Selecciona el secretario" class="tom-select w-full">
+                                        <option value="0">Seleccione una opción</option>
+                                        @foreach($maestros as $secretario)
+                                            <option value="{{$secretario->id}}" @if(isset($alumno) && $alumno->id_maestro_secretario == $secretario->id) selected @endif>{{$secretario->nombre}}</option>
+                                        @endforeach
+                                    </select> 
+                                </div> 
+                                <div class="col-span-12 sm:col-span-12"> 
+                                    <label for="vocal">Vocal:</label>
+                                    <select id="vocal" name="vocal" data-placeholder="Selecciona el vocal" class="tom-select w-full">
+                                        <option value="0">Seleccione una opción</option>
+                                        @foreach($maestros as $vocal)
+                                            <option value="{{$vocal->id}}" @if(isset($alumno) && $alumno->id_maestro_vocal == $vocal->id) selected @endif>{{$vocal->nombre}}</option>
+                                        @endforeach
+                                    </select> 
+                                </div> 
+                            @endif
                         </div> <!-- END: Modal Body --> 
                         <!-- BEGIN: Modal Footer --> 
                         <div class="modal-footer"> 
